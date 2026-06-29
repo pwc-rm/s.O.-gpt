@@ -1,0 +1,29 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# S.O. GPT Showcase — Terraform variable values
+# Copy this file to terraform.tfvars and fill in subscription_id.
+# terraform.tfvars is in .gitignore and must NEVER be committed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Find at: Azure Portal → Subscriptions → Subscription ID
+subscription_id = "00000000-0000-0000-0000-000000000000"
+
+resource_group_name = "RG-PLAYGROUND"
+location            = "germanywestcentral"
+openai_location     = "germanywestcentral"   # change to e.g. "swedencentral" if GPT-4o quota denied here
+
+project_prefix = "so-gpt"
+environment    = "showcase"
+
+search_index_name         = "so-gpt-index"
+cosmos_database           = "so-gpt-db"
+cosmos_container          = "sessions"
+chat_deployment_name          = "gpt-4o-deployment"
+embedding_deployment_name     = "embedding-deployment"
+query_rewrite_deployment_name = "gpt-4o-mini-deployment"
+
+gpt4o_capacity     = 10   # 10 000 TPM — request increase via Azure quota portal if needed
+embedding_capacity = 10
+
+app_service_sku = "B1"   # cheapest Linux tier; upgrade to P1v3 for production
+
+create_bing_search = true  # set false if Bing needs manual Marketplace provisioning

@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>s.O GPT</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-bg: #1c1917;
+      --sidebar-hover: #292524;
+      --sidebar-active: #292524;
+      --accent: #1c1917;
+      --accent-hover: #292524;
+      --main-bg: #f9fafb;
+      --chat-bg: #ffffff;
+      --sources-bg: #f3f4f6;
+      --border: #e5e7eb;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --text-sidebar: #d1d5db;
+      --user-bubble: #e5e7eb;
+      --user-bubble-text: #111827;
+      --ai-bubble: #ffffff;
+      --tag-bg: #fee2e2;
+      --tag-text: #991b1b;
+      --tag-web-bg: #fef3c7;
+      --tag-web-text: #92400e;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--main-bg);
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid #292524;
+    }
+
+    .logo-badge {
+      width: 30px;
+      height: 30px;
+      background: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #1c1917;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.3px;
+    }
+
+    .new-chat-btn {
+      margin: 14px 12px 0;
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+      letter-spacing: 0.3px;
+    }
+    .new-chat-btn:hover { background: #b91c1c; }
+    .new-chat-btn svg { flex-shrink: 0; }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #4b5563;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 16px 16px 6px;
+    }
+
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px 8px;
+    }
+
+    .chat-history-item {
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-sidebar);
+      font-size: 12.5px;
+      transition: background 0.1s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-history-item:hover { background: var(--sidebar-hover); }
+    .chat-history-item.active { background: var(--sidebar-active); color: white; }
+
+    .sidebar-nav {
+      padding: 8px 8px 0;
+      border-top: 1px solid #292524;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 13px;
+      transition: background 0.1s, color 0.1s;
+    }
+    .sidebar-nav-item:hover { background: var(--sidebar-hover); color: var(--text-sidebar); }
+
+    .sidebar-footer {
+      padding: 8px;
+      border-top: 1px solid #292524;
+    }
+
+    /* ── MAIN CHAT ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      height: 53px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .chat-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chat-header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.1s;
+    }
+    .icon-btn:hover { background: var(--border); }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 24px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .message-row {
+      display: flex;
+      gap: 12px;
+      max-width: 760px;
+    }
+    .message-row.user { flex-direction: row-reverse; align-self: flex-end; }
+    .message-row.ai { align-self: flex-start; }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .avatar.user { background: var(--accent); color: white; }
+    .avatar.ai {
+      background: #111827;
+      color: white;
+      font-size: 10px;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 12px;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+    .bubble.user {
+      background: var(--user-bubble);
+      color: var(--user-bubble-text);
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.ai {
+      background: var(--ai-bubble);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .bubble p { margin-bottom: 8px; }
+    .bubble p:last-child { margin-bottom: 0; }
+    .bubble strong { font-weight: 600; }
+    .bubble em { font-style: italic; color: var(--text-secondary); }
+    .bubble ul { padding-left: 18px; margin-top: 4px; }
+    .bubble ul li { margin-bottom: 4px; }
+
+    .cite {
+      display: inline;
+      font-size: 11px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 2px;
+      font-weight: 600;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    .rewritten-query {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      font-style: italic;
+      padding: 6px 10px;
+      background: #f9fafb;
+      border-left: 3px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .bing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      background: var(--tag-web-bg);
+      color: var(--tag-web-text);
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 14px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--text-secondary);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* ── INPUT BAR ── */
+    .input-bar {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: var(--main-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      transition: border-color 0.15s;
+    }
+    .input-wrap:focus-within { border-color: var(--accent); }
+
+    .input-actions-left {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    #message-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      color: var(--text-primary);
+      resize: none;
+      outline: none;
+      max-height: 140px;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    #message-input::placeholder { color: var(--text-secondary); }
+
+    .send-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .send-btn:hover { background: var(--accent-hover); }
+    .send-btn:disabled { background: var(--border); color: var(--text-secondary); cursor: not-allowed; }
+
+    /* ── SOURCES PANEL ── */
+    .sources-panel {
+      width: 280px;
+      min-width: 280px;
+      background: var(--sources-bg);
+      border-left: 1px solid var(--border);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sources-panel.visible { display: flex; }
+
+    .sources-header {
+      height: 53px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .sources-panel.collapsed { display: none !important; }
+    .sources-collapse-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      transition: background 0.1s;
+    }
+    .sources-collapse-btn:hover { background: var(--border); }
+    #sources-expand-btn {
+      display: none;
+    }
+    #sources-expand-btn.visible {
+      display: flex;
+    }
+    .source-card.highlight {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 3px #dbeafe;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .sources-count {
+      font-size: 11px;
+      background: var(--border);
+      color: var(--text-secondary);
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-weight: 500;
+    }
+
+    .sources-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .source-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 13px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .source-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-color: #d1d5db; }
+    .source-card.web { border-left: 3px solid #f59e0b; }
+
+    .source-card-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .source-card-meta {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 7px;
+    }
+
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .tag.doc { background: var(--tag-bg); color: var(--tag-text); }
+    .tag.web { background: var(--tag-web-bg); color: var(--tag-web-text); }
+    .tag.page { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+
+
+    .sources-empty {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      padding: 40px 20px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      padding: 40px;
+    }
+    .empty-logo { font-size: 40px; font-weight: 800; color: #d1d5db; }
+    .empty-title { font-size: 18px; font-weight: 600; color: #374151; }
+    .empty-sub { font-size: 13px; max-width: 360px; text-align: center; line-height: 1.6; }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 8px;
+      max-width: 500px;
+    }
+    .chip {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .chip:hover { border-color: var(--accent); box-shadow: 0 0 0 3px #dbeafe; }
+
+    /* ── AKTIONSBOX ── */
+    .action-box {
+      margin-top: 14px;
+      background: #fff7ed;
+      border: 1.5px solid #fed7aa;
+      border-left: 4px solid #ea580c;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .action-box-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #c2410c;
+      margin-bottom: 8px;
+    }
+    .action-box ul {
+      padding-left: 16px;
+      margin: 0;
+    }
+    .action-box ul li {
+      font-size: 13px;
+      color: #1c1917;
+      margin-bottom: 5px;
+      line-height: 1.5;
+    }
+    .action-box ul li:last-child { margin-bottom: 0; }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    /* Streaming cursor */
+    .stream-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.9em;
+      background: var(--text-primary);
+      margin-left: 1px;
+      vertical-align: text-bottom;
+      animation: blink-cursor 0.7s step-end infinite;
+    }
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">s.O</div>
+    <span class="logo-text">s.O GPT</span>
+  </div>
+
+  <button class="new-chat-btn" onclick="newChat()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    NEUER CHAT
+  </button>
+
+  <div class="sidebar-section-label">Recent Chats</div>
+
+  <div class="chat-history" id="chat-history"></div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Library
+    </div>
+    <div class="sidebar-nav-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Collections
+    </div>
+    <div class="sidebar-nav-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Analytics
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-nav-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M20 12h-2M6 12H4M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 20v-2M12 6V4"/></svg>
+      Settings
+    </div>
+    <div class="sidebar-nav-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Account
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN CHAT ── -->
+<main class="main">
+  <header class="chat-header">
+    <span class="chat-title" id="chat-title">Neuer Chat</span>
+    <button class="icon-btn" id="sources-expand-btn" onclick="toggleSources()" title="Quellen anzeigen">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </header>
+
+  <div class="messages" id="messages">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-logo">s.O</div>
+      <div class="empty-title">Wie kann ich helfen?</div>
+      <div class="empty-sub">Stelle eine Frage zu internen Richtlinien, Projekten oder Unternehmensthemen.</div>
+      <div class="suggestion-chips">
+        <div class="chip" onclick="sendSuggestion(this)">Wie viele Urlaubstage habe ich?</div>
+        <div class="chip" onclick="sendSuggestion(this)">Was ist der Code of Conduct?</div>
+        <div class="chip" onclick="sendSuggestion(this)">Wie verbessern wir unser Wissensmanagement?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-wrap">
+      <div class="input-actions-left">
+        <button class="icon-btn" title="Datei anhängen">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        </button>
+      </div>
+      <textarea
+        id="message-input"
+        rows="1"
+        placeholder="Nachricht an Knowledgeassistent senden..."
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"
+      ></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        SENDEN
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<!-- ── SOURCES PANEL ── -->
+<aside class="sources-panel">
+  <div class="sources-header">
+    <button class="sources-collapse-btn" onclick="toggleSources()" title="Ein-/Ausklappen">
+      <svg id="sources-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span>Quellen</span>
+    <span class="sources-count" id="sources-count">0</span>
+  </div>
+  <div class="sources-list" id="sources-list">
+    <div class="sources-empty">Noch keine Quellen.<br>Stelle eine Frage.</div>
+  </div>
+</aside>
+
+<script>
+  // ── CONFIG ──
+  // API calls go through Azure API Management — no key needed in frontend.
+  // APIM injects the backend x-api-key server-side as a Named Value secret.
+  const API_URL = 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
+
+  // ── STATE ──
+  let sessionId = null;
+  let chatSessions = [];   // [{id, title}] — loaded from backend
+  let currentSessionId = null;
+
+  const SESSIONS_URL = '/sessions';  // relative — same origin as the served HTML
+
+  // ── INIT ──
+  fetchSessions();
+
+  async function fetchSessions() {
+    try {
+      const res = await fetch(SESSIONS_URL);
+      if (res.ok) {
+        chatSessions = await res.json();
+        renderHistory();
+      }
+    } catch (_) {}
+  }
+
+  async function loadSession(s) {
+    sessionId = s.id;
+    currentSessionId = s.id;
+    document.getElementById('chat-title').textContent = s.title;
+    clearSources();
+    renderHistory();
+
+    const msgs = document.getElementById('messages');
+    msgs.innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af;font-size:13px;">Wird geladen…</div>';
+
+    try {
+      const res = await fetch(`${SESSIONS_URL}/${s.id}/messages`);
+      const data = res.ok ? await res.json() : {messages: [], sources: []};
+      const messages = data.messages || [];
+      if (data.sources?.length) renderSources(data.sources, false);
+      msgs.innerHTML = '';
+      messages.forEach(m => {
+        const row = document.createElement('div');
+        if (m.role === 'user') {
+          row.className = 'message-row user';
+          row.innerHTML = `<div class="avatar user">Du</div><div class="bubble user">${escHtml(m.text)}</div>`;
+        } else {
+          row.className = 'message-row ai';
+          row.innerHTML = `<div class="avatar ai">s.O</div><div class="bubble ai">${formatAnswer(m.text)}</div>`;
+        }
+        msgs.appendChild(row);
+      });
+      msgs.scrollTop = msgs.scrollHeight;
+    } catch (_) {
+      msgs.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;">Fehler beim Laden.</div>';
+    }
+  }
+
+  function newChat() {
+    sessionId = null;
+    document.getElementById('messages').innerHTML = `
+      <div class="empty-state" id="empty-state">
+        <div class="empty-logo">s.O</div>
+        <div class="empty-title">Wie kann ich helfen?</div>
+        <div class="empty-sub">Stelle eine Frage zu internen Richtlinien, Projekten oder Unternehmensthemen.</div>
+        <div class="suggestion-chips">
+          <div class="chip" onclick="sendSuggestion(this)">Wie viele Urlaubstage habe ich?</div>
+          <div class="chip" onclick="sendSuggestion(this)">Was ist der Code of Conduct?</div>
+          <div class="chip" onclick="sendSuggestion(this)">Wie verbessern wir unser Wissensmanagement?</div>
+        </div>
+      </div>`;
+    document.getElementById('chat-title').textContent = 'Neuer Chat';
+    clearSources();
+    currentSessionId = null;
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const container = document.getElementById('chat-history');
+    container.innerHTML = '';
+    chatSessions.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'chat-history-item' + (s.id === currentSessionId ? ' active' : '');
+      div.textContent = s.title;
+      div.title = s.title;
+      div.onclick = () => loadSession(s);
+      container.appendChild(div);
+    });
+  }
+
+  // ── INPUT ──
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+  }
+
+  function sendSuggestion(el) {
+    document.getElementById('message-input').value = el.textContent;
+    sendMessage();
+  }
+
+  // ── SEND ──
+  async function sendMessage() {
+    const input = document.getElementById('message-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const emptyState = document.getElementById('empty-state');
+    if (emptyState) emptyState.remove();
+
+    appendUserMessage(text);  // shows user message + typing indicator (...)
+    input.value = '';
+    input.style.height = 'auto';
+    setLoading(true);
+
+    if (!sessionId) {
+      document.getElementById('chat-title').textContent = text.slice(0, 45) + (text.length > 45 ? '…' : '');
+    }
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ frage: text, session_id: sessionId }),
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      // Server responded — replace typing indicator with streaming bubble immediately
+      removeTyping();
+      const bubble = appendStreamingBubble();
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let rawText = '';
+      let meta = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();  // keep incomplete line for next chunk
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+
+          if (payload === '[DONE]') {
+            finalizeStreamBubble(bubble, rawText, meta);
+            continue;
+          }
+
+          try {
+            const evt = JSON.parse(payload);
+            if (evt.type === 'meta') {
+              meta = evt;
+              sessionId = evt.session_id;
+              renderSources(evt.quellen, evt.bing_used);
+            } else if (evt.type === 'token') {
+              rawText += evt.content;
+              updateStreamBubble(bubble, rawText);
+            } else if (evt.type === 'error') {
+              throw new Error(evt.message);
+            }
+          } catch (e) {
+            if (e instanceof SyntaxError) continue;  // incomplete JSON line — skip
+            throw e;
+          }
+        }
+      }
+
+      // Refresh sidebar from backend after each turn
+      if (meta) {
+        currentSessionId = sessionId;
+        fetchSessions();
+      }
+
+    } catch (err) {
+      removeTyping();
+      appendError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ── MESSAGE RENDERING ──
+  function appendUserMessage(text) {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = 'message-row user';
+    row.innerHTML = `
+      <div class="avatar user">Du</div>
+      <div class="bubble user">${escHtml(text)}</div>`;
+    msgs.appendChild(row);
+
+    const typingRow = document.createElement('div');
+    typingRow.className = 'message-row ai';
+    typingRow.id = 'typing-row';
+    typingRow.innerHTML = `
+      <div class="avatar ai">s.O</div>
+      <div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    msgs.appendChild(typingRow);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function appendAIMessage(data) {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = 'message-row ai';
+
+    let rewrittenHtml = '';
+    if (data.rewritten_query) {
+      rewrittenHtml = `<div class="rewritten-query">Umformulierte Suche: <em>${escHtml(data.rewritten_query)}</em></div>`;
+    }
+
+    let bingHtml = '';
+    if (data.bing_used) {
+      bingHtml = `<div class="bing-badge">🌐 Web-Fallback (Bing) aktiviert</div>`;
+    }
+
+    row.innerHTML = `
+      <div class="avatar ai">s.O</div>
+      <div class="bubble ai">
+        ${rewrittenHtml}
+        ${bingHtml}
+        ${formatAnswer(data.antwort)}
+      </div>`;
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function appendError(msg) {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = 'message-row ai';
+    row.innerHTML = `
+      <div class="avatar ai">s.O</div>
+      <div class="bubble ai" style="color:#dc2626;border-color:#fecaca;">
+        Fehler: ${escHtml(msg)}<br><small>Läuft der Backend-Server? <code>uvicorn main:app --reload</code></small>
+      </div>`;
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing-row');
+    if (t) t.remove();
+  }
+
+  // ── STREAMING HELPERS ──
+
+  function appendStreamingBubble() {
+    const msgs = document.getElementById('messages');
+    const row = document.createElement('div');
+    row.className = 'message-row ai';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar ai';
+    avatar.textContent = 's.O';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ai';
+
+    const cursor = document.createElement('span');
+    cursor.className = 'stream-cursor';
+    cursor.textContent = '▌';
+    bubble.appendChild(cursor);
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+    return bubble;
+  }
+
+  function updateStreamBubble(bubble, rawText) {
+    bubble.innerHTML = '';
+    bubble.appendChild(document.createTextNode(rawText));  // safe — no innerHTML injection
+    const cursor = document.createElement('span');
+    cursor.className = 'stream-cursor';
+    cursor.textContent = '▌';
+    bubble.appendChild(cursor);
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+  }
+
+  function finalizeStreamBubble(bubble, rawText, meta) {
+    let html = '';
+    if (meta?.bing_used) {
+      html += `<div class="bing-badge">🌐 Web-Fallback (Bing) aktiviert</div>`;
+    }
+    html += formatAnswer(rawText);
+    bubble.innerHTML = html;
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+  }
+
+  function formatAnswer(text) {
+    // Extract [AKTIONEN]...[/AKTIONEN] block before rendering
+    let actionHtml = '';
+    const actionMatch = text.match(/\[AKTIONEN\]([\s\S]*?)\[\/AKTIONEN\]/);
+    if (actionMatch) {
+      const block = actionMatch[1].trim();
+      const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+      let title = 'Empfohlene Schritte';
+      const items = [];
+      for (const line of lines) {
+        if (line.startsWith('Titel:')) {
+          title = line.replace('Titel:', '').trim();
+        } else if (line.startsWith('- ')) {
+          items.push(escHtml(line.slice(2)));
+        }
+      }
+      actionHtml = `
+        <div class="action-box">
+          <div class="action-box-title">${escHtml(title)}</div>
+          <ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>
+        </div>`;
+      text = text.replace(/\[AKTIONEN\][\s\S]*?\[\/AKTIONEN\]/, '').trim();
+    }
+
+    // Very light markdown: **bold**, *italic*, - lists, [Dok X] citations, newlines
+    let html = escHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/\[Dok (\d+)\]/g, (_, n) => `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">Dok</span>`)
+      .replace(/\[(\d+)\]/g, (_, n) => `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${n}</span>`);
+
+    const lines = html.split('\n');
+    let result = '';
+    let inList = false;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('- ')) {
+        if (!inList) { result += '<ul>'; inList = true; }
+        result += `<li>${trimmed.slice(2)}</li>`;
+      } else {
+        if (inList) { result += '</ul>'; inList = false; }
+        if (trimmed) result += `<p>${trimmed}</p>`;
+      }
+    }
+    if (inList) result += '</ul>';
+    return result + actionHtml;
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── SOURCES ──
+  function renderSources(sources, bingUsed) {
+    const list = document.getElementById('sources-list');
+    const count = document.getElementById('sources-count');
+
+    if (!sources || sources.length === 0) {
+      list.innerHTML = '<div class="sources-empty">Keine Quellen gefunden.</div>';
+      count.textContent = '0';
+      return;
+    }
+    document.querySelector('.sources-panel').classList.add('visible');
+
+    // Group chunks by document title — collect all page numbers per document
+    const grouped = {};
+    sources.forEach(src => {
+      const key = src.document_title || src.source_file || 'Unbekannt';
+      if (!grouped[key]) {
+        grouped[key] = { ...src, pages: [] };
+      }
+      if (src.page_number != null && !grouped[key].pages.includes(src.page_number)) {
+        grouped[key].pages.push(src.page_number);
+      }
+    });
+
+    const groupedList = Object.values(grouped);
+    count.textContent = groupedList.length;
+    list.innerHTML = '';
+
+    groupedList.forEach(src => {
+      const card = document.createElement('div');
+      card.className = 'source-card' + (src.is_web ? ' web' : '');
+
+      const metaParts = [];
+      if (src.source_file) metaParts.push(src.source_file.split('/').pop());
+
+      const pagesHtml = src.pages
+        .sort((a, b) => a - b)
+        .map(p => `<span class="tag page">S. ${p}</span>`)
+        .join('');
+
+      card.innerHTML = `
+        <div class="source-card-title">${escHtml(src.document_title)}</div>
+        ${metaParts.length ? `<div class="source-card-meta">${metaParts.join(' · ')}</div>` : ''}
+        <div class="source-tags">
+          ${src.is_web ? '<span class="tag web">🌐 Web</span>' : '<span class="tag doc">DOK</span>'}
+          ${pagesHtml}
+        </div>`;
+
+      if (src.source_url) {
+        card.onclick = () => window.open(src.source_url, '_blank');
+        card.style.cursor = 'pointer';
+      }
+
+      list.appendChild(card);
+    });
+  }
+
+  let sourcesCollapsed = false;
+
+  function toggleSources() {
+    sourcesCollapsed = !sourcesCollapsed;
+    document.querySelector('.sources-panel').classList.toggle('collapsed', sourcesCollapsed);
+    document.getElementById('sources-expand-btn').classList.toggle('visible', sourcesCollapsed);
+  }
+
+  function expandAndHighlight(dokIndex) {
+    const panel = document.querySelector('.sources-panel');
+    panel.classList.add('visible');
+    if (sourcesCollapsed) { sourcesCollapsed = false; panel.classList.remove('collapsed'); document.getElementById('sources-expand-btn').classList.remove('visible'); }
+
+    // Find the card by index (1-based) and briefly highlight it
+    const cards = document.querySelectorAll('.source-card');
+    const card = cards[dokIndex - 1];
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    card.classList.add('highlight');
+    setTimeout(() => card.classList.remove('highlight'), 1500);
+  }
+
+  function clearSources() {
+    document.getElementById('sources-list').innerHTML = '<div class="sources-empty">Noch keine Quellen.<br>Stelle eine Frage.</div>';
+    document.getElementById('sources-count').textContent = '0';
+    document.querySelector('.sources-panel').classList.remove('visible');
+  }
+
+  // ── LOADING STATE ──
+  function setLoading(loading) {
+    document.getElementById('send-btn').disabled = loading;
+    document.getElementById('message-input').disabled = loading;
+  }
+</script>
+</body>
+</html>

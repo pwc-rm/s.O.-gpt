@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# Environment — NEVER commit real credentials
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Azure artifacts
+*.publishsettings
+local.settings.json
+
+# Word / Office temp files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# macOS
+.DS_Store
+
+# Local scratch / uploads
+so-gpt-backend/uploads/
+so-gpt-backend/tmp/
+
+# Input documents and planning files — do not commit
+Input-Docs/
+Input-Docs-sO/
+Pläne/
+
+# Python venv
+so-gpt-backend/venv/
+
+# Terraform — contains subscription ID and sensitive state
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfvars
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/*.tfplan
+deploy.zip
