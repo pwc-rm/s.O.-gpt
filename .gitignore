@@ -54,6 +54,9 @@ Pläne/
 # Python venv
 so-gpt-backend/venv/
 
+# Node
+node_modules/
+
 # Terraform — contains subscription ID and sensitive state
 infra/.terraform/
 infra/.terraform.lock.hcl

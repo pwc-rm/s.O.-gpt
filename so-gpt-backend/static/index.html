@@ -59,24 +59,17 @@
     }
 
     .logo-badge {
-      width: 30px;
-      height: 30px;
-      background: white;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #1c1917;
-      letter-spacing: -0.5px;
+      height: 22px;
+      width: auto;
+      display: block;
     }
 
     .logo-text {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 600;
-      color: white;
-      letter-spacing: 0.3px;
+      color: #E2003A;
+      letter-spacing: 2px;
+      line-height: 22px;
     }
 
     .new-chat-btn {
@@ -120,12 +113,34 @@
       color: var(--text-sidebar);
       font-size: 12.5px;
       transition: background 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+    .chat-history-item:hover { background: var(--sidebar-hover); }
+    .chat-history-item.active { background: var(--sidebar-active); color: white; }
+    .chat-history-title {
+      flex: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .chat-history-item:hover { background: var(--sidebar-hover); }
-    .chat-history-item.active { background: var(--sidebar-active); color: white; }
+    .chat-delete-btn {
+      flex-shrink: 0;
+      opacity: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 3px;
+      border-radius: 4px;
+      color: var(--text-sidebar);
+      display: flex;
+      align-items: center;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .chat-history-item:hover .chat-delete-btn { opacity: 1; }
+    .chat-delete-btn:hover { background: rgba(220,38,38,0.25); color: #f87171; }
 
     .sidebar-nav {
       padding: 8px 8px 0;
@@ -179,6 +194,18 @@
       display: flex;
       gap: 8px;
     }
+
+    .cost-badge {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: #f3f4f6;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      display: none;
+    }
+    .cost-badge.visible { display: inline-block; }
 
     .icon-btn {
       width: 32px;
@@ -255,6 +282,15 @@
     .bubble em { font-style: italic; color: var(--text-secondary); }
     .bubble ul { padding-left: 18px; margin-top: 4px; }
     .bubble ul li { margin-bottom: 4px; }
+    .bubble h2 { font-size: 15px; font-weight: 700; margin: 14px 0 6px; }
+    .bubble h3 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
+    .bubble h4 { font-size: 13px; font-weight: 600; margin: 10px 0 3px; color: #444; }
+    .bubble h2:first-child, .bubble h3:first-child, .bubble h4:first-child { margin-top: 2px; }
+    .bubble table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+    .bubble th { background: #e8f4fd; font-weight: 600; text-align: left; padding: 6px 10px; border: 1px solid #c8dff5; }
+    .bubble td { padding: 5px 10px; border: 1px solid #dde8f5; }
+    .bubble tr:nth-child(even) td { background: #f7faff; }
+    .bubble hr { border: none; border-top: 1px solid #e5e7eb; margin: 10px 0; }
 
     .cite {
       display: inline;
@@ -505,7 +541,7 @@
       color: var(--text-secondary);
       padding: 40px;
     }
-    .empty-logo { font-size: 40px; font-weight: 800; color: #d1d5db; }
+    .empty-logo { height: 52px; width: auto; opacity: 0.85; margin-bottom: 4px; }
     .empty-title { font-size: 18px; font-weight: 600; color: #374151; }
     .empty-sub { font-size: 13px; max-width: 360px; text-align: center; line-height: 1.6; }
 
@@ -558,10 +594,216 @@
     }
     .action-box ul li:last-child { margin-bottom: 0; }
 
+    /* ── URLAUB WIDGETS ── */
+    .urlaub-card, .urlaub-form, .urlaub-timeline {
+      margin-top: 14px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      animation: urlaubIn 0.35s ease;
+    }
+    @keyframes urlaubIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .urlaub-card-head {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 14px;
+    }
+    .urlaub-src {
+      margin-left: auto; font-size: 10px; font-weight: 600; letter-spacing: .4px;
+      text-transform: uppercase; color: #059669; background: #ecfdf5;
+      border: 1px solid #a7f3d0; border-radius: 20px; padding: 2px 8px;
+    }
+
+    .urlaub-stats { display: flex; gap: 28px; margin-bottom: 12px; }
+    .urlaub-stat { display: flex; flex-direction: column; }
+    .urlaub-stat .big { font-size: 30px; font-weight: 700; color: #E2003A; line-height: 1; }
+    .urlaub-stat .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .urlaub-bar { height: 7px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+    .urlaub-bar-fill { height: 100%; background: linear-gradient(90deg,#E2003A,#ff5c85); border-radius: 4px; transition: width .5s ease; }
+    .urlaub-sub { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+
+    .urlaub-form .uf-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .urlaub-form label { display: flex; flex-direction: column; font-size: 12px; font-weight: 600; color: #374151; gap: 5px; flex: 1; }
+    .urlaub-form input[type=date] {
+      font: inherit; font-size: 13px; padding: 8px 10px;
+      border: 1px solid var(--border); border-radius: 8px; color: #111827; background: #fff;
+    }
+    .urlaub-form input[type=date]:focus { outline: none; border-color: #E2003A; }
+    .uf-days { font-size: 13px; color: #374151; margin-bottom: 10px; padding: 8px 12px; background: #f9fafb; border-radius: 8px; }
+    .uf-days strong { color: #E2003A; font-size: 15px; }
+    .uf-check { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 500 !important; font-size: 13px !important; margin-bottom: 12px; cursor: pointer; }
+    .uf-check input { width: 16px; height: 16px; accent-color: #E2003A; }
+    .uf-err { font-size: 12px; color: #dc2626; min-height: 16px; margin-bottom: 8px; }
+    .uf-balance { display: none; gap: 8px; margin-bottom: 12px; }
+    .uf-balance.show { display: flex; }
+    .uf-bal-item { flex: 1; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 12px; }
+    .uf-bal-item .lbl { display: block; font-size: 11px; color: #6b7280; margin-bottom: 2px; }
+    .uf-bal-item .val { font-size: 15px; font-weight: 700; color: #16a34a; }
+    .uf-bal-item .val small { font-size: 11px; font-weight: 500; color: #6b7280; }
+    .uf-bal-item.used { background: #fef2f2; border-color: #fecaca; }
+    .uf-bal-item.used .val { color: #E2003A; }
+    .uf-submit {
+      width: 100%; background: #E2003A; color: #fff; border: none; border-radius: 8px;
+      padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s;
+    }
+    .uf-submit:hover { background: #b8002f; }
+
+    .ut-range { font-size: 13px; color: #374151; margin-bottom: 14px; }
+    .ut-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
+    .ut-step { display: flex; gap: 12px; align-items: flex-start; position: relative; padding-bottom: 16px; }
+    .ut-step:not(:last-child)::before {
+      content: ''; position: absolute; left: 6px; top: 16px; bottom: 0; width: 2px; background: var(--border);
+    }
+    .ut-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 1px; background: #d1d5db; z-index: 1; }
+    .ut-step.done .ut-dot { background: #059669; }
+    .ut-step.wait .ut-dot { background: #f59e0b; }
+    .ut-dot.pulse { box-shadow: 0 0 0 0 rgba(245,158,11,0.6); animation: utPulse 1.6s infinite; }
+    @keyframes utPulse { 70% { box-shadow: 0 0 0 8px rgba(245,158,11,0); } 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); } }
+    .ut-step strong { font-size: 13px; color: #111827; }
+    .ut-step.pending strong { color: #9ca3af; font-weight: 600; }
+    .ut-t { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .ut-actions { display: flex; gap: 10px; }
+    .ut-btn { flex: 1; border-radius: 8px; padding: 9px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; transition: all .15s; }
+    .ut-btn.undo { color: #dc2626; border-color: #fecaca; }
+    .ut-btn.undo:hover { background: #fef2f2; }
+    .ut-btn.cal { color: #111827; }
+    .ut-btn.cal:hover { background: #f9fafb; }
+    .urlaub-timeline.withdrawn { border-color: #fecaca; background: #fef2f2; }
+    .urlaub-timeline.withdrawn .urlaub-card-head { color: #dc2626; margin-bottom: 6px; }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    /* ── CANVAS PANEL ── */
+    .canvas-panel {
+      display: none; flex-direction: column; flex: 2; min-width: 0;
+      border-left: 1px solid var(--border); background: #fff; overflow: hidden;
+    }
+    body.canvas-open .canvas-panel { display: flex; }
+    body.canvas-open .sidebar { display: none; }
+    body.canvas-open .right-panel { display: none; }
+    body.canvas-open .main { flex: 1; min-width: 0; }
+
+    .canvas-header {
+      height: 53px; padding: 0 12px; border-bottom: 1px solid var(--border);
+      background: white; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .canvas-title-text {
+      flex: 1; font-size: 14px; font-weight: 600; color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .canvas-body {
+      flex: 1; overflow-y: auto; padding: 28px 36px; outline: none;
+      font-size: 14px; line-height: 1.75; color: var(--text-primary);
+    }
+    .canvas-body:focus { outline: none; }
+    .canvas-body p { margin-bottom: 10px; }
+    .canvas-body p:last-child { margin-bottom: 0; }
+    .canvas-body strong { font-weight: 600; }
+    .canvas-body em { font-style: italic; color: var(--text-secondary); }
+    .canvas-body h2 { font-size: 18px; font-weight: 700; margin: 20px 0 8px; color: #111827; }
+    .canvas-body h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
+    .canvas-body h4 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; color: #374151; }
+    .canvas-body h2:first-child, .canvas-body h3:first-child, .canvas-body h4:first-child { margin-top: 0; }
+    .canvas-body ul, .canvas-body ol { padding-left: 22px; margin: 6px 0 10px; }
+    .canvas-body ul li, .canvas-body ol li { margin-bottom: 5px; }
+    .canvas-body table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; }
+    .canvas-body th { background: #e8f4fd; font-weight: 600; padding: 7px 12px; border: 1px solid #c8dff5; text-align: left; }
+    .canvas-body td { padding: 6px 12px; border: 1px solid #dde8f5; }
+    .canvas-body tr:nth-child(even) td { background: #f7faff; }
+    .canvas-body hr { border: none; border-top: 1px solid #e5e7eb; margin: 16px 0; }
+
+    .canvas-diff-new {
+      border-left: 3px solid #16a34a; background: #f0fdf4;
+      margin: 20px 0; padding: 14px 18px; border-radius: 0 8px 8px 0;
+      animation: diffIn 0.3s ease;
+    }
+    @keyframes diffIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .canvas-diff-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: #16a34a; margin-bottom: 10px;
+    }
+    .canvas-diff-bar {
+      display: none; padding: 10px 16px; border-top: 1px solid #bbf7d0;
+      background: #f0fdf4; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .canvas-diff-bar.active { display: flex; }
+    .diff-summary { flex: 1; font-size: 12px; color: #16a34a; font-weight: 500; }
+    .diff-btn {
+      padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: 1px solid; transition: all 0.15s;
+    }
+    .diff-btn.accept { background: #16a34a; color: white; border-color: #16a34a; }
+    .diff-btn.accept:hover { background: #15803d; }
+    .diff-btn.reject { background: white; color: #dc2626; border-color: #fecaca; }
+    .diff-btn.reject:hover { background: #fef2f2; }
+
+    /* ── RIGHT PANEL (Assets + Quellen tabs) ── */
+    .right-panel {
+      width: 280px; min-width: 280px; background: var(--sources-bg);
+      border-left: 1px solid var(--border); display: flex;
+      flex-direction: column; overflow: hidden;
+    }
+    .right-panel.collapsed { display: none !important; }
+
+    .panel-tab-bar {
+      height: 53px; padding: 0 8px; border-bottom: 1px solid var(--border);
+      background: white; display: flex; align-items: flex-end; gap: 2px; flex-shrink: 0;
+    }
+    .panel-tab {
+      padding: 9px 10px; font-size: 12px; font-weight: 600; border: none;
+      background: transparent; cursor: pointer; color: var(--text-secondary);
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+    }
+    .panel-tab.active { color: #E2003A; border-bottom-color: #E2003A; }
+    .panel-tab:hover:not(.active) { color: var(--text-primary); }
+    .panel-tab-spacer { flex: 1; }
+    .panel-tab-content { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+    .panel-tab-content.active { display: flex; }
+
+    .assets-list {
+      flex: 1; overflow-y: auto; padding: 12px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .asset-card {
+      background: white; border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 13px; cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s;
+      border-left: 3px solid #6366f1;
+    }
+    .asset-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left-color: #4f46e5; }
+    .asset-card-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+    .asset-card-meta { font-size: 11px; color: var(--text-secondary); }
+    .asset-tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      background: #ede9fe; color: #5b21b6; border-radius: 4px;
+      padding: 1px 6px; letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .canvas-link-pill {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
+      padding: 6px 12px; background: #f5f3ff; border: 1px solid #c4b5fd;
+      border-radius: 8px; font-size: 12px; font-weight: 500; color: #5b21b6;
+      cursor: default; transition: background 0.15s; flex-wrap: wrap;
+    }
+    .canvas-link-pill:hover { background: #ede9fe; }
+    .canvas-open-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; background: #5b21b6; color: #fff;
+      border: none; border-radius: 6px; font-size: 11px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    .canvas-open-btn:hover { background: #4c1d95; }
+    body.canvas-open .canvas-open-btn { display: none; }
+    .canvas-streaming-indicator {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+      padding: 7px 12px; background: rgba(91,33,182,0.07); border: 1px solid #c4b5fd;
+      border-radius: 8px; font-size: 13px; color: #5b21b6;
+    }
 
     /* Streaming cursor */
     .stream-cursor {
@@ -584,8 +826,8 @@
 <!-- ── SIDEBAR ── -->
 <aside class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-badge">s.O</div>
-    <span class="logo-text">s.O GPT</span>
+    <img src="/static/soliver-logo.png" class="logo-badge" alt="s.Oliver" />
+    <span class="logo-text">GPT</span>
   </div>
 
   <button class="new-chat-btn" onclick="newChat()">
@@ -628,6 +870,7 @@
 <main class="main">
   <header class="chat-header">
     <span class="chat-title" id="chat-title">Neuer Chat</span>
+    <span class="cost-badge" id="cost-badge"></span>
     <button class="icon-btn" id="sources-expand-btn" onclick="toggleSources()" title="Quellen anzeigen">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
@@ -635,7 +878,7 @@
 
   <div class="messages" id="messages">
     <div class="empty-state" id="empty-state">
-      <div class="empty-logo">s.O</div>
+      <img src="/static/soliver-logo.png" class="empty-logo" alt="s.Oliver" />
       <div class="empty-title">Wie kann ich helfen?</div>
       <div class="empty-sub">Stelle eine Frage zu internen Richtlinien, Projekten oder Unternehmensthemen.</div>
       <div class="suggestion-chips">
@@ -661,24 +904,53 @@
         oninput="autoResize(this)"
       ></textarea>
       <button class="send-btn" id="send-btn" onclick="sendMessage()">
-        SENDEN
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span id="send-btn-label">SENDEN</span>
+        <span id="send-btn-icon">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </span>
       </button>
     </div>
   </div>
 </main>
 
-<!-- ── SOURCES PANEL ── -->
-<aside class="sources-panel">
-  <div class="sources-header">
-    <button class="sources-collapse-btn" onclick="toggleSources()" title="Ein-/Ausklappen">
+<!-- ── CANVAS PANEL ── -->
+<aside class="canvas-panel" id="canvas-panel">
+  <div class="canvas-header">
+    <span class="canvas-title-text" id="canvas-title-text">Dokument</span>
+    <button class="icon-btn" onclick="downloadCanvas()" title="Markdown herunterladen">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <button class="icon-btn" onclick="closeCanvas()" title="Schließen">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="canvas-body" id="canvas-body"></div>
+  <div class="canvas-diff-bar" id="canvas-diff-bar">
+    <span class="diff-summary" id="diff-summary">Neuer Abschnitt bereit zur Übernahme</span>
+    <button class="diff-btn reject" onclick="rejectDiff()">✕ Ablehnen</button>
+    <button class="diff-btn accept" onclick="acceptDiff()">✓ Übernehmen</button>
+  </div>
+</aside>
+
+<!-- ── RIGHT PANEL (Chat Assets + Quellen) ── -->
+<aside class="right-panel" id="right-panel">
+  <div class="panel-tab-bar">
+    <button class="panel-tab active" id="tab-btn-assets" onclick="switchPanelTab('assets')">Chat Assets</button>
+    <button class="panel-tab" id="tab-btn-quellen" onclick="switchPanelTab('quellen')">Quellen <span class="sources-count" id="sources-count">0</span></button>
+    <div class="panel-tab-spacer"></div>
+    <button class="sources-collapse-btn" onclick="toggleSources()" title="Panel ein-/ausblenden" style="margin-bottom:4px">
       <svg id="sources-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-    <span>Quellen</span>
-    <span class="sources-count" id="sources-count">0</span>
   </div>
-  <div class="sources-list" id="sources-list">
-    <div class="sources-empty">Noch keine Quellen.<br>Stelle eine Frage.</div>
+  <div class="panel-tab-content active" id="tab-content-assets">
+    <div class="assets-list" id="assets-list">
+      <div class="sources-empty">Noch keine Dokumente.<br>Generiere Inhalte im Chat.</div>
+    </div>
+  </div>
+  <div class="panel-tab-content" id="tab-content-quellen">
+    <div class="sources-list" id="sources-list">
+      <div class="sources-empty">Noch keine Quellen.<br>Stelle eine Frage.</div>
+    </div>
   </div>
 </aside>
 
@@ -686,16 +958,40 @@
   // ── CONFIG ──
   // API calls go through Azure API Management — no key needed in frontend.
   // APIM injects the backend x-api-key server-side as a Named Value secret.
-  const API_URL = 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
+  // On localhost the frontend talks to the local backend directly (DEV_SKIP_AUTH).
+  const _LOCAL = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  const API_URL = _LOCAL ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
 
   // ── STATE ──
   let sessionId = null;
   let chatSessions = [];   // [{id, title}] — loaded from backend
   let currentSessionId = null;
+  let _sessionUsage = { prompt: 0, completion: 0 };
+
+  // GPT-4o pricing (per 1M tokens)
+  const PRICE_INPUT  = 2.50;
+  const PRICE_OUTPUT = 10.00;
+
+  function updateCostBadge() {
+    const cost = (_sessionUsage.prompt * PRICE_INPUT + _sessionUsage.completion * PRICE_OUTPUT) / 1_000_000;
+    const totalTokens = _sessionUsage.prompt + _sessionUsage.completion;
+    const badge = document.getElementById('cost-badge');
+    badge.textContent = `~$${cost.toFixed(4)} · ${(totalTokens / 1000).toFixed(1)}k Token`;
+    badge.classList.add('visible');
+  }
+
+  function resetCostBadge() {
+    _sessionUsage = { prompt: 0, completion: 0 };
+    const badge = document.getElementById('cost-badge');
+    badge.textContent = '';
+    badge.classList.remove('visible');
+  }
 
   const SESSIONS_URL = '/sessions';  // relative — same origin as the served HTML
 
   // ── INIT ──
+  let sourcesCollapsed = false;  // declared before first use (avoids TDZ in _setPanelCollapsed)
+  _setPanelCollapsed(true);  // hide the Assets/Quellen panel until the user starts chatting
   fetchSessions();
 
   async function fetchSessions() {
@@ -713,6 +1009,7 @@
     currentSessionId = s.id;
     document.getElementById('chat-title').textContent = s.title;
     clearSources();
+    _setPanelCollapsed(false);  // existing session has content — show the panel
     renderHistory();
 
     const msgs = document.getElementById('messages');
@@ -723,6 +1020,34 @@
       const data = res.ok ? await res.json() : {messages: [], sources: []};
       const messages = data.messages || [];
       if (data.sources?.length) renderSources(data.sources, false);
+      resetCostBadge();
+      if (data.prompt_tokens || data.completion_tokens) {
+        _sessionUsage.prompt = data.prompt_tokens || 0;
+        _sessionUsage.completion = data.completion_tokens || 0;
+        updateCostBadge();
+      }
+      // Restore canvas documents from Cosmos FIRST — so history message pills
+      // (rendered below via formatAnswer replay mode) can link to existing canvases.
+      _canvases = [];
+      _activeCanvasId = null;
+      _pendingDiff = null;
+      _streamingCanvasId = null;
+      document.body.classList.remove('canvas-open');
+      if (data.canvases?.length) {
+        // Dedup by title, keep newest (list_canvases returns newest first),
+        // then reverse to oldest-first so ordering matches live creation order.
+        const seenTitles = new Set();
+        const deduped = [];
+        for (const c of data.canvases) {
+          if (seenTitles.has(c.title)) continue;
+          seenTitles.add(c.title);
+          deduped.push({ canvas_id: c.canvas_id, title: c.title, content: c.content, sources: c.sources || [] });
+        }
+        _canvases = deduped.reverse();
+        switchPanelTab('assets');
+      }
+      renderAssets();
+
       msgs.innerHTML = '';
       messages.forEach(m => {
         const row = document.createElement('div');
@@ -731,10 +1056,19 @@
           row.innerHTML = `<div class="avatar user">Du</div><div class="bubble user">${escHtml(m.text)}</div>`;
         } else {
           row.className = 'message-row ai';
-          row.innerHTML = `<div class="avatar ai">s.O</div><div class="bubble ai">${formatAnswer(m.text)}</div>`;
+          row.innerHTML = `<div class="avatar ai">s.O</div><div class="bubble ai">${formatAnswer(m.text, data.sources || [], { replay: true })}</div>`;
         }
         msgs.appendChild(row);
       });
+      // Restore a submitted vacation request: replace the rendered form with its timeline
+      if (data.urlaub_antrag) {
+        const a = data.urlaub_antrag;
+        const forms = msgs.querySelectorAll('.urlaub-form');
+        const last = forms[forms.length - 1];
+        if (last) last.outerHTML = renderUrlaubTimeline({
+          von: a.von, bis: a.bis, n: a.days, ot: a.overtime, time: a.time, status: a.status,
+        });
+      }
       msgs.scrollTop = msgs.scrollHeight;
     } catch (_) {
       msgs.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;">Fehler beim Laden.</div>';
@@ -745,7 +1079,7 @@
     sessionId = null;
     document.getElementById('messages').innerHTML = `
       <div class="empty-state" id="empty-state">
-        <div class="empty-logo">s.O</div>
+        <img src="/static/soliver-logo.png" class="empty-logo" alt="s.Oliver" />
         <div class="empty-title">Wie kann ich helfen?</div>
         <div class="empty-sub">Stelle eine Frage zu internen Richtlinien, Projekten oder Unternehmensthemen.</div>
         <div class="suggestion-chips">
@@ -757,6 +1091,15 @@
     document.getElementById('chat-title').textContent = 'Neuer Chat';
     clearSources();
     currentSessionId = null;
+    resetCostBadge();
+    _canvases = [];
+    _activeCanvasId = null;
+    _pendingDiff = null;
+    _streamingCanvasId = null;
+    document.body.classList.remove('canvas-open');
+    renderAssets();
+    switchPanelTab('assets');
+    _setPanelCollapsed(true);  // panel stays hidden in a fresh chat until the user starts chatting
     renderHistory();
   }
 
@@ -766,11 +1109,41 @@
     chatSessions.forEach(s => {
       const div = document.createElement('div');
       div.className = 'chat-history-item' + (s.id === currentSessionId ? ' active' : '');
-      div.textContent = s.title;
       div.title = s.title;
-      div.onclick = () => loadSession(s);
+
+      const title = document.createElement('span');
+      title.className = 'chat-history-title';
+      title.textContent = s.title;
+      title.onclick = () => loadSession(s);
+
+      const del = document.createElement('button');
+      del.className = 'chat-delete-btn';
+      del.title = 'Chat löschen';
+      del.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>';
+      del.onclick = (e) => { e.stopPropagation(); deleteSession(s.id, div); };
+
+      div.appendChild(title);
+      div.appendChild(del);
       container.appendChild(div);
     });
+  }
+
+  async function deleteSession(sessionId, el) {
+    el.style.opacity = '0.4';
+    try {
+      await fetch(`${SESSIONS_URL}/${sessionId}`, { method: 'DELETE' });
+      chatSessions = chatSessions.filter(s => s.id !== sessionId);
+      el.remove();
+      if (sessionId === currentSessionId) {
+        currentSessionId = null;
+        sessionId = null;
+        document.getElementById('messages').innerHTML = '';
+        document.getElementById('chat-title').textContent = 'Neuer Chat';
+        clearSources();
+      }
+    } catch (_) {
+      el.style.opacity = '1';
+    }
   }
 
   // ── INPUT ──
@@ -792,10 +1165,23 @@
   }
 
   // ── SEND ──
+  let _abortController = null;
+
+  function stopGeneration() {
+    if (_abortController) _abortController.abort();
+  }
+
+  let _lastUserMessage = '';  // used by canvas guard to check if question warrants a canvas
+
   async function sendMessage() {
     const input = document.getElementById('message-input');
     const text = input.value.trim();
     if (!text) return;
+
+    _lastUserMessage = text;
+
+    // Reveal the Assets/Quellen panel now that the conversation has started
+    if (sourcesCollapsed) _setPanelCollapsed(false);
 
     const emptyState = document.getElementById('empty-state');
     if (emptyState) emptyState.remove();
@@ -809,24 +1195,28 @@
       document.getElementById('chat-title').textContent = text.slice(0, 45) + (text.length > 45 ? '…' : '');
     }
 
+    _abortController = new AbortController();
+    let _bubble = null;
+    let rawText = '';
+    let meta = null;
+
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ frage: text, session_id: sessionId }),
+        signal: _abortController.signal,
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       // Server responded — replace typing indicator with streaming bubble immediately
       removeTyping();
-      const bubble = appendStreamingBubble();
+      _bubble = appendStreamingBubble();
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
-      let rawText = '';
-      let meta = null;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -841,7 +1231,7 @@
           const payload = line.slice(6).trim();
 
           if (payload === '[DONE]') {
-            finalizeStreamBubble(bubble, rawText, meta);
+            finalizeStreamBubble(_bubble, rawText, meta);
             continue;
           }
 
@@ -850,10 +1240,20 @@
             if (evt.type === 'meta') {
               meta = evt;
               sessionId = evt.session_id;
-              renderSources(evt.quellen, evt.bing_used);
+              // Set the active session id NOW (not only after the stream loop) so a
+              // canvas saved via setTimeout during streaming has a session to persist to.
+              currentSessionId = evt.session_id;
+              // Only render sources when this turn actually has some. Deterministic
+              // flow replies (vacation saldo/form) carry no sources — rendering their
+              // empty list would wipe the sources from the preceding answer.
+              if (evt.quellen && evt.quellen.length) renderSources(evt.quellen, evt.bing_used);
             } else if (evt.type === 'token') {
               rawText += evt.content;
-              updateStreamBubble(bubble, rawText);
+              updateStreamBubble(_bubble, rawText);
+            } else if (evt.type === 'usage') {
+              _sessionUsage.prompt += evt.prompt_tokens;
+              _sessionUsage.completion += evt.completion_tokens;
+              updateCostBadge();
             } else if (evt.type === 'error') {
               throw new Error(evt.message);
             }
@@ -871,9 +1271,21 @@
       }
 
     } catch (err) {
-      removeTyping();
-      appendError(err.message);
+      if (err.name === 'AbortError') {
+        removeTyping();
+        if (_bubble) {
+          if (rawText) {
+            finalizeStreamBubble(_bubble, rawText, meta);
+          } else {
+            _bubble.closest('.message-row')?.remove();
+          }
+        }
+      } else {
+        removeTyping();
+        appendError(err.message);
+      }
     } finally {
+      _abortController = null;
       setLoading(false);
     }
   }
@@ -968,13 +1380,469 @@
     return bubble;
   }
 
+  // ── URLAUB DEMO WIDGETS (Mock-Daten, wiederholbar) ──
+  const URLAUB_DATA = { remaining: 16, total: 30, overtimeHours: 46, manager: 'Sabine Keller', managerRole: 'People & Culture' };
+  const URLAUB_HOURS_PER_DAY = 8;
+  const URLAUB_OT_DAYS = Math.floor(URLAUB_DATA.overtimeHours / URLAUB_HOURS_PER_DAY);  // 46h → 5 Tage
+  let _urlaubSeq = 0;
+
+  function fmtDate(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}.${m}.${y}`;
+  }
+
+  function renderUrlaubSaldoCard() {
+    const used = URLAUB_DATA.total - URLAUB_DATA.remaining;
+    const pct = Math.round(URLAUB_DATA.remaining / URLAUB_DATA.total * 100);
+    return `
+      <div class="urlaub-card">
+        <div class="urlaub-card-head">🏖️ Dein Urlaubskonto ${new Date().getFullYear()}
+          <span class="urlaub-src">live aus HR-System</span></div>
+        <div class="urlaub-stats">
+          <div class="urlaub-stat"><span class="big">${URLAUB_DATA.remaining}</span><span class="lbl">von ${URLAUB_DATA.total} Tagen übrig</span></div>
+          <div class="urlaub-stat"><span class="big">${URLAUB_DATA.overtimeHours}</span><span class="lbl">Überstunden verfügbar</span></div>
+        </div>
+        <div class="urlaub-bar"><div class="urlaub-bar-fill" style="width:${pct}%"></div></div>
+        <div class="urlaub-sub">${used} Tage bereits genommen · ${URLAUB_DATA.remaining} Tage noch verfügbar</div>
+      </div>`;
+  }
+
+  function renderUrlaubForm() {
+    const id = 'uf' + (++_urlaubSeq);
+    const today = new Date();
+    const min = today.toISOString().slice(0, 10);
+    const max = `${today.getFullYear()}-12-31`;
+    return `
+      <div class="urlaub-form" id="${id}">
+        <div class="urlaub-card-head">📝 Urlaubsantrag stellen</div>
+        <div class="uf-row">
+          <label>Von<input type="date" id="${id}-von" min="${min}" max="${max}" onchange="urlaubCalc('${id}')"></label>
+          <label>Bis<input type="date" id="${id}-bis" min="${min}" max="${max}" onchange="urlaubCalc('${id}')"></label>
+        </div>
+        <div class="uf-days" id="${id}-days">Bitte Zeitraum wählen</div>
+        <label class="uf-check"><input type="checkbox" id="${id}-ot" onchange="urlaubCalc('${id}')"> ${URLAUB_DATA.overtimeHours} Überstunden anrechnen (+${URLAUB_OT_DAYS} Tage)</label>
+        <div class="uf-balance" id="${id}-bal"></div>
+        <div class="uf-err" id="${id}-err"></div>
+        <button class="uf-submit" onclick="submitUrlaub('${id}')">Antrag einreichen</button>
+      </div>`;
+  }
+
+  // Überstunden werden ZUERST verrechnet (je Tag 8h) → Urlaubstage werden geschont.
+  function urlaubBalance(n, ot) {
+    const otDaysUsed = ot ? Math.min(n, URLAUB_OT_DAYS) : 0;
+    const otHoursUsed = otDaysUsed * URLAUB_HOURS_PER_DAY;
+    const daysFromVacation = n - otDaysUsed;
+    return {
+      remVacation: URLAUB_DATA.remaining - daysFromVacation,
+      remOvertime: URLAUB_DATA.overtimeHours - otHoursUsed,
+      daysFromVacation, otHoursUsed,
+    };
+  }
+
+  function urlaubBalanceHtml(n, ot) {
+    const b = urlaubBalance(n, ot);
+    const vacUsed = b.daysFromVacation > 0;
+    const otUsed = b.otHoursUsed > 0;
+    return `
+      <div class="uf-bal-item ${vacUsed ? 'used' : ''}">
+        <span class="lbl">Resturlaub danach</span>
+        <span class="val">${b.remVacation} <small>Tage</small></span>
+      </div>
+      <div class="uf-bal-item ${otUsed ? 'used' : ''}">
+        <span class="lbl">Überstunden danach</span>
+        <span class="val">${b.remOvertime} <small>Std.</small></span>
+      </div>`;
+  }
+
+  function urlaubWorkdays(vonIso, bisIso) {
+    let d = new Date(vonIso); const end = new Date(bisIso); let n = 0;
+    while (d <= end) { const wd = d.getDay(); if (wd !== 0 && wd !== 6) n++; d.setDate(d.getDate() + 1); }
+    return n;
+  }
+
+  function urlaubCalc(id) {
+    const vonEl = document.getElementById(id + '-von');
+    const bisEl = document.getElementById(id + '-bis');
+    const von = vonEl.value;
+    const bis = bisEl.value;
+    const ot = document.getElementById(id + '-ot').checked;
+    const daysEl = document.getElementById(id + '-days');
+    const balEl = document.getElementById(id + '-bal');
+    const err = document.getElementById(id + '-err');
+    err.textContent = '';
+    balEl.classList.remove('show');
+
+    // Couple both fields: "Bis" can't be before "Von", "Von" can't be after "Bis"
+    const today = new Date();
+    const baseMin = today.toISOString().slice(0, 10);
+    const baseMax = `${today.getFullYear()}-12-31`;
+    bisEl.min = von || baseMin;
+    vonEl.max = bis || baseMax;
+
+    if (!von || !bis) { daysEl.textContent = 'Bitte Zeitraum wählen'; return; }
+    if (bis < von) { daysEl.textContent = 'Bitte Zeitraum wählen'; err.textContent = 'Das Enddatum liegt vor dem Startdatum.'; return; }
+    const n = urlaubWorkdays(von, bis);
+    const available = URLAUB_DATA.remaining + (ot ? URLAUB_OT_DAYS : 0);
+    daysEl.innerHTML = `<strong>${n}</strong> Arbeitstag${n === 1 ? '' : 'e'} (Wochenenden ausgenommen)`;
+    if (ot && n > URLAUB_DATA.remaining && n <= available) {
+      const otUsed = n - URLAUB_DATA.remaining;
+      daysEl.innerHTML += ` · ${URLAUB_DATA.remaining} Urlaubstage + ${otUsed} über Überstunden`;
+    }
+    if (n > available) {
+      if (!ot && n <= URLAUB_DATA.remaining + URLAUB_OT_DAYS) {
+        err.textContent = `Nur ${URLAUB_DATA.remaining} Urlaubstage verfügbar. Aktiviere die Überstunden (+${URLAUB_OT_DAYS} Tage), um bis zu ${URLAUB_DATA.remaining + URLAUB_OT_DAYS} Tage zu nehmen.`;
+      } else {
+        err.textContent = `Maximal ${available} Tage möglich${ot ? ' (inkl. Überstunden)' : ''} — bitte Zeitraum anpassen.`;
+      }
+    } else {
+      balEl.innerHTML = urlaubBalanceHtml(n, ot);
+      balEl.classList.add('show');
+    }
+  }
+
+  function submitUrlaub(id) {
+    const form = document.getElementById(id);
+    const von = document.getElementById(id + '-von').value;
+    const bis = document.getElementById(id + '-bis').value;
+    const ot = document.getElementById(id + '-ot').checked;
+    const err = document.getElementById(id + '-err');
+    if (!von || !bis) { err.textContent = 'Bitte wähle einen Zeitraum aus.'; return; }
+    if (bis < von) { err.textContent = 'Ungültiger Zeitraum.'; return; }
+    const n = urlaubWorkdays(von, bis);
+    const available = URLAUB_DATA.remaining + (ot ? URLAUB_OT_DAYS : 0);
+    if (n > available) {
+      if (!ot && n <= URLAUB_DATA.remaining + URLAUB_OT_DAYS) {
+        err.textContent = `Nicht genug Urlaubstage: Du hast ${URLAUB_DATA.remaining} Tage, beantragt sind ${n}. Aktiviere die Überstunden (+${URLAUB_OT_DAYS} Tage) oder passe den Zeitraum an.`;
+      } else {
+        err.textContent = `Nicht genug Kontingent: maximal ${available} Tage möglich${ot ? ' inkl. Überstunden' : ''}, beantragt sind ${n}. Bitte Zeitraum anpassen.`;
+      }
+      return;
+    }
+    const time = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+    form.outerHTML = renderUrlaubTimeline({ von, bis, n, ot, time, status: 'pending' });
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+    // Persist in Cosmos so the timeline survives chat switches
+    fetch('/urlaub/antrag', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: currentSessionId, von, bis, days: n, overtime: ot, time }),
+    }).catch(() => {});
+  }
+
+  function renderUrlaubTimeline(r) {
+    const id = 'ut' + (++_urlaubSeq);
+    if (r.status === 'withdrawn') {
+      return `
+        <div class="urlaub-timeline withdrawn" id="${id}">
+          <div class="urlaub-card-head">✕ Urlaubsantrag zurückgezogen</div>
+          <div class="ut-range">${fmtDate(r.von)} – ${fmtDate(r.bis)} · storniert, keine Urlaubstage verbucht.</div>
+        </div>`;
+    }
+    return `
+      <div class="urlaub-timeline" id="${id}" data-von="${r.von}" data-bis="${r.bis}">
+        <div class="urlaub-card-head">✅ Urlaubsantrag eingereicht</div>
+        <div class="ut-range">${fmtDate(r.von)} – ${fmtDate(r.bis)} · ${r.n} Arbeitstage${r.ot ? ' · Überstunden angerechnet' : ''}</div>
+        <div class="uf-balance show" style="margin-top:10px">${urlaubBalanceHtml(r.n, r.ot)}</div>
+        <div class="ut-steps">
+          <div class="ut-step done"><span class="ut-dot"></span><div><strong>Antrag eingereicht</strong><div class="ut-t">${r.time} Uhr</div></div></div>
+          <div class="ut-step wait"><span class="ut-dot pulse"></span><div><strong>Wartet auf Freigabe</strong><div class="ut-t">${URLAUB_DATA.manager} · ${URLAUB_DATA.managerRole}</div></div></div>
+          <div class="ut-step pending"><span class="ut-dot"></span><div><strong>Genehmigt</strong><div class="ut-t">ausstehend</div></div></div>
+        </div>
+        <div class="ut-actions">
+          <button class="ut-btn undo" onclick="undoUrlaub('${id}')">Antrag zurückziehen</button>
+          <button class="ut-btn cal" onclick="calUrlaub('${id}')">📅 Zum Kalender hinzufügen</button>
+        </div>
+      </div>`;
+  }
+
+  function undoUrlaub(id) {
+    const el = document.getElementById(id);
+    el.classList.add('withdrawn');
+    el.innerHTML = `
+      <div class="urlaub-card-head">✕ Urlaubsantrag zurückgezogen</div>
+      <div class="ut-range">Dein Antrag wurde storniert. Es wurden keine Urlaubstage verbucht.</div>`;
+    fetch(`/urlaub/antrag/${currentSessionId}/withdraw`, { method: 'POST' }).catch(() => {});
+  }
+
+  function calUrlaub(id) {
+    const el = document.getElementById(id);
+    const von = el.dataset.von, bis = el.dataset.bis;
+    const dtstart = von.replace(/-/g, '');
+    const end = new Date(bis); end.setDate(end.getDate() + 1);
+    const dtend = end.toISOString().slice(0, 10).replace(/-/g, '');
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//s.O GPT//Urlaub//DE', 'BEGIN:VEVENT',
+      `UID:urlaub-${Date.now()}@so-gpt`, `DTSTART;VALUE=DATE:${dtstart}`, `DTEND;VALUE=DATE:${dtend}`,
+      'SUMMARY:Urlaub', 'DESCRIPTION:Urlaub beantragt über s.O GPT', 'STATUS:TENTATIVE',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
+    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'urlaub.ics'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ── CANVAS ──────────────────────────────────────────────────────────────────
+  let _canvases = [];           // [{canvas_id, title, content}] in-memory, synced to Cosmos
+  let _activeCanvasId = null;
+  let _pendingDiff = null;      // {sectionTitle, newSection, oldContent} — awaiting Accept/Reject
+  let _streamingCanvasId = null; // set while a canvas is being streamed into (so formatAnswer doesn't double-create)
+
+  function _genCanvasId() {
+    return 'cv-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  }
+
+  function _getActiveCanvas() {
+    return _canvases.find(c => c.canvas_id === _activeCanvasId)
+      || (_canvases.length ? _canvases[_canvases.length - 1] : null);
+  }
+
+  // Strip inline "[Dok X]" / "[N]" citation markers — a canvas is a standalone
+  // document, so unresolved "Dok 1" chips must never appear in it.
+  function _stripCanvasCitations(text) {
+    return text
+      .replace(/\s*\[Dok\s+\d+(?:,\s*Dok\s+\d+)*\]/g, '')
+      .replace(/\s*\[(\d+)\]/g, '');
+  }
+
+  // Replace "[Dok X]" citations with the real document name in parentheses, so the
+  // attribution is baked into the stored content and stays consistent after reload.
+  function _bakeCanvasCitations(text, sources) {
+    if (!sources || !sources.length) return _stripCanvasCitations(text);
+    const nameOf = n => sources[n - 1]?.document_title;
+    return text
+      .replace(/\s*\[Dok\s+\d+(?:,\s*Dok\s+\d+)*\]/g, m => {
+        const nums = [...new Set([...m.matchAll(/\d+/g)].map(x => x[0]))];
+        const names = [...new Set(nums.map(nameOf).filter(Boolean))];
+        return names.length ? ` (${names.join(', ')})` : '';
+      })
+      .replace(/\s*\[(\d+)\]/g, (_, n) => {
+        const name = nameOf(n);
+        return name ? ` (${name})` : '';
+      });
+  }
+
+  function _renderCanvasMd(text, sources) {
+    // Reuse formatAnswer purely for markdown → HTML (replay = no canvas side effects).
+    // With sources, render clickable citation chips exactly like the chat window.
+    // Without, strip citation brackets so the document never shows a bare "Dok 1".
+    if (sources && sources.length) return formatAnswer(text, sources, { replay: true });
+    return formatAnswer(_stripCanvasCitations(text), [], { replay: true });
+  }
+
+  function _openCanvasPanel(canvas_id) {
+    const cv = _canvases.find(c => c.canvas_id === canvas_id);
+    if (!cv) return;
+    _activeCanvasId = canvas_id;
+    document.getElementById('canvas-title-text').textContent = cv.title;
+    document.getElementById('canvas-body').innerHTML = _renderCanvasMd(cv.content, cv.sources);
+    document.getElementById('canvas-diff-bar').classList.remove('active');
+    document.body.classList.add('canvas-open');
+  }
+
+  // Called from updateStreamBubble to stream canvas content in real-time.
+  // For CANVAS_START: opens canvas panel immediately, streams plain-text tokens.
+  // For CANVAS_APPEND: shows growing diff preview in the existing canvas.
+  function _streamCanvasContent(title, content, isStart) {
+    const body = document.getElementById('canvas-body');
+    if (isStart) {
+      if (!_streamingCanvasId) {
+        _streamingCanvasId = _genCanvasId();
+        _canvases.push({ canvas_id: _streamingCanvasId, title, content: '' });
+        _activeCanvasId = _streamingCanvasId;
+        document.getElementById('canvas-title-text').textContent = title;
+        document.getElementById('canvas-diff-bar').classList.remove('active');
+        document.body.classList.add('canvas-open');
+        renderAssets();  // show in Chat Assets immediately, not only after DONE
+      }
+      const cv = _canvases.find(c => c.canvas_id === _streamingCanvasId);
+      if (cv) {
+        cv.content = content;
+        // Render markdown live during streaming so formatting is always visible
+        body.innerHTML = _renderCanvasMd(content);
+        body.scrollTop = body.scrollHeight;
+      }
+    } else {
+      // CANVAS_APPEND: open canvas if closed, show growing diff
+      if (!document.body.classList.contains('canvas-open')) {
+        const cv = _getActiveCanvas();
+        if (cv) _openCanvasPanel(cv.canvas_id);
+      }
+      const cv = _getActiveCanvas();
+      if (cv) {
+        body.innerHTML = _renderCanvasMd(cv.content, cv.sources)
+          + `<div class="canvas-diff-new">
+               <div class="canvas-diff-label">+ ${escHtml(title)}</div>
+               <div style="white-space:pre-wrap;font-family:inherit;font-size:14px;padding:4px 0">${escHtml(content)}</div>
+             </div>`;
+        body.scrollTop = body.scrollHeight;
+      }
+    }
+  }
+
+  function createCanvas(title, content, sources) {
+    const canvas_id = _genCanvasId();
+    _canvases.push({ canvas_id, title, content, sources: sources || [] });
+    _openCanvasPanel(canvas_id);
+    renderAssets();
+    _saveCanvasToDB(canvas_id, title, content, sources);
+    return canvas_id;
+  }
+
+  function appendToCanvas(sectionTitle, newSection) {
+    const cv = _getActiveCanvas();
+    if (!cv) { createCanvas(sectionTitle, newSection); return; }
+    _pendingDiff = { sectionTitle, newSection, oldContent: cv.content };
+    // Ensure canvas panel is open
+    _activeCanvasId = cv.canvas_id;
+    document.getElementById('canvas-title-text').textContent = cv.title;
+    // Show old content + diff-new block
+    const body = document.getElementById('canvas-body');
+    body.innerHTML = _renderCanvasMd(cv.content, cv.sources)
+      + `<div class="canvas-diff-new">
+           <div class="canvas-diff-label">+ Neuer Abschnitt: ${escHtml(sectionTitle)}</div>
+           ${_renderCanvasMd(newSection, cv.sources)}
+         </div>`;
+    document.getElementById('diff-summary').textContent = `"${sectionTitle}" bereit zur Übernahme`;
+    document.getElementById('canvas-diff-bar').classList.add('active');
+    document.body.classList.add('canvas-open');
+    document.getElementById('canvas-body').scrollTop = document.getElementById('canvas-body').scrollHeight;
+  }
+
+  function openCanvas(canvas_id) {
+    _openCanvasPanel(canvas_id);
+  }
+
+  function closeCanvas() {
+    // Canvas is a rendered (markdown) view — closing must never mutate its content,
+    // otherwise the stored markdown would be replaced by de-formatted innerText.
+    document.body.classList.remove('canvas-open');
+    _pendingDiff = null;
+    document.getElementById('canvas-diff-bar').classList.remove('active');
+    // Auto-switch to Assets tab so user sees their canvases
+    switchPanelTab('assets');
+  }
+
+  function acceptDiff() {
+    if (!_pendingDiff) return;
+    const cv = _getActiveCanvas();
+    if (!cv) return;
+    cv.content = _pendingDiff.oldContent
+      + '\n\n## ' + _pendingDiff.sectionTitle + '\n\n' + _pendingDiff.newSection;
+    _pendingDiff = null;
+    document.getElementById('canvas-body').innerHTML = _renderCanvasMd(cv.content, cv.sources);
+    document.getElementById('canvas-diff-bar').classList.remove('active');
+    _saveCanvasToDB(cv.canvas_id, cv.title, cv.content, cv.sources);
+    renderAssets();
+  }
+
+  function rejectDiff() {
+    if (!_pendingDiff) return;
+    const cv = _getActiveCanvas();
+    if (cv) document.getElementById('canvas-body').innerHTML = _renderCanvasMd(cv.content, cv.sources);
+    document.getElementById('canvas-diff-bar').classList.remove('active');
+    _pendingDiff = null;
+  }
+
+  function renderAssets() {
+    const list = document.getElementById('assets-list');
+    if (!_canvases.length) {
+      list.innerHTML = '<div class="sources-empty">Noch keine Dokumente.<br>Generiere Inhalte im Chat.</div>';
+      return;
+    }
+    list.innerHTML = '';
+    [..._canvases].reverse().forEach(cv => {
+      const card = document.createElement('div');
+      card.className = 'asset-card';
+      card.onclick = () => openCanvas(cv.canvas_id);
+      card.innerHTML = `
+        <div class="asset-card-title">${escHtml(cv.title)}</div>
+        <div class="asset-card-meta"><span class="asset-tag">Canvas</span></div>`;
+      list.appendChild(card);
+    });
+  }
+
+  function switchPanelTab(tab) {
+    ['assets', 'quellen'].forEach(t => {
+      document.getElementById(`tab-btn-${t}`).classList.toggle('active', t === tab);
+      document.getElementById(`tab-content-${t}`).classList.toggle('active', t === tab);
+    });
+  }
+
+  function downloadCanvas() {
+    const cv = _getActiveCanvas();
+    if (!cv) return;
+    const blob = new Blob([cv.content], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = cv.title.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-') + '.md';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function _saveCanvasToDB(canvas_id, title, content, sources) {
+    if (!currentSessionId) return;
+    fetch('/canvas/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: currentSessionId, canvas_id, title, content, sources: sources || [] }),
+    }).catch(() => {});
+  }
+
+  // ────────────────────────────────────────────────────────────────────────────
+
   function updateStreamBubble(bubble, rawText) {
-    bubble.innerHTML = '';
-    bubble.appendChild(document.createTextNode(rawText));  // safe — no innerHTML injection
-    const cursor = document.createElement('span');
-    cursor.className = 'stream-cursor';
-    cursor.textContent = '▌';
-    bubble.appendChild(cursor);
+    const csIdx = rawText.indexOf('[[CANVAS_START:');
+    const caIdx = rawText.indexOf('[[CANVAS_APPEND:');
+    const markerIdx = csIdx >= 0 ? csIdx : (caIdx >= 0 ? caIdx : -1);
+
+    // Safety guard: only allow canvas if the user's question contains an explicit creation trigger.
+    // This prevents the model from opening canvas for conversational Q&A even if it ignores the system prompt.
+    const _canvasTrigger = /erstell|schreib|fass zusammen|mach mir|erstelle (ein|eine[mn]?)|dokument|checkliste|übersicht|merkblatt|plan|leitfaden|zusammenfassung|füg|ergänz|erweiter|abschnitt|hinzu/i;
+    const _questionAllowsCanvas = _canvasTrigger.test(_lastUserMessage);
+
+    if (markerIdx >= 0 && _questionAllowsCanvas) {
+      const isStart = csIdx >= 0;
+      const intro = rawText.slice(0, markerIdx).trim();
+      const afterMarker = rawText.slice(markerIdx);
+
+      // Extract title from the opening marker
+      const titleMatch = afterMarker.match(/\[\[CANVAS_(?:START|APPEND):([^\]]+)\]\]/);
+      const title = titleMatch ? titleMatch[1].trim() : 'Dokument';
+
+      // Extract canvas content between marker and [[CANVAS_END]] (or to stream end)
+      let canvasContent = '';
+      if (titleMatch) {
+        const closingBracket = afterMarker.indexOf(']]');
+        if (closingBracket >= 0) {
+          const afterTitle = afterMarker.slice(closingBracket + 2);
+          const endIdx = afterTitle.indexOf('[[CANVAS_END]]');
+          canvasContent = (endIdx >= 0 ? afterTitle.slice(0, endIdx) : afterTitle).trim();
+        }
+      }
+
+      // Live-stream content into canvas panel
+      _streamCanvasContent(title, canvasContent, isStart);
+
+      // Chat bubble: only intro + streaming indicator
+      bubble.innerHTML = '';
+      if (intro) bubble.appendChild(document.createTextNode(intro));
+      const indicator = document.createElement('div');
+      indicator.className = 'canvas-streaming-indicator';
+      indicator.innerHTML = `📄 <strong>${escHtml(title)}</strong>&ensp;<span class="stream-cursor">▌</span>`;
+      bubble.appendChild(indicator);
+    } else {
+      // No canvas marker yet — normal text streaming
+      let display = rawText
+        .replace(/\[\[URLAUB_(SALDO|FORMULAR)\]\]/g, '')
+        .replace(/\[\[[A-Z_]*\]{0,2}\s*$/, '');
+      bubble.innerHTML = '';
+      bubble.appendChild(document.createTextNode(display));
+      const cursor = document.createElement('span');
+      cursor.className = 'stream-cursor';
+      cursor.textContent = '▌';
+      bubble.appendChild(cursor);
+    }
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
   }
 
@@ -983,12 +1851,125 @@
     if (meta?.bing_used) {
       html += `<div class="bing-badge">🌐 Web-Fallback (Bing) aktiviert</div>`;
     }
-    html += formatAnswer(rawText);
+    html += formatAnswer(rawText, meta?.quellen || []);
     bubble.innerHTML = html;
+    // Safety net: if _streamingCanvasId is still set here, formatAnswer didn't find
+    // a csMatch (e.g. model generated empty title or malformed markers). Finalize anyway.
+    if (_streamingCanvasId) {
+      const existingId = _streamingCanvasId;
+      _streamingCanvasId = null;
+      const cv = _canvases.find(c => c.canvas_id === existingId);
+      if (cv && cv.content) {
+        document.getElementById('canvas-body').innerHTML = _renderCanvasMd(cv.content);
+        _saveCanvasToDB(existingId, cv.title, cv.content);
+      }
+      renderAssets();
+    }
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
   }
 
-  function formatAnswer(text) {
+  // Builds a chat pill that links to a canvas. `cid` empty → no open button.
+  function _canvasPill(title, cid, suffix = '') {
+    const btn = cid
+      ? `<button class="canvas-open-btn" onclick="openCanvas('${cid}')">Canvas öffnen ↗</button>`
+      : '';
+    return `<div class="canvas-link-pill">
+      📄 <strong>${escHtml(title)}</strong>${suffix ? ` — ${escHtml(suffix)}` : ''} ${btn}
+    </div>`;
+  }
+
+  function formatAnswer(text, sources = [], opts = {}) {
+    const replay = opts.replay === true;  // history render: pure, no side effects
+    // ── Canvas markers ─────────────────────────────────────────────────────
+    let canvasPillHtml = '';
+    const csRe = /\[\[CANVAS_START:([^\]]+)\]\]([\s\S]*?)\[\[CANVAS_END\]\]/;
+    const caRe = /\[\[CANVAS_APPEND:([^\]]+)\]\]([\s\S]*?)\[\[CANVAS_END\]\]/;
+
+    // Question-intent guard (live only). During replay we always strip markers.
+    const _canvasTriggerFmt = /erstell|schreib|fass zusammen|mach mir|erstelle (ein|eine[mn]?)|dokument|checkliste|übersicht|merkblatt|plan|leitfaden|zusammenfassung|füg|ergänz|erweiter|abschnitt|hinzu/i;
+    const _questionAllowsCanvasFmt = replay || _canvasTriggerFmt.test(_lastUserMessage);
+
+    const csMatch = _questionAllowsCanvasFmt && text.match(csRe);
+    if (csMatch) {
+      const title = csMatch[1].trim();
+      // Keep raw content (with "[Dok X]" markers) + the turn's sources, so the canvas
+      // renders the same clickable citation chips as the chat — consistently after reload.
+      const content = csMatch[2].trim();
+
+      if (replay) {
+        // History: link the pill to the already-restored canvas (matched by title).
+        // No creation, no diff, no side effects — the canvas is loaded from Cosmos.
+        const existing = _canvases.find(c => c.title === title);
+        canvasPillHtml = _canvasPill(title, existing ? existing.canvas_id : '');
+      } else if (_streamingCanvasId) {
+        // Canvas was streamed live — finalize (markdown render + save).
+        const existingId = _streamingCanvasId;
+        _streamingCanvasId = null;
+        setTimeout(() => {
+          const cv = _canvases.find(c => c.canvas_id === existingId);
+          if (cv) {
+            cv.title = title;
+            cv.content = content;
+            cv.sources = sources;
+            document.getElementById('canvas-body').innerHTML = _renderCanvasMd(content, sources);
+            document.getElementById('canvas-title-text').textContent = title;
+            _saveCanvasToDB(existingId, title, content, sources);
+            renderAssets();
+          }
+        }, 0);
+        canvasPillHtml = _canvasPill(title, existingId);
+      } else {
+        // Non-streamed path — create fresh, dedup by title.
+        let cid = (_canvases.find(c => c.title === title) || {}).canvas_id;
+        if (!cid) {
+          cid = _genCanvasId();
+          setTimeout(() => {
+            _canvases.push({ canvas_id: cid, title, content, sources });
+            _openCanvasPanel(cid);
+            renderAssets();
+            _saveCanvasToDB(cid, title, content, sources);
+          }, 0);
+        }
+        canvasPillHtml = _canvasPill(title, cid);
+      }
+      text = text.replace(csRe, '').trim();
+    }
+
+    const caMatch = text.match(caRe);
+    if (caMatch) {
+      const sectionTitle = caMatch[1].trim();
+      const newSection = _bakeCanvasCitations(caMatch[2].trim(), sources);
+      if (replay) {
+        // History: the append was already merged & saved into the canvas content.
+        // Just link the pill to the canvas that holds it — never re-trigger the diff.
+        const target = _canvases.find(c => c.content && c.content.includes(sectionTitle))
+                    || (_canvases.length ? _canvases[_canvases.length - 1] : null);
+        canvasPillHtml = _canvasPill(sectionTitle, target ? target.canvas_id : '');
+      } else {
+        const target = _getActiveCanvas();
+        setTimeout(() => appendToCanvas(sectionTitle, newSection), 0);
+        canvasPillHtml = _canvasPill(sectionTitle, target ? target.canvas_id : '', 'Diff aktiv');
+      }
+      text = text.replace(caRe, '').trim();
+    }
+
+    // Safety net: strip any stray/malformed canvas markers so they never leak as text
+    text = text.replace(/\[\[CANVAS_(?:START|APPEND)[^\]]*\]\]/g, '')
+               .replace(/\[\[CANVAS_END\]\]/g, '')
+               .trim();
+    // ──────────────────────────────────────────────────────────────────────
+
+    // Extract interactive vacation widgets before text rendering
+    let widgetHtml = '';
+    if (text.includes('[[URLAUB_SALDO]]')) {
+      widgetHtml += renderUrlaubSaldoCard();
+      text = text.replace(/\[\[URLAUB_SALDO\]\]/g, '').trim();
+    }
+    if (text.includes('[[URLAUB_FORMULAR]]')) {
+      widgetHtml += renderUrlaubForm();
+      text = text.replace(/\[\[URLAUB_FORMULAR\]\]/g, '').trim();
+    }
+
     // Extract [AKTIONEN]...[/AKTIONEN] block before rendering
     let actionHtml = '';
     const actionMatch = text.match(/\[AKTIONEN\]([\s\S]*?)\[\/AKTIONEN\]/);
@@ -1012,28 +1993,94 @@
       text = text.replace(/\[AKTIONEN\][\s\S]*?\[\/AKTIONEN\]/, '').trim();
     }
 
-    // Very light markdown: **bold**, *italic*, - lists, [Dok X] citations, newlines
-    let html = escHtml(text)
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/\[Dok (\d+)\]/g, (_, n) => `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">Dok</span>`)
-      .replace(/\[(\d+)\]/g, (_, n) => `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${n}</span>`);
+    const _seenCites = new Set();
 
-    const lines = html.split('\n');
+    function applyInline(str) {
+      return escHtml(str)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\[Dok\s+\d+(?:,\s*Dok\s+\d+)*\]/g, match => {
+          const nums = [...new Set([...match.matchAll(/\d+/g)].map(m => m[0]))];
+          return nums.filter(n => {
+            if (_seenCites.has(n)) return false;
+            _seenCites.add(n); return true;
+          }).map(n => {
+            const title = sources[n-1]?.document_title || `Dok ${n}`;
+            return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
+          }).join(' ');
+        })
+        .replace(/\[(\d+)\]/g, (_, n) => {
+          if (_seenCites.has(n)) return '';
+          _seenCites.add(n);
+          const title = sources[n-1]?.document_title || n;
+          return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
+        });
+    }
+
+    function buildTable(tableLines) {
+      const isSeparator = l => /^\s*\|[\s\-:|]+\|\s*$/.test(l);
+      const dataRows = tableLines.filter(l => !isSeparator(l));
+      let html = '<table>';
+      dataRows.forEach((row, i) => {
+        const cells = row.split('|').slice(1, -1).map(c => c.trim());
+        const tag = i === 0 ? 'th' : 'td';
+        html += '<tr>' + cells.map(c => `<${tag}>${applyInline(c)}</${tag}>`).join('') + '</tr>';
+      });
+      return html + '</table>';
+    }
+
+    const rawLines = text.split('\n');
     let result = '';
     let inList = false;
-    for (const line of lines) {
+    let inOList = false;
+    let tableBuffer = [];
+
+    function flushTable() {
+      if (tableBuffer.length) { result += buildTable(tableBuffer); tableBuffer = []; }
+    }
+    function closeOpenLists() {
+      if (inList) { result += '</ul>'; inList = false; }
+      if (inOList) { result += '</ol>'; inOList = false; }
+    }
+
+    for (const line of rawLines) {
       const trimmed = line.trim();
-      if (trimmed.startsWith('- ')) {
+
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        closeOpenLists();
+        tableBuffer.push(trimmed);
+        continue;
+      }
+      flushTable();
+
+      if (trimmed.startsWith('#### ')) {
+        closeOpenLists();
+        result += `<h4>${applyInline(trimmed.slice(5))}</h4>`;
+      } else if (trimmed.startsWith('### ')) {
+        closeOpenLists();
+        result += `<h3>${applyInline(trimmed.slice(4))}</h3>`;
+      } else if (trimmed.startsWith('## ') || trimmed.startsWith('# ')) {
+        closeOpenLists();
+        result += `<h2>${applyInline(trimmed.replace(/^#{1,2} /, ''))}</h2>`;
+      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+        if (inOList) { result += '</ol>'; inOList = false; }
         if (!inList) { result += '<ul>'; inList = true; }
-        result += `<li>${trimmed.slice(2)}</li>`;
-      } else {
+        result += `<li>${applyInline(trimmed.slice(2))}</li>`;
+      } else if (/^\d+\.\s/.test(trimmed)) {
         if (inList) { result += '</ul>'; inList = false; }
-        if (trimmed) result += `<p>${trimmed}</p>`;
+        if (!inOList) { result += '<ol>'; inOList = true; }
+        result += `<li>${applyInline(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
+      } else if (trimmed === '---') {
+        closeOpenLists();
+        result += '<hr>';
+      } else {
+        closeOpenLists();
+        if (trimmed) result += `<p>${applyInline(trimmed)}</p>`;
       }
     }
-    if (inList) result += '</ul>';
-    return result + actionHtml;
+    closeOpenLists();
+    flushTable();
+    return result + actionHtml + widgetHtml + canvasPillHtml;
   }
 
   function escHtml(str) {
@@ -1050,7 +2097,8 @@
       count.textContent = '0';
       return;
     }
-    document.querySelector('.sources-panel').classList.add('visible');
+    // Auto-switch to Quellen tab when new sources arrive
+    switchPanelTab('quellen');
 
     // Group chunks by document title — collect all page numbers per document
     const grouped = {};
@@ -1097,18 +2145,20 @@
     });
   }
 
-  let sourcesCollapsed = false;
+  // Single source of truth for the right panel's collapsed state.
+  function _setPanelCollapsed(collapsed) {
+    sourcesCollapsed = collapsed;
+    document.getElementById('right-panel').classList.toggle('collapsed', collapsed);
+    document.getElementById('sources-expand-btn').classList.toggle('visible', collapsed);
+  }
 
   function toggleSources() {
-    sourcesCollapsed = !sourcesCollapsed;
-    document.querySelector('.sources-panel').classList.toggle('collapsed', sourcesCollapsed);
-    document.getElementById('sources-expand-btn').classList.toggle('visible', sourcesCollapsed);
+    _setPanelCollapsed(!sourcesCollapsed);
   }
 
   function expandAndHighlight(dokIndex) {
-    const panel = document.querySelector('.sources-panel');
-    panel.classList.add('visible');
-    if (sourcesCollapsed) { sourcesCollapsed = false; panel.classList.remove('collapsed'); document.getElementById('sources-expand-btn').classList.remove('visible'); }
+    if (sourcesCollapsed) _setPanelCollapsed(false);
+    switchPanelTab('quellen');
 
     // Find the card by index (1-based) and briefly highlight it
     const cards = document.querySelectorAll('.source-card');
@@ -1122,13 +2172,25 @@
   function clearSources() {
     document.getElementById('sources-list').innerHTML = '<div class="sources-empty">Noch keine Quellen.<br>Stelle eine Frage.</div>';
     document.getElementById('sources-count').textContent = '0';
-    document.querySelector('.sources-panel').classList.remove('visible');
   }
 
   // ── LOADING STATE ──
   function setLoading(loading) {
-    document.getElementById('send-btn').disabled = loading;
+    const btn = document.getElementById('send-btn');
+    const label = document.getElementById('send-btn-label');
+    const icon = document.getElementById('send-btn-icon');
     document.getElementById('message-input').disabled = loading;
+    if (loading) {
+      btn.onclick = stopGeneration;
+      btn.disabled = false;
+      label.textContent = 'STOPP';
+      icon.innerHTML = '<svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>';
+    } else {
+      btn.onclick = sendMessage;
+      btn.disabled = false;
+      label.textContent = 'SENDEN';
+      icon.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    }
   }
 </script>
 </body>
