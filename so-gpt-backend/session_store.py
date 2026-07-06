@@ -195,7 +195,8 @@ def list_canvases(session_id: str) -> list[dict]:
 # ── Urlaubsantrag (Demo-Feature) ──────────────────────────────────────────────
 
 def save_urlaub_antrag(session_id: str, von: str, bis: str, days: int,
-                       overtime: bool, time_str: str, status: str = "pending") -> None:
+                       overtime: bool, time_str: str, status: str = "pending",
+                       ticket: str | None = None) -> None:
     """Persists (or overwrites) the vacation request for a session."""
     container = _get_container()
     container.upsert_item({
@@ -208,6 +209,7 @@ def save_urlaub_antrag(session_id: str, von: str, bis: str, days: int,
         "overtime": overtime,
         "time": time_str,
         "status": status,
+        "ticket": ticket,
         "timestamp": int(time.time()),
     })
 
@@ -217,7 +219,7 @@ def get_urlaub_antrag(session_id: str) -> dict | None:
     container = _get_container()
     items = list(container.query_items(
         query=(
-            "SELECT c.von, c.bis, c.days, c.overtime, c.time, c.status FROM c "
+            "SELECT c.von, c.bis, c.days, c.overtime, c.time, c.status, c.ticket FROM c "
             "WHERE c.session_id = @sid AND c.doc_type = @t"
         ),
         parameters=[

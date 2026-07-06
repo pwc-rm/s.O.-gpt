@@ -207,6 +207,20 @@
     }
     .cost-badge.visible { display: inline-block; }
 
+    .mock-badge {
+      font-size: 11px;
+      color: #92400e;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      display: none;
+      gap: 4px;
+      align-items: center;
+    }
+    .mock-badge.visible { display: inline-flex; }
+
     .icon-btn {
       width: 32px;
       height: 32px;
@@ -235,27 +249,26 @@
       display: flex;
       gap: 12px;
       max-width: 760px;
+      align-self: flex-start;
     }
-    .message-row.user { flex-direction: row-reverse; align-self: flex-end; }
-    .message-row.ai { align-self: flex-start; }
+    .message-row.user { flex-direction: row; }
+    .message-row.ai   { flex-direction: row; }
 
     .avatar {
-      width: 32px;
-      height: 32px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
+      overflow: hidden;
     }
-    .avatar.user { background: var(--accent); color: white; }
-    .avatar.ai {
-      background: #111827;
-      color: white;
-      font-size: 10px;
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
+    .avatar.user img { transform: scale(1.38); }
+    .avatar.ai img   { transform: scale(1.65); }
 
     .bubble {
       padding: 12px 16px;
@@ -264,9 +277,10 @@
       max-width: 640px;
     }
     .bubble.user {
-      background: var(--user-bubble);
-      color: var(--user-bubble-text);
-      border-bottom-right-radius: 4px;
+      background: #1c1917;
+      color: #f9fafb;
+      border-bottom-left-radius: 4px;
+      font-size: 14px;
     }
     .bubble.ai {
       background: var(--ai-bubble);
@@ -651,6 +665,9 @@
     .uf-submit:hover { background: #b8002f; }
 
     .ut-range { font-size: 13px; color: #374151; margin-bottom: 14px; }
+    .ut-ticket { font-size: 12px; color: #6b7280; margin-bottom: 14px; }
+    .ut-ticket-link { color: #2563eb; text-decoration: none; font-weight: 500; }
+    .ut-ticket-link:hover { text-decoration: underline; }
     .ut-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 16px; }
     .ut-step { display: flex; gap: 12px; align-items: flex-start; position: relative; padding-bottom: 16px; }
     .ut-step:not(:last-child)::before {
@@ -777,12 +794,20 @@
       border-left: 3px solid #6366f1;
     }
     .asset-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left-color: #4f46e5; }
+    .asset-card.urlaub { border-left-color: #E2003A; }
+    .asset-card.urlaub:hover { border-left-color: #b0001f; }
     .asset-card-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
     .asset-card-meta { font-size: 11px; color: var(--text-secondary); }
     .asset-tag {
       display: inline-block; font-size: 10px; font-weight: 600;
       background: #ede9fe; color: #5b21b6; border-radius: 4px;
       padding: 1px 6px; letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .asset-tag.urlaub { background: #fee2e2; color: #b91c1c; }
+    .urlaub-timeline.highlight {
+      outline: 2px solid #E2003A;
+      outline-offset: 3px;
+      transition: outline 0.1s;
     }
     .canvas-link-pill {
       display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
@@ -839,20 +864,6 @@
 
   <div class="chat-history" id="chat-history"></div>
 
-  <nav class="sidebar-nav">
-    <div class="sidebar-nav-item">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Library
-    </div>
-    <div class="sidebar-nav-item">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-      Collections
-    </div>
-    <div class="sidebar-nav-item">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Analytics
-    </div>
-  </nav>
 
   <div class="sidebar-footer">
     <div class="sidebar-nav-item">
@@ -870,7 +881,13 @@
 <main class="main">
   <header class="chat-header">
     <span class="chat-title" id="chat-title">Neuer Chat</span>
-    <span class="cost-badge" id="cost-badge"></span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="mock-badge visible" id="mock-badge">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        Output basiert auf Mock-Daten
+      </span>
+      <span class="cost-badge" id="cost-badge"></span>
+    </div>
     <button class="icon-btn" id="sources-expand-btn" onclick="toggleSources()" title="Quellen anzeigen">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </button>
@@ -974,9 +991,8 @@
 
   function updateCostBadge() {
     const cost = (_sessionUsage.prompt * PRICE_INPUT + _sessionUsage.completion * PRICE_OUTPUT) / 1_000_000;
-    const totalTokens = _sessionUsage.prompt + _sessionUsage.completion;
     const badge = document.getElementById('cost-badge');
-    badge.textContent = `~$${cost.toFixed(4)} · ${(totalTokens / 1000).toFixed(1)}k Token`;
+    badge.textContent = `Kosten pro Chat: ~$${cost.toFixed(4)}`;
     badge.classList.add('visible');
   }
 
@@ -1029,6 +1045,7 @@
       // Restore canvas documents from Cosmos FIRST — so history message pills
       // (rendered below via formatAnswer replay mode) can link to existing canvases.
       _canvases = [];
+      _urlaubAntrag = null;
       _activeCanvasId = null;
       _pendingDiff = null;
       _streamingCanvasId = null;
@@ -1046,6 +1063,12 @@
         _canvases = deduped.reverse();
         switchPanelTab('assets');
       }
+      // Restore vacation-request state BEFORE renderAssets so its asset card shows.
+      if (data.urlaub_antrag) {
+        const a = data.urlaub_antrag;
+        _urlaubAntrag = { von: a.von, bis: a.bis, n: a.days, ot: a.overtime, time: a.time, status: a.status, ticket: a.ticket };
+        switchPanelTab('assets');
+      }
       renderAssets();
 
       msgs.innerHTML = '';
@@ -1053,20 +1076,20 @@
         const row = document.createElement('div');
         if (m.role === 'user') {
           row.className = 'message-row user';
-          row.innerHTML = `<div class="avatar user">Du</div><div class="bubble user">${escHtml(m.text)}</div>`;
+          row.innerHTML = `<div class="avatar user"><img src="/static/human_profile.png" alt="Du"></div><div class="bubble user">${escHtml(m.text)}</div>`;
         } else {
           row.className = 'message-row ai';
-          row.innerHTML = `<div class="avatar ai">s.O</div><div class="bubble ai">${formatAnswer(m.text, data.sources || [], { replay: true })}</div>`;
+          row.innerHTML = `<div class="avatar ai"><img src="/static/chatbot_profile.png" alt="s.O"></div><div class="bubble ai">${formatAnswer(m.text, data.sources || [], { replay: true })}</div>`;
         }
         msgs.appendChild(row);
       });
-      // Restore a submitted vacation request: replace the rendered form with its timeline
+      // Replace the rendered form with its timeline (state already restored above)
       if (data.urlaub_antrag) {
         const a = data.urlaub_antrag;
         const forms = msgs.querySelectorAll('.urlaub-form');
         const last = forms[forms.length - 1];
         if (last) last.outerHTML = renderUrlaubTimeline({
-          von: a.von, bis: a.bis, n: a.days, ot: a.overtime, time: a.time, status: a.status,
+          von: a.von, bis: a.bis, n: a.days, ot: a.overtime, time: a.time, status: a.status, ticket: a.ticket,
         });
       }
       msgs.scrollTop = msgs.scrollHeight;
@@ -1093,6 +1116,7 @@
     currentSessionId = null;
     resetCostBadge();
     _canvases = [];
+    _urlaubAntrag = null;
     _activeCanvasId = null;
     _pendingDiff = null;
     _streamingCanvasId = null;
@@ -1296,7 +1320,7 @@
     const row = document.createElement('div');
     row.className = 'message-row user';
     row.innerHTML = `
-      <div class="avatar user">Du</div>
+      <div class="avatar user"><img src="/static/human_profile.png" alt="Du"></div>
       <div class="bubble user">${escHtml(text)}</div>`;
     msgs.appendChild(row);
 
@@ -1304,7 +1328,7 @@
     typingRow.className = 'message-row ai';
     typingRow.id = 'typing-row';
     typingRow.innerHTML = `
-      <div class="avatar ai">s.O</div>
+      <div class="avatar ai"><img src="/static/chatbot_profile.png" alt="s.O"></div>
       <div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
     msgs.appendChild(typingRow);
     msgs.scrollTop = msgs.scrollHeight;
@@ -1326,7 +1350,7 @@
     }
 
     row.innerHTML = `
-      <div class="avatar ai">s.O</div>
+      <div class="avatar ai"><img src="/static/chatbot_profile.png" alt="s.O"></div>
       <div class="bubble ai">
         ${rewrittenHtml}
         ${bingHtml}
@@ -1341,7 +1365,7 @@
     const row = document.createElement('div');
     row.className = 'message-row ai';
     row.innerHTML = `
-      <div class="avatar ai">s.O</div>
+      <div class="avatar ai"><img src="/static/chatbot_profile.png" alt="s.O"></div>
       <div class="bubble ai" style="color:#dc2626;border-color:#fecaca;">
         Fehler: ${escHtml(msg)}<br><small>Läuft der Backend-Server? <code>uvicorn main:app --reload</code></small>
       </div>`;
@@ -1363,7 +1387,7 @@
 
     const avatar = document.createElement('div');
     avatar.className = 'avatar ai';
-    avatar.textContent = 's.O';
+    avatar.innerHTML = '<img src="/static/chatbot_profile.png" alt="s.O">';
 
     const bubble = document.createElement('div');
     bubble.className = 'bubble ai';
@@ -1519,18 +1543,28 @@
       return;
     }
     const time = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    form.outerHTML = renderUrlaubTimeline({ von, bis, n, ot, time, status: 'pending' });
+    const ticket = _sapTicketNr();
+    _urlaubAntrag = { von, bis, n, ot, time, status: 'pending', ticket };
+    form.outerHTML = renderUrlaubTimeline({ von, bis, n, ot, time, status: 'pending', ticket });
+    renderAssets();
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
     // Persist in Cosmos so the timeline survives chat switches
     fetch('/urlaub/antrag', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: currentSessionId, von, bis, days: n, overtime: ot, time }),
+      body: JSON.stringify({ session_id: currentSessionId, von, bis, days: n, overtime: ot, time, ticket }),
     }).catch(() => {});
+  }
+
+  function _sapTicketNr() {
+    const yr = new Date().getFullYear();
+    const seq = String(Math.floor(Math.random() * 900000) + 100000);
+    return `LEA-${yr}-${seq}`;
   }
 
   function renderUrlaubTimeline(r) {
     const id = 'ut' + (++_urlaubSeq);
+    const ticket = r.ticket || _sapTicketNr();
     if (r.status === 'withdrawn') {
       return `
         <div class="urlaub-timeline withdrawn" id="${id}">
@@ -1543,6 +1577,9 @@
         <div class="urlaub-card-head">✅ Urlaubsantrag eingereicht</div>
         <div class="ut-range">${fmtDate(r.von)} – ${fmtDate(r.bis)} · ${r.n} Arbeitstage${r.ot ? ' · Überstunden angerechnet' : ''}</div>
         <div class="uf-balance show" style="margin-top:10px">${urlaubBalanceHtml(r.n, r.ot)}</div>
+        <div class="ut-ticket">
+          SAP-Ticketnummer: <a class="ut-ticket-link" href="https://fiori.soliver.com/sap/bc/ui5_ui5/ui2/ushell/shells/abap/FioriLaunchpad.html#LeaveRequest-display&/request/${ticket}" target="_blank" rel="noopener">${ticket}</a>
+        </div>
         <div class="ut-steps">
           <div class="ut-step done"><span class="ut-dot"></span><div><strong>Antrag eingereicht</strong><div class="ut-t">${r.time} Uhr</div></div></div>
           <div class="ut-step wait"><span class="ut-dot pulse"></span><div><strong>Wartet auf Freigabe</strong><div class="ut-t">${URLAUB_DATA.manager} · ${URLAUB_DATA.managerRole}</div></div></div>
@@ -1582,6 +1619,7 @@
   }
 
   // ── CANVAS ──────────────────────────────────────────────────────────────────
+  let _urlaubAntrag = null;     // {von, bis, n, ot, time, status, ticket} — set on submit/restore
   let _canvases = [];           // [{canvas_id, title, content}] in-memory, synced to Cosmos
   let _activeCanvasId = null;
   let _pendingDiff = null;      // {sectionTitle, newSection, oldContent} — awaiting Accept/Reject
@@ -1745,11 +1783,27 @@
 
   function renderAssets() {
     const list = document.getElementById('assets-list');
-    if (!_canvases.length) {
+    const hasAny = _canvases.length || _urlaubAntrag;
+    if (!hasAny) {
       list.innerHTML = '<div class="sources-empty">Noch keine Dokumente.<br>Generiere Inhalte im Chat.</div>';
       return;
     }
     list.innerHTML = '';
+    // Urlaubsantrag always on top
+    if (_urlaubAntrag) {
+      const a = _urlaubAntrag;
+      const statusLabel = a.status === 'withdrawn' ? 'Zurückgezogen' : 'Wartet auf Freigabe';
+      const card = document.createElement('div');
+      card.className = 'asset-card urlaub';
+      card.onclick = () => scrollToUrlaub();
+      card.innerHTML = `
+        <div class="asset-card-title">🏖️ Urlaubsantrag ${fmtDate(a.von)} – ${fmtDate(a.bis)}</div>
+        <div class="asset-card-meta">
+          <span class="asset-tag urlaub">Urlaubsantrag</span>
+          <span style="margin-left:6px">${a.n} Tage · ${statusLabel}</span>
+        </div>`;
+      list.appendChild(card);
+    }
     [..._canvases].reverse().forEach(cv => {
       const card = document.createElement('div');
       card.className = 'asset-card';
@@ -1759,6 +1813,14 @@
         <div class="asset-card-meta"><span class="asset-tag">Canvas</span></div>`;
       list.appendChild(card);
     });
+  }
+
+  function scrollToUrlaub() {
+    const el = document.querySelector('#messages .urlaub-timeline');
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 1800);
   }
 
   function switchPanelTab(tab) {

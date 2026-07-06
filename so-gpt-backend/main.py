@@ -37,12 +37,13 @@ import config
 from session_store import (
     load_session, save_session, get_docs_used, list_sessions,
     get_session_messages, delete_session,
-    save_urlaub_antrag, update_urlaub_status,
+    save_urlaub_antrag, update_urlaub_status, get_urlaub_antrag,
     save_canvas, list_canvases,
 )
 from query_rewriter import rewrite_query
 from retrieval import hybrid_search
 from prompt_builder import build_prompt
+from mock_data import detect_doc_kind, build_handover_context, build_ooo_context
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -70,7 +71,7 @@ if _static_dir.exists():
 @app.get("/", include_in_schema=False)
 def serve_frontend():
     if _frontend.exists():
-        return FileResponse(_frontend)
+        return FileResponse(_frontend, headers={"Cache-Control": "no-store"})
     return {"status": "backend running — frontend not bundled"}
 
 # ── Request model ─────────────────────────────────────────────────────────────
@@ -87,6 +88,7 @@ class UrlaubAntragRequest(BaseModel):
     days: int
     overtime: bool = False
     time: str
+    ticket: Optional[str] = None
 
 
 class CanvasSaveRequest(BaseModel):
@@ -114,6 +116,15 @@ def _is_affirmative(text: str) -> bool:
     if t in _AFFIRM:
         return True
     return any(t.startswith(a + " ") or t.startswith(a + ",") for a in _AFFIRM)
+
+
+def _fmt_de(iso: str) -> str:
+    """ISO date 'YYYY-MM-DD' → German 'DD.MM.YYYY' (leaves other formats untouched)."""
+    try:
+        y, m, d = iso.split("-")
+        return f"{d}.{m}.{y}"
+    except Exception:
+        return iso
 
 
 def _urlaub_flow_shortcut(question: str, history: list[dict]) -> Optional[str]:
@@ -205,7 +216,7 @@ def urlaub_antrag_create(req: UrlaubAntragRequest):
     """Persists a submitted vacation request (Demo-Feature)."""
     try:
         save_urlaub_antrag(req.session_id, req.von, req.bis, req.days,
-                           req.overtime, req.time, "pending")
+                           req.overtime, req.time, "pending", req.ticket)
         return {"status": "pending"}
     except Exception as exc:
         raise HTTPException(status_code=503, detail=str(exc))
@@ -287,7 +298,21 @@ def chat(
 
         chunks, _ = hybrid_search(rewritten, docs_used)
 
-        messages = build_prompt(question, chunks, history)
+        # Mock-context injection for the handover checklist / out-of-office note.
+        # The document is still model-generated (not deterministic) — we only feed
+        # it persistent, simulated calendar/mailbox data plus (for the OOO note) the
+        # dates from a previously submitted vacation request.
+        extra_context = None
+        doc_kind = detect_doc_kind(question)
+        if doc_kind == "handover":
+            extra_context = build_handover_context()
+        elif doc_kind == "ooo":
+            antrag = get_urlaub_antrag(session_id)
+            von = _fmt_de(antrag["von"]) if antrag else None
+            bis = _fmt_de(antrag["bis"]) if antrag else None
+            extra_context = build_ooo_context(von, bis)
+
+        messages = build_prompt(question, chunks, history, extra_context=extra_context)
 
     except RuntimeError as exc:
         logger.error("Retrieval error: %s", exc)
@@ -310,7 +335,7 @@ def chat(
 
     # ⑥ Stream GPT-4o response
     return StreamingResponse(
-        _stream(messages, session_id, question, chunks, sources, rewritten),
+        _stream(messages, session_id, question, chunks, sources, rewritten, doc_kind),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
@@ -328,6 +353,7 @@ def _stream(
     chunks: list[dict],
     sources: list[dict],
     rewritten: str,
+    doc_kind: str | None = None,
 ) -> Iterator[str]:
     if not (config.OPENAI_ENDPOINT and config.OPENAI_API_KEY):
         yield _sse({"type": "error", "message": "Azure OpenAI not configured — set OPENAI_ENDPOINT and OPENAI_API_KEY"})
@@ -339,6 +365,7 @@ def _stream(
         "session_id": session_id,
         "quellen": sources,
         "rewritten_query": rewritten if rewritten != question else None,
+        "mock_used": doc_kind,
     })
 
     from openai import AzureOpenAI

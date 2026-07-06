@@ -95,10 +95,15 @@ Beispiele wann KEINE Aktionsbox: reine Informationsfragen wie "Wie viele Urlaubs
 habe ich?" oder "Was sind die Passwortanforderungen?"."""
 
 
-def build_prompt(question: str, chunks: list[dict], history: list[dict]) -> list[dict]:
+def build_prompt(question: str, chunks: list[dict], history: list[dict],
+                 extra_context: str | None = None) -> list[dict]:
     """
     Returns a messages list ready for client.chat.completions.create().
     chunks and history items follow the schema from retrieval.py / session_store.py.
+
+    extra_context: optional task-specific system instruction (e.g. injected mock
+    calendar/mailbox data for the handover checklist or out-of-office note). Added
+    as a high-priority system message right before the user question.
     """
     context_parts = []
     for i, chunk in enumerate(chunks, start=1):
@@ -116,6 +121,9 @@ def build_prompt(question: str, chunks: list[dict], history: list[dict]) -> list
     for turn in history[-4:]:
         messages.append({"role": "user", "content": turn["question"]})
         messages.append({"role": "assistant", "content": turn["answer"]})
+
+    if extra_context:
+        messages.append({"role": "system", "content": extra_context})
 
     messages.append({
         "role": "user",
