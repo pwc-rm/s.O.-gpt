@@ -45,16 +45,6 @@ MOCK_EMAILS = [
     {"thema": "Musterversand Winterkollektion", "status": "Terminbestätigung offen"},
 ]
 
-# Laufende Projekte, die während der Abwesenheit weiterlaufen.
-MOCK_PROJEKTE = [
-    {"name": "Relaunch Damen-Onlineshop", "status": "in Umsetzung",
-     "detail": "Phase 2; nächster Meilenstein Sortiments-Freigabe am 15.07. — Nina hält den Kontakt zur Agentur."},
-    {"name": "Herbst/Winter-Kollektion 2026", "status": "in Abstimmung",
-     "detail": "Musterfreigabe steht aus, wartet auf Rückmeldung aus dem Einkauf."},
-    {"name": "Nachhaltigkeits-Label Rollout", "status": "gestartet",
-     "detail": "Pilot in 3 Filialen; Zwischenauswertung Ende des Monats."},
-]
-
 
 # ── Erkennung ────────────────────────────────────────────────────────────────
 # OOO wird zuerst geprüft, weil "Abwesenheitsnotiz" spezifischer ist als das
@@ -103,10 +93,6 @@ def _fmt_emails() -> str:
     return "\n".join(f"- {e['thema']} ({e['status']})" for e in MOCK_EMAILS)
 
 
-def _fmt_projekte() -> str:
-    return "\n".join(f"- {p['name']} ({p['status']}) — {p['detail']}" for p in MOCK_PROJEKTE)
-
-
 def build_handover_context() -> str:
     """System-message content instructing the model to build a personal handover checklist."""
     v = MOCK_VERTRETUNG
@@ -114,20 +100,17 @@ def build_handover_context() -> str:
         "AUFGABE — Persönliche Übergabe-Checkliste:\n"
         "Der Nutzer plant eine Abwesenheit und bittet um eine Übergabe-Checkliste. "
         "Für DIESE Aufgabe gilt die 'nur Dokumentauszüge'-Regel NICHT — nutze die folgenden "
-        "simulierten Daten aus Kalender, Postfach und Projektliste des Nutzers als Grundlage. "
-        "Erfinde keine zusätzlichen Termine, Themen oder Projekte.\n\n"
+        "simulierten Daten aus Kalender und Postfach des Nutzers als Grundlage. Erfinde keine "
+        "zusätzlichen Termine oder Themen.\n\n"
         f"Nutzer: {MOCK_USER['name']}, {MOCK_USER['role']} ({MOCK_USER['team']})\n"
         f"Vertretung: {v['name']}, {v['role']} ({v['email']})\n\n"
         f"Anstehende Termine während der Abwesenheit:\n{_fmt_calendar()}\n\n"
         f"Offene Themen im Postfach:\n{_fmt_emails()}\n\n"
-        f"Laufende Projekte:\n{_fmt_projekte()}\n\n"
-        "Erstelle als Canvas eine strukturierte Übergabe-Checkliste mit GENAU diesen Abschnitten "
-        "(diese Überschriften verwenden): 'Offene Aufgaben', 'Laufende Projekte', "
-        "'Wichtige Termine', 'Vertretung & Ansprechpartner'. Der Abschnitt 'Laufende Projekte' "
-        "listet die oben genannten Projekte mit Status und dem, was während der Abwesenheit zu "
-        "beachten ist. Hebe die mit [WICHTIG] markierten Termine deutlich hervor und ergänze bei "
-        "JEDEM wichtigen Termin explizit den Hinweis, dass noch zu klären ist, ob er abgesagt oder "
-        "an die Vertretung übergeben werden soll. Das Wort [WICHTIG] selbst NICHT ausgeben. "
+        "Erstelle als Canvas eine strukturierte Übergabe-Checkliste mit sinnvollen Abschnitten "
+        "(z.B. 'Offene Aufgaben', 'Wichtige Termine', 'Vertretung & Ansprechpartner'). "
+        "Hebe die mit [WICHTIG] markierten Termine deutlich hervor und ergänze bei JEDEM "
+        "wichtigen Termin explizit den Hinweis, dass noch zu klären ist, ob er abgesagt oder an "
+        "die Vertretung übergeben werden soll. Das Wort [WICHTIG] selbst NICHT ausgeben. "
         "Nutze den Canvas-Marker [[CANVAS_START:Übergabe bei Abwesenheit]] … [[CANVAS_END]]."
     )
 
