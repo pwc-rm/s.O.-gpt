@@ -976,8 +976,11 @@
   // API calls go through Azure API Management — no key needed in frontend.
   // APIM injects the backend x-api-key server-side as a Named Value secret.
   // On localhost the frontend talks to the local backend directly (DEV_SKIP_AUTH).
+  // The isolated test instance (…-backend-test) also talks same-origin to its own
+  // backend (DEV_SKIP_AUTH set there); prod keeps going through APIM (key injection).
   const _LOCAL = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  const API_URL = _LOCAL ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
+  const _SAME_ORIGIN_API = _LOCAL || location.hostname.includes('-backend-test');
+  const API_URL = _SAME_ORIGIN_API ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
 
   // ── STATE ──
   let sessionId = null;
