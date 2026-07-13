@@ -983,6 +983,10 @@
   const API_URL = _SAME_ORIGIN_API ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
 
   // ── STATE ──
+  // Per-message sources: lets a citation chip restore ITS OWN sources panel
+  // (not the latest question's) when clicked — fixes C-01/H-03.
+  const _msgSources = {};
+  let _msgSourceSeq = 0;
   let sessionId = null;
   let chatSessions = [];   // [{id, title}] — loaded from backend
   let currentSessionId = null;
@@ -2059,6 +2063,10 @@
     }
 
     const _seenCites = new Set();
+    // Register this turn's sources under a message id so its citation chips can
+    // restore exactly these sources (and highlight the right card) on click.
+    const _mid = 'm' + (++_msgSourceSeq);
+    if (sources && sources.length) _msgSources[_mid] = sources;
 
     function applyInline(str) {
       return escHtml(str)
@@ -2072,14 +2080,14 @@
             // document must not render as two identical citation chips (C-06).
             if (_seenCites.has(title)) return '';
             _seenCites.add(title);
-            return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
+            return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight('${_mid}', ${n})">${escHtml(title)}</span>`;
           }).filter(Boolean).join(' ');
         })
         .replace(/\[(\d+)\]/g, (_, n) => {
           const title = sources[n-1]?.document_title || n;
           if (_seenCites.has(title)) return '';
           _seenCites.add(title);
-          return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
+          return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight('${_mid}', ${n})">${escHtml(title)}</span>`;
         });
     }
 
@@ -2185,6 +2193,7 @@
     groupedList.forEach(src => {
       const card = document.createElement('div');
       card.className = 'source-card' + (src.is_web ? ' web' : '');
+      card.dataset.docKey = src.document_title || src.source_file || 'Unbekannt';
 
       const metaParts = [];
       if (src.source_file) metaParts.push(src.source_file.split('/').pop());
@@ -2222,13 +2231,21 @@
     _setPanelCollapsed(!sourcesCollapsed);
   }
 
-  function expandAndHighlight(dokIndex) {
+  function expandAndHighlight(mid, dokIndex) {
     if (sourcesCollapsed) _setPanelCollapsed(false);
     switchPanelTab('quellen');
 
-    // Find the card by index (1-based) and briefly highlight it
-    const cards = document.querySelectorAll('.source-card');
-    const card = cards[dokIndex - 1];
+    // Restore the sources of the message this chip belongs to (not the latest
+    // question's), then highlight the card for that chip's document — matched by
+    // document name, since the panel groups by document while chips are numbered
+    // per chunk. Fixes C-01 (stale panel) and H-03 (wrong card).
+    const src = _msgSources[mid];
+    if (src) renderSources(src);
+    const chunk = src ? src[dokIndex - 1] : null;
+    const key = chunk ? (chunk.document_title || chunk.source_file || 'Unbekannt') : null;
+
+    const cards = [...document.querySelectorAll('.source-card')];
+    const card = key ? cards.find(c => c.dataset.docKey === key) : cards[dokIndex - 1];
     if (!card) return;
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     card.classList.add('highlight');
