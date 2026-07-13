@@ -2066,18 +2066,19 @@
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/\[Dok\s+\d+(?:,\s*Dok\s+\d+)*\]/g, match => {
           const nums = [...new Set([...match.matchAll(/\d+/g)].map(m => m[0]))];
-          return nums.filter(n => {
-            if (_seenCites.has(n)) return false;
-            _seenCites.add(n); return true;
-          }).map(n => {
+          return nums.map(n => {
             const title = sources[n-1]?.document_title || `Dok ${n}`;
+            // De-duplicate by document, not by chunk number: two chunks from the same
+            // document must not render as two identical citation chips (C-06).
+            if (_seenCites.has(title)) return '';
+            _seenCites.add(title);
             return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
-          }).join(' ');
+          }).filter(Boolean).join(' ');
         })
         .replace(/\[(\d+)\]/g, (_, n) => {
-          if (_seenCites.has(n)) return '';
-          _seenCites.add(n);
           const title = sources[n-1]?.document_title || n;
+          if (_seenCites.has(title)) return '';
+          _seenCites.add(title);
           return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
         });
     }
