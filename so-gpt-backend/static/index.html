@@ -275,6 +275,7 @@
       border-radius: 12px;
       line-height: 1.6;
       max-width: 640px;
+      overflow-wrap: break-word;   /* long tokens (URLs, special-char strings) wrap instead of overflowing */
     }
     .bubble.user {
       background: #1c1917;
@@ -295,7 +296,9 @@
     .bubble strong { font-weight: 600; }
     .bubble em { font-style: italic; color: var(--text-secondary); }
     .bubble ul { padding-left: 18px; margin-top: 4px; }
-    .bubble ul li { margin-bottom: 4px; }
+    .bubble ol { padding-left: 22px; margin-top: 4px; }   /* was missing → numbered markers overflowed left */
+    .bubble ul li, .bubble ol li { margin-bottom: 4px; }
+    .bubble li > ul, .bubble li > ol { margin-top: 4px; }  /* nested lists indent inside the bubble */
     .bubble h2 { font-size: 15px; font-weight: 700; margin: 14px 0 6px; }
     .bubble h3 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
     .bubble h4 { font-size: 13px; font-weight: 600; margin: 10px 0 3px; color: #444; }
@@ -2105,16 +2108,14 @@
 
     const rawLines = text.split('\n');
     let result = '';
-    let inList = false;
-    let inOList = false;
+    const listStack = [];  // [{tag,indent}] — supports nested ordered/unordered lists
     let tableBuffer = [];
 
     function flushTable() {
       if (tableBuffer.length) { result += buildTable(tableBuffer); tableBuffer = []; }
     }
     function closeOpenLists() {
-      if (inList) { result += '</ul>'; inList = false; }
-      if (inOList) { result += '</ol>'; inOList = false; }
+      while (listStack.length) result += `</li></${listStack.pop().tag}>`;
     }
 
     for (const line of rawLines) {
@@ -2136,14 +2137,27 @@
       } else if (trimmed.startsWith('## ') || trimmed.startsWith('# ')) {
         closeOpenLists();
         result += `<h2>${applyInline(trimmed.replace(/^#{1,2} /, ''))}</h2>`;
-      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        if (inOList) { result += '</ol>'; inOList = false; }
-        if (!inList) { result += '<ul>'; inList = true; }
-        result += `<li>${applyInline(trimmed.slice(2))}</li>`;
-      } else if (/^\d+\.\s/.test(trimmed)) {
-        if (inList) { result += '</ul>'; inList = false; }
-        if (!inOList) { result += '<ol>'; inOList = true; }
-        result += `<li>${applyInline(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
+      } else if (/^[-*]\s/.test(trimmed) || /^\d+\.\s/.test(trimmed)) {
+        // Nested lists: the line's indentation decides the level, so a "1." with
+        // indented "- " sub-items renders as a proper nested list (fixes B-04).
+        const indent = line.length - line.trimStart().length;
+        const tag = /^\d+\.\s/.test(trimmed) ? 'ol' : 'ul';
+        // Close any lists deeper than this indent (closing their open <li>).
+        while (listStack.length && listStack[listStack.length - 1].indent > indent) {
+          result += `</li></${listStack.pop().tag}>`;
+        }
+        const top = listStack[listStack.length - 1];
+        if (top && top.indent === indent) {
+          result += '</li>';                        // close previous sibling item
+          if (top.tag !== tag) {                     // switch list type at same level
+            result += `</${top.tag}>`; listStack.pop();
+            result += `<${tag}>`; listStack.push({ tag, indent });
+          }
+        } else {
+          result += `<${tag}>`; listStack.push({ tag, indent });  // open new / nested list
+        }
+        const content = tag === 'ol' ? trimmed.replace(/^\d+\.\s/, '') : trimmed.slice(2);
+        result += `<li>${applyInline(content)}`;     // <li> stays open until closed above
       } else if (trimmed === '---') {
         closeOpenLists();
         result += '<hr>';
