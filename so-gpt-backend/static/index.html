@@ -275,6 +275,7 @@
       border-radius: 12px;
       line-height: 1.6;
       max-width: 640px;
+      overflow-wrap: break-word;   /* long tokens (URLs, special-char strings) wrap instead of overflowing */
     }
     .bubble.user {
       background: #1c1917;
@@ -295,7 +296,9 @@
     .bubble strong { font-weight: 600; }
     .bubble em { font-style: italic; color: var(--text-secondary); }
     .bubble ul { padding-left: 18px; margin-top: 4px; }
-    .bubble ul li { margin-bottom: 4px; }
+    .bubble ol { padding-left: 22px; margin-top: 4px; }   /* was missing → numbered markers overflowed left */
+    .bubble ul li, .bubble ol li { margin-bottom: 4px; }
+    .bubble li > ul, .bubble li > ol { margin-top: 4px; }  /* nested lists indent inside the bubble */
     .bubble h2 { font-size: 15px; font-weight: 700; margin: 14px 0 6px; }
     .bubble h3 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
     .bubble h4 { font-size: 13px; font-weight: 600; margin: 10px 0 3px; color: #444; }
@@ -976,10 +979,17 @@
   // API calls go through Azure API Management — no key needed in frontend.
   // APIM injects the backend x-api-key server-side as a Named Value secret.
   // On localhost the frontend talks to the local backend directly (DEV_SKIP_AUTH).
+  // The isolated test instance (…-backend-test) also talks same-origin to its own
+  // backend (DEV_SKIP_AUTH set there); prod keeps going through APIM (key injection).
   const _LOCAL = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  const API_URL = _LOCAL ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
+  const _SAME_ORIGIN_API = _LOCAL || location.hostname.includes('-backend-test');
+  const API_URL = _SAME_ORIGIN_API ? '/chat' : 'https://apim-so-gpt-showcase.azure-api.net/so-gpt/chat';
 
   // ── STATE ──
+  // Per-message sources: lets a citation chip restore ITS OWN sources panel
+  // (not the latest question's) when clicked — fixes C-01/H-03.
+  const _msgSources = {};
+  let _msgSourceSeq = 0;
   let sessionId = null;
   let chatSessions = [];   // [{id, title}] — loaded from backend
   let currentSessionId = null;
@@ -2056,6 +2066,10 @@
     }
 
     const _seenCites = new Set();
+    // Register this turn's sources under a message id so its citation chips can
+    // restore exactly these sources (and highlight the right card) on click.
+    const _mid = 'm' + (++_msgSourceSeq);
+    if (sources && sources.length) _msgSources[_mid] = sources;
 
     function applyInline(str) {
       return escHtml(str)
@@ -2063,19 +2077,20 @@
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/\[Dok\s+\d+(?:,\s*Dok\s+\d+)*\]/g, match => {
           const nums = [...new Set([...match.matchAll(/\d+/g)].map(m => m[0]))];
-          return nums.filter(n => {
-            if (_seenCites.has(n)) return false;
-            _seenCites.add(n); return true;
-          }).map(n => {
+          return nums.map(n => {
             const title = sources[n-1]?.document_title || `Dok ${n}`;
-            return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
-          }).join(' ');
+            // De-duplicate by document, not by chunk number: two chunks from the same
+            // document must not render as two identical citation chips (C-06).
+            if (_seenCites.has(title)) return '';
+            _seenCites.add(title);
+            return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight('${_mid}', ${n})">${escHtml(title)}</span>`;
+          }).filter(Boolean).join(' ');
         })
         .replace(/\[(\d+)\]/g, (_, n) => {
-          if (_seenCites.has(n)) return '';
-          _seenCites.add(n);
           const title = sources[n-1]?.document_title || n;
-          return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight(${n})">${escHtml(title)}</span>`;
+          if (_seenCites.has(title)) return '';
+          _seenCites.add(title);
+          return `<span class="cite" data-dok="${n}" onclick="expandAndHighlight('${_mid}', ${n})">${escHtml(title)}</span>`;
         });
     }
 
@@ -2093,16 +2108,14 @@
 
     const rawLines = text.split('\n');
     let result = '';
-    let inList = false;
-    let inOList = false;
+    const listStack = [];  // [{tag,indent}] — supports nested ordered/unordered lists
     let tableBuffer = [];
 
     function flushTable() {
       if (tableBuffer.length) { result += buildTable(tableBuffer); tableBuffer = []; }
     }
     function closeOpenLists() {
-      if (inList) { result += '</ul>'; inList = false; }
-      if (inOList) { result += '</ol>'; inOList = false; }
+      while (listStack.length) result += `</li></${listStack.pop().tag}>`;
     }
 
     for (const line of rawLines) {
@@ -2124,14 +2137,27 @@
       } else if (trimmed.startsWith('## ') || trimmed.startsWith('# ')) {
         closeOpenLists();
         result += `<h2>${applyInline(trimmed.replace(/^#{1,2} /, ''))}</h2>`;
-      } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-        if (inOList) { result += '</ol>'; inOList = false; }
-        if (!inList) { result += '<ul>'; inList = true; }
-        result += `<li>${applyInline(trimmed.slice(2))}</li>`;
-      } else if (/^\d+\.\s/.test(trimmed)) {
-        if (inList) { result += '</ul>'; inList = false; }
-        if (!inOList) { result += '<ol>'; inOList = true; }
-        result += `<li>${applyInline(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
+      } else if (/^[-*]\s/.test(trimmed) || /^\d+\.\s/.test(trimmed)) {
+        // Nested lists: the line's indentation decides the level, so a "1." with
+        // indented "- " sub-items renders as a proper nested list (fixes B-04).
+        const indent = line.length - line.trimStart().length;
+        const tag = /^\d+\.\s/.test(trimmed) ? 'ol' : 'ul';
+        // Close any lists deeper than this indent (closing their open <li>).
+        while (listStack.length && listStack[listStack.length - 1].indent > indent) {
+          result += `</li></${listStack.pop().tag}>`;
+        }
+        const top = listStack[listStack.length - 1];
+        if (top && top.indent === indent) {
+          result += '</li>';                        // close previous sibling item
+          if (top.tag !== tag) {                     // switch list type at same level
+            result += `</${top.tag}>`; listStack.pop();
+            result += `<${tag}>`; listStack.push({ tag, indent });
+          }
+        } else {
+          result += `<${tag}>`; listStack.push({ tag, indent });  // open new / nested list
+        }
+        const content = tag === 'ol' ? trimmed.replace(/^\d+\.\s/, '') : trimmed.slice(2);
+        result += `<li>${applyInline(content)}`;     // <li> stays open until closed above
       } else if (trimmed === '---') {
         closeOpenLists();
         result += '<hr>';
@@ -2181,6 +2207,7 @@
     groupedList.forEach(src => {
       const card = document.createElement('div');
       card.className = 'source-card' + (src.is_web ? ' web' : '');
+      card.dataset.docKey = src.document_title || src.source_file || 'Unbekannt';
 
       const metaParts = [];
       if (src.source_file) metaParts.push(src.source_file.split('/').pop());
@@ -2218,13 +2245,21 @@
     _setPanelCollapsed(!sourcesCollapsed);
   }
 
-  function expandAndHighlight(dokIndex) {
+  function expandAndHighlight(mid, dokIndex) {
     if (sourcesCollapsed) _setPanelCollapsed(false);
     switchPanelTab('quellen');
 
-    // Find the card by index (1-based) and briefly highlight it
-    const cards = document.querySelectorAll('.source-card');
-    const card = cards[dokIndex - 1];
+    // Restore the sources of the message this chip belongs to (not the latest
+    // question's), then highlight the card for that chip's document — matched by
+    // document name, since the panel groups by document while chips are numbered
+    // per chunk. Fixes C-01 (stale panel) and H-03 (wrong card).
+    const src = _msgSources[mid];
+    if (src) renderSources(src);
+    const chunk = src ? src[dokIndex - 1] : null;
+    const key = chunk ? (chunk.document_title || chunk.source_file || 'Unbekannt') : null;
+
+    const cards = [...document.querySelectorAll('.source-card')];
+    const card = key ? cards.find(c => c.dataset.docKey === key) : cards[dokIndex - 1];
     if (!card) return;
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     card.classList.add('highlight');

@@ -46,16 +46,27 @@ def rewrite_query(question: str, history: list[dict]) -> str:
         api_key=config.OPENAI_API_KEY,
         api_version=config.OPENAI_API_VERSION,
     )
-    response = client.chat.completions.create(
-        model=config.OPENAI_QUERY_REWRITE_DEPLOYMENT,
-        messages=[
-            {"role": "system", "content": _SYSTEM_PROMPT},
-            {"role": "user", "content": (
-                f"Gesprächshistorie:\n{history_text}\n\n"
-                f"Aktuelle Frage: {question}"
-            )},
-        ],
-        max_tokens=200,
-        temperature=0,
-    )
-    return response.choices[0].message.content.strip()
+    try:
+        response = client.chat.completions.create(
+            model=config.OPENAI_QUERY_REWRITE_DEPLOYMENT,
+            messages=[
+                {"role": "system", "content": _SYSTEM_PROMPT},
+                {"role": "user", "content": (
+                    f"Gesprächshistorie:\n{history_text}\n\n"
+                    f"Aktuelle Frage: {question}"
+                )},
+            ],
+            max_tokens=200,
+            temperature=0,
+        )
+        rewritten = response.choices[0].message.content
+    except Exception as exc:
+        # Query rewriting must never break the pipeline. On any failure — e.g. the
+        # Azure content filter rejecting a jailbreak-style follow-up — degrade to the
+        # original question so retrieval still runs (previously: unhandled → HTTP 500).
+        logger.warning("Query rewriting failed, using original question: %s", exc)
+        return question
+
+    # content can be None even without an exception (filtered completion) — guard it,
+    # otherwise .strip() raises AttributeError and the request 500s.
+    return rewritten.strip() if rewritten else question

@@ -101,7 +101,46 @@ def hybrid_search(query: str, docs_used: list[str]) -> tuple[list[Chunk], float]
     if docs_used:
         chunks.sort(key=lambda c: (c["source_file"] not in docs_used, -c["score"]))
 
-    top_chunks = chunks[: config.TOP_N_CHUNKS]
+    # ⑤ — Document diversity: cap chunks per document so the top-N spans several
+    # documents instead of being dominated by one. Ensures a second relevant document
+    # surfaces (e.g. BYOD next to Mobiles-Arbeiten, or Krankmeldung next to Urlaub)
+    # instead of the sources being 4x the same document.
+    top_chunks = _diversify(chunks, config.TOP_N_CHUNKS, max_per_doc=2)
     max_score = max((c["score"] for c in top_chunks), default=0.0)
 
     return top_chunks, max_score
+
+
+def _doc_key(chunk: Chunk) -> str:
+    """Identity of the document a chunk belongs to (for de-duplication)."""
+    return chunk.get("source_file") or chunk.get("document_title") or ""
+
+
+def _diversify(chunks: list[Chunk], top_n: int, max_per_doc: int = 2) -> list[Chunk]:
+    """Picks the top_n highest-ranked chunks while limiting how many may come from
+    the same document, so several relevant documents surface instead of one crowding
+    out the rest. Chunks keep their ranked order; the per-document cap only skips
+    surplus chunks. If that leaves fewer than top_n (the query genuinely matches only
+    one document), a second pass fills the remaining slots with the best leftovers —
+    so single-document questions keep their depth.
+    """
+    selected: list[Chunk] = []
+    per_doc: dict[str, int] = {}
+
+    for c in chunks:
+        k = _doc_key(c)
+        if per_doc.get(k, 0) >= max_per_doc:
+            continue
+        selected.append(c)
+        per_doc[k] = per_doc.get(k, 0) + 1
+        if len(selected) >= top_n:
+            return selected
+
+    # Not enough diverse chunks — top up with the best remaining chunks.
+    for c in chunks:
+        if len(selected) >= top_n:
+            break
+        if c not in selected:
+            selected.append(c)
+
+    return selected

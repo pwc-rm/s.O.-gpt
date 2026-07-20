@@ -49,19 +49,29 @@ MOCK_EMAILS = [
 # ── Erkennung ────────────────────────────────────────────────────────────────
 # OOO wird zuerst geprüft, weil "Abwesenheitsnotiz" spezifischer ist als das
 # bloße "Abwesenheit" in der Übergabe-Anfrage.
+# Keywords sind ASCII-normalisiert (ue/ae/oe/ss), damit sowohl "Übergabe" als
+# auch "Uebergabe" erkannt werden — Nutzer tippen Umlaute oft als ue/ae/oe.
 _OOO_KEYWORDS = (
     "abwesenheitsnotiz", "abwesenheitsmeldung", "abwesenheits-notiz",
     "out of office", "out-of-office", "ooo", "autoreply", "auto-reply",
     "abwesenheitsassistent",
 )
 _HANDOVER_KEYWORDS = (
-    "übergabe", "übergeben", "handover", "übergabecheckliste", "übergabe-checkliste",
+    "uebergabe", "uebergeben", "handover", "uebergabecheckliste", "uebergabe-checkliste",
 )
+
+
+def _normalize(text: str) -> str:
+    """Lowercase and expand German umlauts so 'Übergabe' and 'Uebergabe' match alike."""
+    t = text.lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss")):
+        t = t.replace(a, b)
+    return t
 
 
 def detect_doc_kind(question: str) -> Optional[str]:
     """Returns 'ooo', 'handover' or None based on the user's request."""
-    q = question.lower()
+    q = _normalize(question)
     if any(k in q for k in _OOO_KEYWORDS):
         return "ooo"
     if any(k in q for k in _HANDOVER_KEYWORDS):
