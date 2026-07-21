@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="de" class="h-full"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#ffdad8",
+                      "background": "#f8f9fa",
+                      "border-subtle": "#e5e7eb",
+                      "success-green": "#10b981",
+                      "error-container": "#ffdad6",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-secondary-container": "#656467",
+                      "inverse-primary": "#ffb3b0",
+                      "sidebar-bg": "#18181b",
+                      "surface-container-low": "#f3f4f5",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#94f1f9",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-primary-container": "#fff6f5",
+                      "surface-container": "#edeeef",
+                      "on-background": "#191c1d",
+                      "inverse-surface": "#2e3132",
+                      "primary-container": "#d92b3a",
+                      "on-secondary-fixed-variant": "#47464a",
+                      "outline-variant": "#e4bdbb",
+                      "on-error-container": "#93000a",
+                      "secondary": "#5f5e61",
+                      "primary": "#b50625",
+                      "on-primary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#007f86",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#410006",
+                      "surface-bright": "#f8f9fa",
+                      "on-primary-fixed-variant": "#93001b",
+                      "secondary-fixed-dim": "#c8c5ca",
+                      "on-tertiary-container": "#e6fdff",
+                      "sidebar-text": "#ffffff",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "on-surface": "#191c1d",
+                      "on-secondary-fixed": "#1b1b1e",
+                      "warning-amber": "#f59e0b",
+                      "secondary-fixed": "#e4e1e6",
+                      "text-main": "#1f2937",
+                      "surface-variant": "#e1e3e4",
+                      "surface-tint": "#bc1029",
+                      "secondary-container": "#e4e1e6",
+                      "text-muted": "#6b7280",
+                      "tertiary": "#00646a",
+                      "primary-fixed-dim": "#ffb3b0",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "on-tertiary-fixed": "#002022",
+                      "on-surface-variant": "#5b403f",
+                      "surface-container-high": "#e7e8e9",
+                      "outline": "#906f6e",
+                      "tertiary-fixed-dim": "#77d5dc",
+                      "surface": "#f8f9fa"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "stack-md": "16px",
+                      "sidebar-width": "260px",
+                      "margin-page": "32px",
+                      "gutter": "24px",
+                      "stack-lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-bold": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-bold": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      }catch(_e){}</script></head><body class="bg-background text-on-background font-body-md h-full overflow-hidden flex selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+    <!-- Sidebar (Reused structure, suppressed full shared JSON nav for a dedicated chat interface, keeping layout structure) -->
+    <aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg flex flex-col z-20 border-r border-sidebar-bg">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6">
+            <span class="font-display-lg text-display-lg text-on-secondary font-bold tracking-tight">s.O<span class="text-primary-container">GPT</span></span>
+        </div>
+
+        <!-- New Chat Button -->
+        <div class="px-4 py-4">
+            <button class="w-full flex items-center gap-3 px-4 py-3 bg-surface-container-highest bg-opacity-10 hover:bg-opacity-20 text-sidebar-text rounded-lg transition-colors duration-200 group">
+                <span class="material-symbols-outlined text-sidebar-text group-hover:text-primary-fixed-dim transition-colors" data-icon="add">add</span>
+                <span class="font-label-bold text-label-bold">Neuer Chat</span>
+            </button>
+        </div>
+
+        <!-- Recent Chats (Placeholder) -->
+        <div class="flex-1 overflow-y-auto px-4 py-2">
+            <div class="mb-4">
+                <p class="px-4 py-2 text-xs font-label-bold text-secondary-fixed-dim uppercase tracking-wider">Heute</p>
+                <button class="w-full flex items-center gap-3 px-4 py-2 text-left text-sidebar-text rounded-md hover:bg-surface-container-highest hover:bg-opacity-10 transition-colors truncate" onclick="window.location.href='{{DATA:SCREEN:SCREEN_6}}'">
+                    <span class="material-symbols-outlined text-[18px] text-secondary-fixed-dim" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+                    <span class="truncate text-sm">Urlaubsantrag Q3</span>
+                </button>
+                <button class="w-full flex items-center gap-3 px-4 py-2 text-left text-sidebar-text rounded-md hover:bg-surface-container-highest hover:bg-opacity-10 transition-colors truncate" onclick="window.location.href='{{DATA:SCREEN:SCREEN_6}}'">
+                    <span class="material-symbols-outlined text-[18px] text-secondary-fixed-dim" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+                    <span class="truncate text-sm">Sonderurlaub Heirat</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="p-4 border-t border-secondary-fixed-dim border-opacity-20 mt-auto">
+            <button class="w-full flex items-center gap-3 px-4 py-3 text-sidebar-text hover:bg-surface-container-highest hover:bg-opacity-10 rounded-lg transition-colors mb-2" onclick="window.location.href='{{DATA:SCREEN:SCREEN_2}}'">
+                <span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                <span class="font-label-bold text-label-bold">Zurück zu s.O GPT</span>
+            </button>
+            
+            <button class="w-full flex items-center gap-3 px-4 py-2 mt-2 group">
+                <div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden">
+                    <span class="material-symbols-outlined text-sidebar-bg text-[20px]" data-icon="person">person</span>
+                </div>
+                <div class="flex-1 text-left">
+                    <p class="text-sm font-medium text-sidebar-text">Max Mustermann</p>
+                </div>
+                <span class="material-symbols-outlined text-secondary-fixed-dim group-hover:text-sidebar-text transition-colors" data-icon="more_horiz">more_horiz</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main-->
+    <main class="flex-1 flex flex-col h-screen ml-sidebar-width w-[calc(100%-theme(spacing.sidebar-width))] relative">
+        
+        <!-- Top App Bar (Simplified for Chat Interface) -->
+        <header class="h-16 flex items-center justify-between px-gutter sticky top-0 z-10 bg-background/80 backdrop-blur-md">
+             <div>
+                <!-- Model Selector / Info (Optional context) -->
+                 <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface-container-low transition-colors text-secondary group">
+                    <span class="font-label-bold text-label-bold text-secondary group-hover:text-on-background">s.O GPT-4 Corporate</span>
+                    <span class="material-symbols-outlined text-[16px]" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+                 </button>
+             </div>
+             <div class="flex items-center gap-4"><a href="{{DATA:SCREEN:SCREEN_13}}" class="flex items-center gap-1 text-secondary hover:text-primary transition-colors font-body-md text-body-md group mr-2">
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                    Zum Agent Cockpit
+                </a>
+                 <button class="p-2 text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-container-low" title="Hilfe">
+                    <span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                 </button>
+                 <button class="p-2 text-secondary hover:text-primary transition-colors rounded-full hover:bg-surface-container-low" title="Benachrichtigungen">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                 </button>
+             </div>
+        </header>
+
+        <!-- Chat Canvas (Scrollable Area) -->
+        <div class="flex-1 overflow-y-auto px-gutter pb-32 pt-12 flex flex-col items-center">
+            
+            <div class="w-full max-w-3xl flex flex-col items-center justify-center min-h-[60vh]">
+                
+                <!-- Agent Identity -->
+                <div class="text-center mb-12 flex flex-col items-center animate-fade-in-up">
+                    <div class="w-24 h-24 rounded-2xl bg-primary-container bg-opacity-10 text-primary-container flex items-center justify-center mb-6 shadow-sm border border-primary-fixed-dim border-opacity-30">
+                        <span class="material-symbols-outlined text-[48px]" data-weight="fill" data-icon="beach_access">beach_access</span>
+                    </div>
+                    <h1 class="font-display-lg text-display-lg text-on-surface mb-2">HR Vacation Assistant</h1>
+                    <p class="font-body-lg text-body-lg text-secondary max-w-md">Dein Experte für Urlaubsplanung und Abwesenheiten.</p>
+                </div>
+
+                <!-- Welcome Message & Suggestions -->
+                <div class="w-full text-center mb-8">
+                    <h2 class="font-headline-sm text-headline-sm text-on-background mb-8">Wie kann ich dir heute bei deinem Urlaub helfen?</h2>
+                </div>
+
+                <!-- Suggestion Grid (Bento-style layout for prompts) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full"><!-- Suggestion 1 -->
+<a href="{{DATA:SCREEN:SCREEN_6}}" class="group p-5 bg-surface rounded-xl border border-border-subtle hover:border-primary-container hover:shadow-md transition-all duration-300 text-left flex flex-col h-full hover:-translate-y-1 bg-white">
+<span class="material-symbols-outlined text-primary-container mb-3" data-icon="calendar_month">calendar_month</span>
+<p class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">"Wie viele Urlaubstage habe ich für dieses Jahr noch übrig?"</p>
+</a>
+<!-- Suggestion 2 -->
+<a href="{{DATA:SCREEN:SCREEN_6}}" class="group p-5 bg-surface rounded-xl border border-border-subtle hover:border-primary-container hover:shadow-md transition-all duration-300 text-left flex flex-col h-full hover:-translate-y-1 bg-white">
+<span class="material-symbols-outlined text-primary-container mb-3" data-icon="family_restroom">family_restroom</span>
+<p class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">"Was sind die Richtlinien für Sonderurlaub bei s.Oliver?"</p>
+</a>
+<!-- Suggestion 3 -->
+<a href="{{DATA:SCREEN:SCREEN_6}}" class="group p-5 bg-surface rounded-xl border border-border-subtle hover:border-primary-container hover:shadow-md transition-all duration-300 text-left flex flex-col h-full hover:-translate-y-1 bg-white">
+<span class="material-symbols-outlined text-primary-container mb-3" data-icon="next_plan">next_plan</span>
+<p class="font-body-md text-body-md text-on-surface group-hover:text-primary-container transition-colors">"Kann ich meinen Resturlaub in das nächste Jahr mitnehmen?"</p>
+</a></div>
+
+            </div>
+        </div>
+
+        <!-- Input Area (Fixed at bottom) -->
+        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background via-background to-transparent pt-10 pb-8 px-gutter">
+            <div class="max-w-3xl mx-auto w-full relative">
+                <!-- Input Box -->
+                <div class="relative flex items-end bg-surface rounded-2xl border border-border-subtle shadow-sm focus-within:border-primary-container focus-within:ring-1 focus-within:ring-primary-container focus-within:shadow-md transition-all duration-200 p-2 bg-white">
+                    
+                    <!-- Attachment Button -->
+                    <button class="p-3 text-secondary hover:text-on-surface transition-colors rounded-xl hover:bg-surface-container-low flex-shrink-0" title="Datei anhängen">
+                        <span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+                    </button>
+
+                    <!-- Textarea -->
+                    <textarea class="w-full max-h-48 min-h-[44px] bg-transparent border-none focus:ring-0 resize-none py-3 px-2 font-body-md text-body-md text-on-surface placeholder:text-secondary-fixed-dim" placeholder="Nachricht an HR Vacation Assistant senden..." rows="1" style="scrollbar-width: none;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+
+                    <!-- Send Button -->
+                    <button class="p-3 m-1 bg-primary-container text-on-primary rounded-xl hover:bg-primary transition-colors flex-shrink-0 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+                    </button>
+                </div>
+                
+                <!-- Disclaimer -->
+                <p class="text-center text-[11px] text-secondary-fixed-dim mt-3 font-label-sm">
+                    HR Vacation Assistant kann Fehler machen. Überprüfen Sie wichtige Informationen.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <style class="">
+        /* Simple entry animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY</style>
+
+
+
+</body></html>

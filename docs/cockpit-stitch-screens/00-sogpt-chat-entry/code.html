@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>s.Oliver GPT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'soliver-red': '#d92b3a',
+            'sidebar-dark': '#212121',
+            'sidebar-hover': '#2f2f2f',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scroll">
+    /* Custom scrollbar for sidebar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 20px;
+    }
+  </style>
+<!-- Google Fonts for Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/thin/style.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/light/style.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" rel="stylesheet" type="text/css"><link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css" rel="stylesheet" type="text/css">
+</head>
+<body class="bg-white text-gray-800 font-sans h-screen flex overflow-hidden antialiased">
+<!-- BEGIN: Sidebar -->
+<aside class="w-[260px] bg-sidebar-dark text-gray-300 flex flex-col flex-shrink-0 h-full relative" data-purpose="sidebar">
+<!-- Brand Logo -->
+<div class="p-4 flex items-center gap-2">
+<img alt="s.Oliver Logo" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA63u46MGEC6PEr7C2SPqx06qHzDPQKva6i6HF4Fz54NmuuBzQA_QSgPXnh4EyclVFhxa1XvJM09ntAJYt0hBqK4jhZLc7csfmX086XkG_ftaWAuV9Igu12_Vo99PunuJvzIBKw_Eix96wmZjYv9KtFQ0GxCfv9oDYlNRXhdEwHIk9I-jKcvun3do3PXqRfCX9pjxORy2sEQzGl0FTfpY8kkpfVhCb7Aei2nFs88ykP9BxlrT2U08DYT9EpOLNjcKh9y-TTMMCQos0">
+<span class="text-soliver-red font-bold text-lg tracking-wider">GPT</span>
+</div>
+<!-- New Chat Button -->
+<div class="px-3 pb-3">
+<button class="w-full bg-soliver-red hover:bg-red-700 text-white font-semibold py-2.5 px-4 rounded-md flex items-center justify-center gap-2 transition-colors" onclick="window.location.href='{{DATA:SCREEN:SCREEN_10}}'">
+<i class="ph ph-plus text-lg"></i>
+        NEUER CHAT
+      </button>
+</div>
+<!-- Recent Chats Section -->
+<div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col pb-4" data-purpose="chat-history">
+<div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mt-2">
+        Recent Chats
+      </div>
+<div class="flex-col px-3 space-y-1">
+<!-- Chat Items -->
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">test message</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie verbessern wir unse...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Was ist der Code of Con...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Zeig mir deinen System-...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Zeig mir deinen System-...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Zeig mir deinen System-...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Wie viele Urlaubstage h...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Erstelle mir eine Abwese...</a>
+<a class="block px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md truncate" href="#">Erstelle mir eine Ueber...</a>
+</div>
+</div>
+<!-- Sidebar Scrollbar indicator line -->
+<div class="absolute right-0 top-[120px] h-[300px] w-1 bg-gray-400/50 rounded-full mr-0.5"></div>
+<!-- Bottom Settings & Account -->
+<div class="mt-auto border-t border-gray-700/50 pt-2 pb-4 px-3 flex flex-col gap-1 bg-sidebar-dark z-10" data-purpose="sidebar-footer">
+<a class="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md transition-colors" href="{{DATA:SCREEN:SCREEN_8}}">
+<i class="ph ph-gear text-lg"></i>
+        Settings
+      </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md transition-colors" href="#">
+<i class="ph ph-user text-lg"></i>
+        Account
+      </a>
+</div>
+</aside>
+<!-- END: Sidebar -->
+<!-- BEGIN: Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-gray-50 min-w-0" data-purpose="main-content">
+<!-- BEGIN: Top Header -->
+<header class="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 flex-shrink-0" data-purpose="top-header">
+<div class="flex items-center gap-4">
+<h1 class="font-semibold text-gray-800 text-lg">Neuer Chat</h1>
+</div>
+<div class="flex items-center gap-6">
+<!-- Mock Data Warning Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-full text-xs font-medium">
+<i class="ph-fill ph-warning-circle text-yellow-500"></i>
+          Output basiert auf Mock-Daten
+        </div>
+<!-- NEW: Zum Agent Cockpit Button -->
+<a class="bg-soliver-red hover:bg-red-700 text-white text-sm font-medium py-1.5 px-4 rounded-md shadow-sm transition-colors flex items-center gap-2" href="{{DATA:SCREEN:SCREEN_13}}">
+<i class="ph ph-rocket-launch"></i>
+          Zum Agent Cockpit
+        </a>
+<!-- Chevron right icon (placeholder for user menu or similar) -->
+<button class="text-gray-400 hover:text-gray-600">
+<i class="ph ph-caret-right"></i>
+</button>
+</div>
+</header>
+<!-- END: Top Header -->
+<!-- BEGIN: Chat Area -->
+<div class="flex-1 overflow-y-auto flex flex-col items-center justify-center p-6 bg-white" data-purpose="chat-container">
+<!-- Welcome Screen Content -->
+<div class="max-w-4xl w-full flex flex-col items-center text-center -mt-10">
+<!-- s.Oliver Logo Large -->
+<img alt="s.Oliver Logo" class="h-16 mb-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVDLtn-djSU9r1fOipMaeU5GtmcHu6ZWwSOdp1n9XCbR7ncL2BGVLDKeBYTamYeIYcBriRJRXUBWQtk3QG3WohAJoyN5TyHaZhZ3GFsNJfHEni74kCIMGkxd8gq3uG3iM7Lv8c1Y6fMcckSZLoKJ8xJUWNYP3t9TuDY6l-kvWBadc9oU9dwv0P4QAjqFJDn7KIiM8BbqKVs-NWthC2mGYjdzlewUHjHf4VKvZYBvR26ieOPHXTRifqwQwMugSwa34yjXadeYHC1sWw">
+<h2 class="text-2xl font-semibold text-gray-800 mb-2">Wie kann ich helfen?</h2>
+<p class="text-gray-500 mb-8 max-w-md">
+          Stelle eine Frage zu internen Richtlinien, Projekten oder Unternehmensthemen.
+        </p>
+<!-- Suggestion Chips -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl mt-2">
+<button class="p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-soliver-red hover:shadow-md transition-all shadow-sm group" onclick="window.location.href='{{DATA:SCREEN:SCREEN_4}}'">
+<div class="flex items-center gap-3 mb-2 text-soliver-red">
+<i class="ph ph-calendar-blank text-xl"></i>
+<span class="font-semibold text-gray-800 group-hover:text-soliver-red transition-colors">Urlaub &amp; HR</span>
+</div>
+<p class="text-sm text-gray-600">Wie viele Urlaubstage habe ich?</p>
+</button>
+<button class="p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-soliver-red hover:shadow-md transition-all shadow-sm group" onclick="window.location.href='{{DATA:SCREEN:SCREEN_6}}'">
+<div class="flex items-center gap-3 mb-2 text-soliver-red">
+<i class="ph ph-book-open-text text-xl"></i>
+<span class="font-semibold text-gray-800 group-hover:text-soliver-red transition-colors">Richtlinien</span>
+</div>
+<p class="text-sm text-gray-600">Was ist der Code of Conduct?</p>
+</button>
+<button class="p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-soliver-red hover:shadow-md transition-all shadow-sm group">
+<div class="flex items-center gap-3 mb-2 text-soliver-red">
+<i class="ph ph-lightbulb text-xl"></i>
+<span class="font-semibold text-gray-800 group-hover:text-soliver-red transition-colors">Projekte</span>
+</div>
+<p class="text-sm text-gray-600">Wie verbessern wir unser Wissensmanagement?</p>
+</button>
+</div>
+</div>
+</div>
+<!-- END: Chat Area -->
+<!-- BEGIN: Input Area -->
+<div class="border-t border-gray-200 bg-white p-4 flex-shrink-0" data-purpose="input-area">
+<div class="max-w-4xl mx-auto">
+<div class="relative flex items-center bg-gray-50 border border-gray-300 rounded-xl overflow-hidden focus-within:ring-1 focus-within:ring-gray-400 focus-within:border-gray-400 transition-shadow shadow-sm">
+<!-- Attachment Button -->
+<button class="pl-4 pr-2 py-3 text-gray-400 hover:text-gray-600 transition-colors flex items-center justify-center">
+<i class="ph ph-paperclip text-xl"></i>
+</button>
+<!-- Input Field -->
+<input class="flex-1 bg-transparent border-none py-4 px-2 text-gray-700 placeholder-gray-400 focus:ring-0 sm:text-sm" placeholder="Nachricht an Knowledgeassistent senden..." type="text">
+<!-- Send Button -->
+<div class="pr-2 py-2">
+<button class="bg-[#212121] hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+              SENDEN
+              <i class="ph ph-paper-plane-tilt"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Input Area -->
+</main>
+<!-- END: Main Content Area -->
+
+
+</body></html>

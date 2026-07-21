@@ -884,13 +884,18 @@
 <main class="main">
   <header class="chat-header">
     <span class="chat-title" id="chat-title">Neuer Chat</span>
-    <div style="display:flex;align-items:center;gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:center;">
       <span class="mock-badge visible" id="mock-badge">
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
         Output basiert auf Mock-Daten
       </span>
       <span class="cost-badge" id="cost-badge"></span>
     </div>
+    <a href="https://app-agent-cockpit.azurewebsites.net" id="cockpit-btn" title="Zum Agent Cockpit"
+       style="display:inline-flex;align-items:center;gap:6px;background:#d92b3a;color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;margin-left:auto;margin-right:8px;white-space:nowrap;">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+      Zum Agent Cockpit
+    </a>
     <button class="icon-btn" id="sources-expand-btn" onclick="toggleSources()" title="Quellen anzeigen">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </button>

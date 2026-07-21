@@ -1,0 +1,10 @@
+.venv*
+__pycache__/
+*.pyc
+.env
+.git
+node_modules/
+test-results/
+playwright-report/
+tests/
+playwright.config.ts

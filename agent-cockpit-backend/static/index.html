@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>s.Oliver Agent Cockpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        primary: "#b50625", "primary-container": "#d92b3a", "surface-tint": "#bc1029",
+        "sidebar-bg": "#18181b", "sidebar-text": "#ffffff",
+        background: "#f8f9fa", surface: "#f8f9fa",
+        "surface-container-lowest": "#ffffff", "surface-container-low": "#f3f4f5",
+        "surface-container": "#edeeef", "surface-container-high": "#e7e8e9", "surface-container-highest": "#e1e3e4",
+        "on-surface": "#191c1d", secondary: "#5f5e61", "secondary-fixed-dim": "#c8c5ca",
+        "on-secondary-fixed-variant": "#47464a",
+        "text-main": "#1f2937", "text-muted": "#6b7280", "border-subtle": "#e5e7eb",
+        "success-green": "#10b981", "warning-amber": "#f59e0b", error: "#ba1a1a",
+      },
+      fontFamily: { sans: ["Inter", "sans-serif"] },
+    }}
+  }
+</script>
+<style>
+  body { font-family: 'Inter', sans-serif; margin: 0; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .tabc { display: none; }
+  .tabc.active { display: block; }
+</style>
+</head>
+<body class="bg-background text-on-surface flex h-screen overflow-hidden antialiased">
+
+<!-- Sidebar -->
+<nav class="fixed left-0 top-0 h-screen w-[260px] bg-sidebar-bg flex flex-col py-8 overflow-y-auto z-50">
+  <div class="px-6 mb-8 flex items-center gap-3">
+    <div class="w-9 h-9 bg-primary-container rounded flex items-center justify-center text-white font-bold text-sm">sO</div>
+    <div>
+      <h1 class="text-lg font-bold text-sidebar-text leading-tight">s.Oliver Cockpit</h1>
+      <p class="text-xs text-secondary-fixed-dim">Governance &amp; Marketplace</p>
+    </div>
+  </div>
+  <div class="flex flex-col gap-1 px-3 flex-1" id="nav">
+    <button data-view="marketplace" class="navbtn flex items-center gap-3 px-4 py-3 rounded text-left transition-colors"><span class="material-symbols-outlined">storefront</span><span class="text-xs font-semibold uppercase tracking-wider">Marktplatz</span></button>
+    <button data-view="finops" class="navbtn flex items-center gap-3 px-4 py-3 rounded text-left transition-colors"><span class="material-symbols-outlined">account_balance_wallet</span><span class="text-xs font-semibold uppercase tracking-wider">FinOps</span></button>
+    <button data-view="agentops" class="navbtn flex items-center gap-3 px-4 py-3 rounded text-left transition-colors"><span class="material-symbols-outlined">smart_toy</span><span class="text-xs font-semibold uppercase tracking-wider">AgentOps</span></button>
+    <button data-view="settings" class="navbtn flex items-center gap-3 px-4 py-3 rounded text-left transition-colors"><span class="material-symbols-outlined">settings</span><span class="text-xs font-semibold uppercase tracking-wider">Einstellungen</span></button>
+  </div>
+  <div class="px-4 mt-auto">
+    <a id="back-sogpt" href="#" class="w-full py-2 border border-secondary-fixed-dim text-secondary-fixed-dim rounded text-xs font-semibold uppercase tracking-wider hover:text-sidebar-text hover:border-sidebar-text transition-colors flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">arrow_back</span> Zurück zu s.O GPT
+    </a>
+  </div>
+</nav>
+
+<!-- Main -->
+<main class="ml-[260px] flex-1 flex flex-col h-full overflow-hidden bg-background">
+  <header class="bg-surface-container-lowest border-b border-border-subtle shadow-sm flex items-center justify-between h-16 px-6 shrink-0 z-40">
+    <h2 class="text-xl font-bold" id="header-title">Agent Marketplace</h2>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-success-green animate-pulse"></div>
+        <span class="text-xs font-semibold text-success-green uppercase tracking-wider">Auto-Discovery: Active</span>
+      </div>
+      <div class="hidden md:flex items-center gap-2 bg-surface-container-low border border-border-subtle rounded-lg px-3 py-1.5 w-80">
+        <span class="material-symbols-outlined text-secondary text-lg">search</span>
+        <input id="search" class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Agenten suchen..."/>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 overflow-y-auto p-6">
+
+    <!-- MARKETPLACE -->
+    <section id="view-marketplace" class="view active">
+      <div class="flex justify-between items-end mb-6">
+        <p class="text-sm text-secondary">Entdecken und aktivieren Sie KI-Agenten für Ihre Geschäftsprozesse.</p>
+        <select id="cat-filter" class="border border-border-subtle rounded text-sm py-1.5 pl-3 pr-8 bg-surface-container-lowest">
+          <option>Alle Kategorien</option>
+        </select>
+      </div>
+      <div id="marketplace-groups" class="space-y-10"></div>
+    </section>
+
+    <!-- AGENT DETAIL -->
+    <section id="view-detail" class="view"></section>
+
+    <!-- FINOPS -->
+    <section id="view-finops" class="view"></section>
+
+    <!-- AGENTOPS -->
+    <section id="view-agentops" class="view"></section>
+
+    <!-- SETTINGS -->
+    <section id="view-settings" class="view"></section>
+
+  </div>
+</main>
+
+<script>
+const API = "";
+let SOURCES = {}, SOGPT_URL = "#", AGENTS = [];
+
+const HEADERS = { marketplace:"Agent Marketplace", finops:"FinOps & Kostenkontrolle",
+  agentops:"AgentOps & Performance", settings:"Einstellungen", detail:"Agent verwalten" };
+
+const ACTIVE = "bg-on-secondary-fixed-variant text-sidebar-text border-l-4 border-primary-container";
+const INACTIVE = "text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text border-l-4 border-transparent";
+
+function esc(s){ return (s??"").toString().replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function fmtNum(n){ return (n||0).toLocaleString("de-DE"); }
+
+function setView(v){
+  document.querySelectorAll(".view").forEach(e=>e.classList.remove("active"));
+  document.getElementById("view-"+v).classList.add("active");
+  document.getElementById("header-title").innerText = HEADERS[v] || "";
+  document.querySelectorAll(".navbtn").forEach(b=>{
+    b.className = "navbtn flex items-center gap-3 px-4 py-3 rounded text-left transition-colors " + (b.dataset.view===v ? ACTIVE : INACTIVE);
+  });
+  if(v==="finops") renderFinops();
+  if(v==="agentops") renderAgentops();
+  if(v==="settings") renderSettings();
+}
+
+document.querySelectorAll(".navbtn").forEach(b=> b.onclick = ()=> setView(b.dataset.view));
+
+// ── Source badge (the requested "woher kommt der Agent") ──
+function sourceBadge(srcKey){
+  const s = SOURCES[srcKey] || {label:srcKey, color:"#5f5e61"};
+  return `<span class="inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-border-subtle bg-surface-container-lowest" title="Quelle / Auto-Discovery">
+    <span class="w-2 h-2 rounded-full" style="background:${s.color}"></span>${esc(s.label)}</span>`;
+}
+
+function statusPill(st){
+  return st==="active"
+    ? `<span class="bg-success-green/10 text-success-green font-semibold text-[10px] px-2 py-1 rounded">Aktiv</span>`
+    : `<span class="bg-surface-container text-secondary font-semibold text-[10px] px-2 py-1 rounded">Inaktiv</span>`;
+}
+
+// ── Agent rating (thumbs up/down) ──
+function ratingPct(r){ r=r||{}; const t=(r.up||0)+(r.down||0); return t? Math.round((r.up||0)/t*100) : null; }
+function ratingCount(r){ r=r||{}; return (r.up||0)+(r.down||0); }
+function ratingBadge(a){
+  const pct=ratingPct(a.rating); if(pct===null) return '';
+  return `<span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-surface-container text-secondary" title="${ratingCount(a.rating)} Bewertungen">
+    <span class="material-symbols-outlined text-[13px] text-success-green">thumb_up</span>${pct}%</span>`;
+}
+// ── Budget & FinOps (per agent) ──
+function budgetUtilHtml(a){
+  const f=a.finops||{}, budget=f.budget_eur||0, quota=f.quota||0;
+  const cu=budget?Math.round(f.cost_eur/budget*100):0;
+  const tu=quota?Math.round(f.tokens_used/quota*100):0;
+  const th=f.alert_threshold_pct||85, warn=cu>=th||tu>=th;
+  return `
+    <div>
+      <div class="flex justify-between text-xs mb-1"><span class="text-secondary">Kostenbudget</span><span class="font-semibold ${cu>=th?'text-error':''}">${cu}%</span></div>
+      <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full ${cu>=th?'bg-error':'bg-primary'}" style="width:${Math.min(cu,100)}%"></div></div>
+      <div class="text-xs text-secondary mt-1">€ ${fmtNum(f.cost_eur)} von € ${fmtNum(budget)}</div>
+    </div>
+    <div>
+      <div class="flex justify-between text-xs mb-1"><span class="text-secondary">Token-Kontingent</span><span class="font-semibold ${tu>=th?'text-error':''}">${tu}%</span></div>
+      <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full ${tu>=th?'bg-warning-amber':'bg-primary'}" style="width:${Math.min(tu,100)}%"></div></div>
+      <div class="text-xs text-secondary mt-1">${((f.tokens_used||0)/1e6).toFixed(1)}M von ${(quota/1e6).toFixed(0)}M Token</div>
+    </div>
+    <div class="pt-2 flex items-center gap-2">
+      <span class="text-xs px-2 py-1 rounded-full ${warn?'bg-warning-amber/10 text-warning-amber':'bg-success-green/10 text-success-green'}">${warn?'Warning':'OK'}</span>
+      <span class="text-xs text-secondary">Alert bei ${th}%</span>
+    </div>`;
+}
+async function saveBudget(id){
+  const body={ budget_eur:parseFloat(val("f-budget")), quota:parseInt(val("f-quota")), alert_threshold_pct:parseInt(val("f-threshold")) };
+  const a=await (await fetch(`/api/agents/${id}/budget`, {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)})).json();
+  document.getElementById("util-body").innerHTML = budgetUtilHtml(a);
+  document.getElementById("budget-msg").innerText = "✓ Gespeichert";
+  await loadAgents();
+}
+
+async function rateAgent(id, value){
+  const r = await (await fetch(`/api/agents/${id}/rate`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({value})})).json();
+  const t=(r.up||0)+(r.down||0), pct=t?Math.round((r.up||0)/t*100):0;
+  const p=document.getElementById("rate-pct"); if(p) p.innerText = pct+"% positiv";
+  const c=document.getElementById("rate-count"); if(c) c.innerText = "("+t+" Bewertungen)";
+  const m=document.getElementById("rate-msg"); if(m){ m.innerText="✓ Danke für dein Feedback!"; }
+  await loadAgents();
+}
+
+function agentCard(a){
+  return `<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow">
+    <div class="flex justify-between items-start mb-3">
+      <div class="w-12 h-12 bg-primary-container/10 text-primary-container rounded-lg flex items-center justify-center"><span class="material-symbols-outlined">${esc(a.icon||"smart_toy")}</span></div>
+      ${statusPill(a.status)}
+    </div>
+    <div class="mb-2">${sourceBadge(a.source)}</div>
+    <h3 class="text-lg font-semibold mb-2">${esc(a.name)}</h3>
+    <div class="mb-3 space-y-1 text-xs text-secondary">
+      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> Business Owner: ${esc(a.business_owner)}</div>
+      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">corporate_fare</span> Org. Zuordnung: ${esc(a.org_unit)}</div>
+    </div>
+    <p class="text-sm text-secondary mb-4 flex-1">${esc(a.description)}</p>
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <span class="bg-surface-container text-secondary text-xs px-2 py-0.5 rounded flex items-center gap-1"><span class="material-symbols-outlined text-sm">memory</span> ${esc(a.model)}</span>
+      ${ratingBadge(a)}
+    </div>
+    <div class="flex gap-2 mt-auto">
+      <button onclick="startAgent('${a.id}')" class="flex-1 bg-primary-container text-white text-sm font-semibold py-2 rounded hover:bg-surface-tint transition-colors">Agent starten</button>
+      <button onclick="openDetail('${a.id}')" class="flex-1 border border-primary-container text-primary-container text-sm font-semibold py-2 rounded hover:bg-primary/5 transition-colors">Verwalten</button>
+    </div>
+  </div>`;
+}
+
+function renderMarketplace(){
+  const cats = [...new Set(AGENTS.map(a=>a.category))];
+  const filter = document.getElementById("cat-filter");
+  const sel = filter.value || "Alle Kategorien";
+  // Populate the filter options ONCE — rebuilding them on every render would
+  // reset the current selection back to "Alle Kategorien".
+  if(filter.options.length <= 1){
+    filter.innerHTML = `<option>Alle Kategorien</option>` + cats.map(c=>`<option>${esc(c)}</option>`).join("");
+    filter.value = sel;
+  }
+  const groups = document.getElementById("marketplace-groups");
+  groups.innerHTML = cats.filter(c=> sel==="Alle Kategorien" || sel===c).map(cat=>{
+    const list = AGENTS.filter(a=>a.category===cat && (!SEARCH || a.name.toLowerCase().includes(SEARCH)));
+    if(!list.length) return "";
+    return `<section>
+      <div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+        <h3 class="text-lg font-semibold">${esc(cat)}</h3>
+        <span class="text-xs text-secondary">${list.length} Agent${list.length>1?"en":""}</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${list.map(agentCard).join("")}</div>
+    </section>`;
+  }).join("");
+}
+
+let SEARCH = "";
+document.getElementById("search").oninput = e => { SEARCH = e.target.value.toLowerCase(); renderMarketplace(); };
+document.getElementById("cat-filter").onchange = renderMarketplace;
+
+function startAgent(id){ window.location.href = `/agent/${id}/chat`; }
+
+// ── Agent Detail ──
+async function openDetail(id){
+  const a = await (await fetch(`/api/agents/${id}`)).json();
+  const doc = (a.knowledge?.documents||[]).map(d=>`<li class="flex items-center justify-between p-3 border-b border-border-subtle last:border-0">
+     <div class="flex items-center gap-2"><span class="material-symbols-outlined text-error">description</span>
+       <div><p class="text-sm font-medium">${esc(d.name)}</p><p class="text-xs text-secondary">${esc(d.uploaded_at)} • ${esc(d.size)} • ${esc(d.status)}</p></div></div></li>`).join("");
+  const perms = (a.permissions||[]).map(p=>`<tr class="border-b border-border-subtle">
+     <td class="px-4 py-3 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-base">${p.type==='user'?'person':'group'}</span>${esc(p.entity)}</td>
+     <td class="px-4 py-3 text-secondary">${p.type==='user'?'Einzelnutzer':'AD-Gruppe'}</td>
+     <td class="px-4 py-3">${p.role==='owner'?'Admin (Owner)':'Nutzer (Read/Execute)'}</td></tr>`).join("");
+  const rt = a.knowledge?.retrieval||{};
+  document.getElementById("view-detail").innerHTML = `
+    <button onclick="setView('marketplace')" class="text-sm text-secondary hover:text-primary flex items-center gap-1 mb-4"><span class="material-symbols-outlined text-base">arrow_back</span> Zurück zum Marktplatz</button>
+    <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 mb-6">
+      <div class="flex justify-between items-start gap-4">
+        <div class="flex gap-4 items-start">
+          <div class="w-16 h-16 rounded-xl bg-primary-container/10 text-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-3xl">${esc(a.icon)}</span></div>
+          <div>
+            <div class="flex items-center gap-3 mb-1"><h2 class="text-2xl font-semibold">${esc(a.name)}</h2>${statusPill(a.status)} ${sourceBadge(a.source)}</div>
+            <p class="text-sm text-secondary mb-2">${esc(a.description)}</p>
+            <div class="text-xs text-secondary flex gap-4"><span>Ersteller: ${esc(a.business_owner)} (${esc(a.org_unit)})</span></div>
+            <div class="flex items-center gap-2 mt-3">
+              <span class="text-sm text-secondary">Bewertung:</span>
+              <span id="rate-pct" class="text-sm font-semibold">${ratingPct(a.rating)!==null?ratingPct(a.rating)+"% positiv":"—"}</span>
+              <span id="rate-count" class="text-xs text-secondary">(${ratingCount(a.rating)} Bewertungen)</span>
+              <button onclick="rateAgent('${a.id}','up')" title="Hilfreich" class="p-1.5 rounded-full text-secondary hover:bg-success-green/10 hover:text-success-green transition-colors"><span class="material-symbols-outlined text-lg">thumb_up</span></button>
+              <button onclick="rateAgent('${a.id}','down')" title="Nicht hilfreich" class="p-1.5 rounded-full text-secondary hover:bg-error/10 hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">thumb_down</span></button>
+              <span id="rate-msg" class="text-xs text-success-green"></span>
+            </div>
+          </div>
+        </div>
+        <button onclick="startAgent('${a.id}')" class="px-4 py-2 bg-primary-container text-white rounded text-sm font-semibold shadow-sm">Agent starten</button>
+      </div>
+    </div>
+    <div class="border-b border-border-subtle mb-6"><nav class="flex gap-8">
+      ${["Konfiguration","Berechtigungen","Wissensdatenbank","Budget & FinOps"].map((t,i)=>`<button onclick="detailTab(${i})" data-tab="${i}" class="dtab pb-3 text-sm font-semibold uppercase tracking-wider ${i===0?'text-primary border-b-2 border-primary':'text-secondary'}">${t}</button>`).join("")}
+    </nav></div>
+    <div class="dtabc active" data-tabc="0">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 space-y-4">
+          <h3 class="text-lg font-semibold mb-2">Allgemeine Informationen</h3>
+          <div><label class="block text-xs text-secondary mb-1">Agenten Name</label><input id="f-name" class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${esc(a.name)}"/></div>
+          <div><label class="block text-xs text-secondary mb-1">System Prompt / Instructions</label><textarea id="f-prompt" rows="6" class="w-full px-3 py-2 border border-border-subtle rounded text-sm font-mono">${esc(a.system_prompt)}</textarea></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs text-secondary mb-1">Business Owner</label><input id="f-owner" class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${esc(a.business_owner)}"/></div>
+            <div><label class="block text-xs text-secondary mb-1">Application Container</label><input class="w-full px-3 py-2 border border-border-subtle rounded text-sm bg-surface-container-low" value="${esc(a.cmdb?.application_container)}" disabled/></div>
+            <div><label class="block text-xs text-secondary mb-1">Configuration Item</label><input class="w-full px-3 py-2 border border-border-subtle rounded text-sm bg-surface-container-low" value="${esc(a.cmdb?.configuration_item)}" disabled/></div>
+            <div><label class="block text-xs text-secondary mb-1">Quelle (Auto-Discovery)</label><input class="w-full px-3 py-2 border border-border-subtle rounded text-sm bg-surface-container-low" value="${esc((SOURCES[a.source]||{}).label)}" disabled/></div>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 space-y-4">
+          <h3 class="text-lg font-semibold mb-2">Modell &amp; Laufzeit</h3>
+          <div><label class="block text-xs text-secondary mb-1">Basis KI-Modell</label>
+            <select id="f-model" class="w-full px-3 py-2 border border-border-subtle rounded text-sm">
+              ${["gpt-4o","gpt-4-turbo","claude-3-5-sonnet","mistral-large"].map(m=>`<option ${m===a.model?'selected':''}>${m}</option>`).join("")}
+            </select></div>
+          <div><label class="block text-xs text-secondary mb-1">Creativity (Temperature): <span id="tval">${a.temperature}</span></label>
+            <input id="f-temp" type="range" min="0" max="1" step="0.1" value="${a.temperature}" class="w-full accent-primary" oninput="document.getElementById('tval').innerText=this.value"/></div>
+          <button onclick="saveAgent('${a.id}')" class="w-full px-4 py-2 bg-primary-container text-white rounded text-sm font-semibold">Speichern</button>
+          <p id="save-msg" class="text-xs text-success-green"></p>
+        </div>
+      </div>
+    </div>
+    <div class="dtabc" data-tabc="1">
+      <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm overflow-hidden">
+        <table class="w-full text-left text-sm"><thead><tr class="bg-surface-container-low border-b border-border-subtle text-xs text-secondary uppercase">
+          <th class="px-4 py-3">Entität</th><th class="px-4 py-3">Typ</th><th class="px-4 py-3">Rolle</th></tr></thead><tbody>${perms}</tbody></table>
+      </div>
+    </div>
+    <div class="dtabc" data-tabc="2">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm">
+          <div class="p-4 border-b border-border-subtle"><h3 class="text-lg font-semibold">Verknüpfte Dokumente</h3></div>
+          <ul>${doc||'<li class="p-4 text-sm text-secondary">Keine Dokumente</li>'}</ul>
+        </div>
+        <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 space-y-3">
+          <h3 class="text-lg font-semibold mb-2">Retrieval Settings</h3>
+          <div><label class="block text-xs text-secondary mb-1">Chunk Size</label><input class="w-full px-3 py-2 border border-border-subtle rounded text-sm bg-surface-container-low" value="${rt.chunk_size||''}" disabled/></div>
+          <div><label class="block text-xs text-secondary mb-1">Top-K Results</label><input class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${rt.top_k||''}"/></div>
+          <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="rounded text-primary" ${rt.strict_mode?'checked':''}/> Strict Mode (nur Antworten aus Doks)</label>
+        </div>
+      </div>
+    </div>
+    <div class="dtabc" data-tabc="3">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 space-y-4">
+          <h3 class="text-lg font-semibold">Budgetplanung</h3>
+          <p class="text-xs text-secondary">Monatsbudget, Token-Kontingent und Alert-Schwelle für diesen Agenten.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><label class="block text-xs text-secondary mb-1">Monatsbudget (€)</label><input id="f-budget" type="number" class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${(a.finops||{}).budget_eur||0}"/></div>
+            <div><label class="block text-xs text-secondary mb-1">Token-Kontingent (Monat)</label><input id="f-quota" type="number" class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${(a.finops||{}).quota||0}"/></div>
+            <div><label class="block text-xs text-secondary mb-1">Alert-Schwelle (%)</label><input id="f-threshold" type="number" min="0" max="100" class="w-full px-3 py-2 border border-border-subtle rounded text-sm" value="${(a.finops||{}).alert_threshold_pct||85}"/></div>
+          </div>
+          <div class="pt-2"><button onclick="saveBudget('${a.id}')" class="px-4 py-2 bg-primary-container text-white rounded text-sm font-semibold">Budget speichern</button><span id="budget-msg" class="text-xs text-success-green ml-3"></span></div>
+        </div>
+        <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6">
+          <h3 class="text-lg font-semibold mb-4">Aktuelle Auslastung</h3>
+          <div id="util-body" class="space-y-4">${budgetUtilHtml(a)}</div>
+        </div>
+      </div>
+    </div>`;
+  setView("detail");
+}
+function detailTab(i){
+  document.querySelectorAll(".dtab").forEach(t=>t.className = "dtab pb-3 text-sm font-semibold uppercase tracking-wider " + (+t.dataset.tab===i?'text-primary border-b-2 border-primary':'text-secondary'));
+  document.querySelectorAll(".dtabc").forEach(c=>c.classList.toggle("active", +c.dataset.tabc===i));
+  document.querySelectorAll(".dtabc").forEach(c=>c.style.display = (+c.dataset.tabc===i?'block':'none'));
+}
+async function saveAgent(id){
+  const body = { name:val("f-name"), system_prompt:val("f-prompt"), business_owner:val("f-owner"),
+    model:val("f-model"), temperature:parseFloat(val("f-temp")) };
+  await fetch(`/api/agents/${id}`, {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+  document.getElementById("save-msg").innerText = "✓ Gespeichert";
+  await loadAgents();
+}
+function val(id){ return document.getElementById(id).value; }
+
+// ── FinOps ──
+// "Nice" axis ticks: rounds the max up to a clean number and returns even ticks.
+function niceTicks(maxVal, count){
+  const rawStep = maxVal / count;
+  const pow = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const n = rawStep / pow;
+  const step = (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10) * pow;
+  const axisMax = Math.ceil(maxVal / step) * step || step;
+  const ticks = [];
+  for(let v=0; v<=axisMax+1e-9; v+=step) ticks.push(Math.round(v));
+  return { axisMax, ticks };
+}
+// € formatting with automatic k-notation (e.g. 4000 → "€ 4k", 12500 → "€ 12,5k").
+function fmtEuro(v){
+  if(v>=1000){ const k=v/1000; return "€ " + (Number.isInteger(k)? String(k) : k.toFixed(1).replace('.',',')) + "k"; }
+  return "€ " + v;
+}
+
+// Self-contained inline-SVG line/area chart with labelled Y and X axes (no CDN).
+function costChart(series){
+  const W=800, H=240, n=series.length;
+  const { axisMax, ticks } = niceTicks(Math.max(...series), 4);
+  const x=i=> 4 + i*(W-8)/(n-1);
+  const y=v=> (1 - v/axisMax) * H;                       // v=axisMax→top, v=0→bottom
+  const pts=series.map((v,i)=>[x(i), y(v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=`M ${x(0)} ${H} `+pts.map(p=>'L '+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L ${x(n-1)} ${H} Z`;
+  const grid=ticks.map(t=>{const gy=y(t).toFixed(1);return `<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#e5e7eb" stroke-width="1"/>`;}).join('');
+  const last=pts[n-1];
+  const svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="w-full" style="height:15rem" role="img" aria-label="Kostenverlauf">
+    ${grid}
+    <path d="${area}" fill="#d92b3a" opacity="0.08"/>
+    <path d="${line}" fill="none" stroke="#d92b3a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4" fill="#d92b3a"/></svg>`;
+  const ylabels=[...ticks].reverse().map(t=>`<span>${fmtEuro(t)}</span>`).join("");
+  const today=new Date();
+  const dstr=(ago)=>{ const dt=new Date(today); dt.setDate(dt.getDate()-ago); return dt.getDate()+"."+(dt.getMonth()+1)+"."; };
+  const xlabels=[29,23,17,11,5,0].map(a=>`<span>${a===0?'heute':dstr(a)}</span>`).join("");
+  return `<div class="flex">
+    <div class="flex flex-col justify-between text-right pr-2 text-[10px] text-secondary shrink-0 tabular-nums" style="height:15rem">${ylabels}</div>
+    <div class="flex-1 min-w-0">
+      <div style="height:15rem">${svg}</div>
+      <div class="flex justify-between text-[10px] text-secondary mt-1 tabular-nums">${xlabels}</div>
+    </div>
+  </div>`;
+}
+
+// Inline budget edit in the FinOps table (mirrors the detail tab, same field).
+function editBudget(id, cur){
+  const span=document.getElementById('b-'+id); if(!span) return;
+  span.parentElement.innerHTML = `<input id="bi-${id}" type="number" value="${cur}" class="w-24 px-2 py-1 border border-border-subtle rounded text-sm text-right"/> <button onclick="saveBudgetInline('${id}')" class="text-primary align-middle" title="Speichern"><span class="material-symbols-outlined text-base">check</span></button>`;
+  document.getElementById('bi-'+id).focus();
+}
+async function saveBudgetInline(id){
+  const v=parseFloat(document.getElementById('bi-'+id).value);
+  await fetch(`/api/agents/${id}/budget`, {method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify({budget_eur:v})});
+  await loadAgents();
+  renderFinops();
+}
+
+async function renderFinops(){
+  const d = await (await fetch("/api/finops")).json();
+  const kpi = (label,val,trend,pos)=>`<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-border-subtle p-5">
+    <h4 class="text-xs text-secondary uppercase tracking-wider mb-2">${label}</h4>
+    <div class="flex items-end gap-3"><span class="text-3xl font-bold">${val}</span>
+    ${trend!=null?`<span class="text-sm font-semibold flex items-center ${pos?'text-success-green':'text-error'} mb-1"><span class="material-symbols-outlined text-base">${pos?'arrow_downward':'arrow_upward'}</span>${Math.abs(trend)}%</span>`:''}</div></div>`;
+  const rows = d.agents.map(a=>{
+    const pct = Math.round(a.tokens_used/a.quota*100);
+    return `<tr class="border-b border-border-subtle hover:bg-surface-container-low">
+      <td class="p-4 font-medium">${esc(a.name)}</td><td class="p-4 text-secondary">${esc(a.owner)}</td>
+      <td class="p-4 text-right"><div class="flex flex-col items-end gap-1"><span class="text-sm"><b>${(a.tokens_used/1e6).toFixed(1)}M</b> <span class="text-secondary text-xs">/ ${(a.quota/1e6).toFixed(0)}M</span></span>
+        <div class="w-24 h-1.5 bg-surface-container rounded-full overflow-hidden"><div class="h-full bg-primary-container" style="width:${pct}%"></div></div></div></td>
+      <td class="p-4 text-right">€ ${fmtNum(a.cost_eur)}</td>
+      <td class="p-4 text-right whitespace-nowrap"><span id="b-${a.id}">€ ${fmtNum(a.budget_eur)}</span> <button onclick="editBudget('${a.id}',${a.budget_eur})" class="text-secondary hover:text-primary align-middle" title="Budget bearbeiten"><span class="material-symbols-outlined text-sm">edit</span></button></td>
+      <td class="p-4 text-center"><span class="text-xs px-2 py-1 rounded-full ${a.status==='ok'?'bg-success-green/10 text-success-green':'bg-warning-amber/10 text-warning-amber'}">${a.status==='ok'?'OK':'Warning'}</span></td></tr>`;
+  }).join("");
+  document.getElementById("view-finops").innerHTML = `
+    <p class="text-sm text-secondary mb-6">Überwachung der API-Kosten und des Token-Verbrauchs über alle Agenten hinweg (Demo-Daten).</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      ${kpi("Gesamtbudget (Monat)","€ "+fmtNum(d.budget_eur),d.budget_trend_pct,true)}
+      ${kpi("Verbrauchte Token",(d.tokens_used/1e6).toFixed(1)+"M",d.tokens_trend_pct,false)}
+      ${kpi("Kosten pro Anfrage (Ø)","€ "+d.cost_per_request_eur,null)}
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Chart (2/3) -->
+      <div class="lg:col-span-2 bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Kostenverlauf der letzten 30 Tage</h3>
+          <span class="text-xs text-secondary">Ø € ${fmtNum(d.trend_avg_eur)}/Tag</span>
+        </div>
+        ${costChart(d.trend)}
+      </div>
+      <!-- Summary panel (1/3) -->
+      <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm p-6 flex flex-col">
+        <h3 class="text-lg font-semibold mb-5">Zusammenfassung</h3>
+        <div class="flex-1 space-y-5">
+          <div>
+            <div class="text-xs text-secondary uppercase tracking-wider mb-1">Gesamtausgaben (30 Tage)</div>
+            <div class="text-3xl font-bold">€ ${fmtNum(d.total_spend_eur)}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><div class="text-xs text-secondary mb-1">Ø Tageskosten</div><div class="text-lg font-semibold">€ ${fmtNum(d.trend_avg_eur)}</div></div>
+            <div><div class="text-xs text-secondary mb-1">Spitzentag</div><div class="text-lg font-semibold">€ ${fmtNum(d.peak_day_eur)}</div></div>
+          </div>
+          <div>
+            <div class="text-xs text-secondary mb-1">Trend (30 Tage)</div>
+            <div class="flex items-center gap-1 font-semibold ${d.trend_change_pct<=0?'text-success-green':'text-error'}">
+              <span class="material-symbols-outlined text-lg">${d.trend_change_pct<=0?'trending_down':'trending_up'}</span>${d.trend_change_pct>0?'+':''}${d.trend_change_pct}%
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-border-subtle">
+          ${(()=>{const util=Math.round(d.total_spend_eur/d.budget_eur*100);return `
+          <div class="flex justify-between text-xs mb-1"><span class="text-secondary">Budget-Auslastung</span><span class="font-semibold">${util}%</span></div>
+          <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden"><div class="h-full ${util>90?'bg-error':'bg-primary'}" style="width:${Math.min(util,100)}%"></div></div>
+          <div class="text-xs text-secondary mt-1">€ ${fmtNum(d.total_spend_eur)} von € ${fmtNum(d.budget_eur)}</div>`;})()}
+        </div>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm overflow-hidden">
+      <div class="p-4 border-b border-border-subtle bg-surface-container-low"><h3 class="text-lg font-semibold">Kosten pro Agent</h3></div>
+      <table class="w-full text-left text-sm"><thead><tr class="bg-surface-container-low border-b border-border-subtle text-xs text-secondary uppercase">
+        <th class="p-4">Agent</th><th class="p-4">Owner</th><th class="p-4 text-right">Verbrauch / Kontingent</th><th class="p-4 text-right">Kosten</th><th class="p-4 text-right">Budget</th><th class="p-4 text-center">Status</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+// ── AgentOps ──
+async function renderAgentops(){
+  const d = await (await fetch("/api/agentops")).json();
+  const kpi=(l,v)=>`<div class="bg-surface-container-lowest border-l-2 border-primary p-4 shadow-sm rounded"><div class="text-xs text-secondary mb-1">${l}</div><div class="text-2xl font-semibold">${v}</div></div>`;
+  const alerts = d.alerts.map(a=>`<div class="flex gap-4 items-start p-4 border-b border-border-subtle last:border-0">
+     <div class="${a.level==='error'?'bg-error/10 text-error':'bg-warning-amber/20 text-warning-amber'} p-2 rounded-full"><span class="material-symbols-outlined text-base">${a.level==='error'?'error':'warning'}</span></div>
+     <div><div class="font-semibold text-sm">${esc(a.title)}</div><div class="text-secondary text-sm">${esc(a.message)}</div><div class="text-text-muted text-xs mt-1">${esc(a.ago)}</div></div></div>`).join("");
+  const rows = d.agents.map(a=>`<tr class="border-b border-border-subtle hover:bg-surface-container-low">
+     <td class="p-4 font-medium">${esc(a.name)}</td>
+     <td class="p-4"><span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs ${a.health==='active'?'bg-success-green/10 text-success-green':'bg-warning-amber/10 text-warning-amber'}"><span class="w-1.5 h-1.5 rounded-full ${a.health==='active'?'bg-success-green':'bg-warning-amber'}"></span>${a.health==='active'?'Active':'Degraded'}</span></td>
+     <td class="p-4">${fmtNum(a.calls_24h)}</td><td class="p-4">${a.avg_latency_ms}ms</td></tr>`).join("");
+  document.getElementById("view-agentops").innerHTML = `
+    <p class="text-sm text-secondary mb-6">Systemgesundheit, Latenzen und Qualitätsmetriken (Demo-Daten).</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      ${kpi("Durchschn. Latenz",d.avg_latency_ms+"ms")}${kpi("Adoption Rate",Math.round(d.adoption_rate*100)+"%")}
+      ${kpi("QA Score",d.qa_score)}${kpi("User Feedback",d.feedback_avg+" ★")}
+    </div>
+    <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm mb-6"><div class="p-4 border-b border-border-subtle"><h3 class="text-lg font-semibold">Alerts &amp; Exceptions</h3></div>${alerts}</div>
+    <div class="bg-surface-container-lowest border border-border-subtle rounded-lg shadow-sm overflow-hidden">
+      <div class="p-4 border-b border-border-subtle bg-surface-container-low"><h3 class="text-lg font-semibold">Agenten Performance</h3></div>
+      <table class="w-full text-left text-sm"><thead><tr class="bg-surface-container-low border-b border-border-subtle text-xs text-secondary uppercase">
+        <th class="p-4">Agent</th><th class="p-4">Status</th><th class="p-4">Calls (24h)</th><th class="p-4">Ø Latenz</th></tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+// ── Settings ──
+function settingsNav(el, id){
+  document.querySelectorAll(".setnav").forEach(a=>{
+    a.className = "setnav flex items-center gap-3 p-3 rounded-lg border-l-4 transition-all text-sm " +
+      (a===el ? "bg-surface-container-lowest shadow-sm border-primary text-primary font-semibold"
+              : "border-transparent text-secondary hover:bg-surface-container-lowest hover:text-text-main");
+  });
+  document.getElementById(id)?.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function toggleSwitch(btn){
+  const on = btn.dataset.on === "1";
+  btn.dataset.on = on ? "0" : "1";
+  btn.className = "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors " + (on ? "bg-surface-container-highest" : "bg-primary");
+  btn.querySelector("span").className = "inline-block h-5 w-5 transform rounded-full bg-white shadow transition " + (on ? "translate-x-0.5" : "translate-x-5");
+}
+function settingsSaved(){
+  const t = document.getElementById("settings-toast");
+  if(!t) return; t.classList.remove("hidden");
+  clearTimeout(window._stoast); window._stoast = setTimeout(()=>t.classList.add("hidden"), 1600);
+}
+
+async function renderSettings(){
+  const d = await (await fetch("/api/settings")).json();
+  const keys = d.api_keys.map(k=>`<tr class="hover:bg-background transition-colors group border-b border-border-subtle last:border-0">
+     <td class="p-4 font-medium flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-lg">key</span>${esc(k.name)}</td>
+     <td class="p-4 text-text-muted">${esc(k.created_at)}</td>
+     <td class="p-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${k.status==='active'?'bg-success-green/10 text-success-green border border-success-green/20':'bg-surface-container-highest text-secondary border border-border-subtle'}"><span class="w-1.5 h-1.5 rounded-full ${k.status==='active'?'bg-success-green':'bg-secondary'}"></span>${k.status==='active'?'Aktiv':'Inaktiv'}</span></td>
+     <td class="p-4 text-right"><button class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>`).join("");
+  const orgs = d.org_units.map(o=>`<tr class="hover:bg-background transition-colors border-b border-border-subtle last:border-0">
+     <td class="p-4 font-medium">${esc(o.name)}</td><td class="p-4 text-text-muted">${o.members} Mitglieder</td>
+     <td class="p-4 text-right"><button class="text-primary text-sm font-semibold hover:underline">Bearbeiten</button></td></tr>`).join("");
+  const toggle = (on)=>`<button data-on="${on?1:0}" onclick="toggleSwitch(this)" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors ${on?'bg-primary':'bg-surface-container-highest'}"><span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${on?'translate-x-5':'translate-x-0.5'}"></span></button>`;
+  const notif = (title,desc,on)=>`<div class="flex items-center justify-between"><div><div class="font-medium text-text-main">${title}</div><div class="text-text-muted text-xs">${desc}</div></div>${toggle(on)}</div>`;
+
+  document.getElementById("view-settings").innerHTML = `
+    <div id="settings-toast" class="hidden fixed top-20 right-8 z-50 bg-success-green text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-lg">✓ Gespeichert</div>
+    <div class="mb-8"><h2 class="text-3xl font-bold text-text-main mb-1">Einstellungen</h2>
+      <p class="text-text-muted">Verwalten Sie Ihr Profil, Governance-Richtlinien und Systemkonfigurationen.</p></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Sticky sub-nav -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-4 space-y-1">
+          <a href="#profile" onclick="settingsNav(this,'sec-profile');return false;" class="setnav flex items-center gap-3 p-3 rounded-lg border-l-4 transition-all text-sm bg-surface-container-lowest shadow-sm border-primary text-primary font-semibold"><span class="material-symbols-outlined text-xl">person</span>Benutzerprofil</a>
+          <a href="#api" onclick="settingsNav(this,'sec-api');return false;" class="setnav flex items-center gap-3 p-3 rounded-lg border-l-4 border-transparent transition-all text-sm text-secondary hover:bg-surface-container-lowest hover:text-text-main"><span class="material-symbols-outlined text-xl">api</span>API &amp; Governance</a>
+          <a href="#org" onclick="settingsNav(this,'sec-org');return false;" class="setnav flex items-center gap-3 p-3 rounded-lg border-l-4 border-transparent transition-all text-sm text-secondary hover:bg-surface-container-lowest hover:text-text-main"><span class="material-symbols-outlined text-xl">domain</span>Organisation</a>
+          <a href="#notifications" onclick="settingsNav(this,'sec-notif');return false;" class="setnav flex items-center gap-3 p-3 rounded-lg border-l-4 border-transparent transition-all text-sm text-secondary hover:bg-surface-container-lowest hover:text-text-main"><span class="material-symbols-outlined text-xl">notifications_active</span>Benachrichtigungen</a>
+        </div>
+      </div>
+      <!-- Sections -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Profil -->
+        <section id="sec-profile" class="bg-surface-container-lowest rounded-xl shadow-sm border border-border-subtle overflow-hidden">
+          <div class="p-6 border-b border-border-subtle bg-background"><h3 class="text-lg font-semibold text-text-main">Benutzerprofil</h3><p class="text-sm text-text-muted mt-1">Ihre persönlichen Kontodaten.</p></div>
+          <div class="p-6 space-y-6">
+            <div class="flex items-center gap-6">
+              <div class="w-20 h-20 rounded-full bg-surface-container-high border border-border-subtle flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-4xl">person</span></div>
+              <div class="flex flex-col gap-2">
+                <button class="px-4 py-2 bg-primary text-white rounded text-xs font-semibold hover:bg-surface-tint transition-colors shadow-sm">Bild ändern</button>
+                <button class="px-4 py-2 bg-transparent text-secondary border border-border-subtle rounded text-xs font-semibold hover:bg-surface-container-low transition-colors">Entfernen</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="text-xs text-text-muted">Vorname</label><input class="w-full px-3 py-2 mt-1 bg-background border border-border-subtle rounded text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" value="${esc(d.profile.first_name)}"/></div>
+              <div><label class="text-xs text-text-muted">Nachname</label><input class="w-full px-3 py-2 mt-1 bg-background border border-border-subtle rounded text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" value="${esc(d.profile.last_name)}"/></div>
+              <div class="sm:col-span-2"><label class="text-xs text-text-muted">E-Mail-Adresse</label><input type="email" disabled class="w-full px-3 py-2 mt-1 bg-surface-container border border-border-subtle rounded text-sm text-text-muted cursor-not-allowed" value="${esc(d.profile.email)}"/></div>
+            </div>
+          </div>
+          <div class="p-4 bg-background border-t border-border-subtle flex justify-end"><button onclick="settingsSaved()" class="px-6 py-2 bg-primary text-white rounded text-sm font-semibold hover:bg-surface-tint transition-colors shadow-sm">Speichern</button></div>
+        </section>
+        <!-- API & Governance -->
+        <section id="sec-api" class="bg-surface-container-lowest rounded-xl shadow-sm border border-border-subtle overflow-hidden">
+          <div class="p-6 border-b border-border-subtle bg-background"><h3 class="text-lg font-semibold text-text-main flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">shield</span>API &amp; Governance</h3><p class="text-sm text-text-muted mt-1">Verwalten Sie API-Schlüssel und Zugriffsrichtlinien für externe Agenten.</p></div>
+          <table class="w-full text-left text-sm"><thead><tr class="bg-surface-container-low border-b border-border-subtle text-xs text-text-muted uppercase tracking-wider"><th class="p-4">Schlüsselname</th><th class="p-4">Erstellt am</th><th class="p-4">Status</th><th class="p-4 text-right">Aktion</th></tr></thead><tbody>${keys}</tbody></table>
+          <div class="p-4 bg-background border-t border-border-subtle"><button class="flex items-center gap-2 px-4 py-2 bg-transparent text-primary border border-primary rounded text-xs font-semibold hover:bg-primary/5 transition-colors"><span class="material-symbols-outlined text-lg">add</span>Neuen Schlüssel anfragen</button></div>
+        </section>
+        <!-- Organisation -->
+        <section id="sec-org" class="bg-surface-container-lowest rounded-xl shadow-sm border border-border-subtle overflow-hidden">
+          <div class="p-6 border-b border-border-subtle bg-background"><h3 class="text-lg font-semibold text-text-main">Organisation</h3><p class="text-sm text-text-muted mt-1">Verwalten Sie Ihre Teams, Abteilungen und Zugriffsrechte.</p></div>
+          <table class="w-full text-left text-sm"><thead><tr class="bg-surface-container-low border-b border-border-subtle text-xs text-text-muted uppercase tracking-wider"><th class="p-4">Abteilung</th><th class="p-4">Mitglieder</th><th class="p-4 text-right">Aktion</th></tr></thead><tbody>${orgs}</tbody></table>
+        </section>
+        <!-- Benachrichtigungen -->
+        <section id="sec-notif" class="bg-surface-container-lowest rounded-xl shadow-sm border border-border-subtle overflow-hidden">
+          <div class="p-6 border-b border-border-subtle bg-background"><h3 class="text-lg font-semibold text-text-main">Benachrichtigungen</h3><p class="text-sm text-text-muted mt-1">Konfigurieren Sie, wie und wann Sie über Systemereignisse informiert werden möchten.</p></div>
+          <div class="p-6 space-y-6">
+            ${notif("E-Mail Benachrichtigungen","Erhalten Sie Updates direkt in Ihr Postfach.",true)}
+            ${notif("Browser-Push","Echtzeit-Benachrichtigungen in Ihrem Browser.",false)}
+            ${notif("Kritische System-Alerts","Wichtige Sicherheits- und Systemwarnungen.",true)}
+          </div>
+          <div class="p-4 bg-background border-t border-border-subtle flex justify-end"><button onclick="settingsSaved()" class="px-6 py-2 bg-primary text-white rounded text-sm font-semibold hover:bg-surface-tint transition-colors shadow-sm">Einstellungen speichern</button></div>
+        </section>
+      </div>
+    </div>`;
+}
+
+// ── Boot ──
+async function loadAgents(){ AGENTS = await (await fetch("/api/agents")).json(); renderMarketplace(); }
+async function boot(){
+  const cfg = await (await fetch("/api/config")).json();
+  SOURCES = cfg.sources; SOGPT_URL = cfg.sogpt_url;
+  document.getElementById("back-sogpt").href = SOGPT_URL;
+  setView("marketplace");
+  await loadAgents();
+}
+boot();
+</script>
+</body>
+</html>

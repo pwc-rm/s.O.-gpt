@@ -1,0 +1,506 @@
+<!DOCTYPE html><html lang="de" class="antialiased" style=""><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">try{
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d9dadb",
+                      "on-primary-container": "#fff6f5",
+                      "on-background": "#191c1d",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#c8c5ca",
+                      "inverse-primary": "#ffb3b0",
+                      "outline-variant": "#e4bdbb",
+                      "sidebar-text": "#ffffff",
+                      "primary": "#b50625",
+                      "on-secondary-fixed-variant": "#47464a",
+                      "surface-tint": "#bc1029",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-primary-fixed-variant": "#93001b",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#00646a",
+                      "success-green": "#10b981",
+                      "on-surface-variant": "#5b403f",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "secondary-container": "#e4e1e6",
+                      "on-surface": "#191c1d",
+                      "text-muted": "#6b7280",
+                      "on-tertiary-fixed": "#002022",
+                      "on-tertiary-container": "#e6fdff",
+                      "surface-container": "#edeeef",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#77d5dc",
+                      "on-secondary-container": "#656467",
+                      "secondary": "#5f5e61",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed-dim": "#ffb3b0",
+                      "inverse-on-surface": "#f0f1f2",
+                      "text-main": "#1f2937",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "surface": "#f8f9fa",
+                      "error": "#ba1a1a",
+                      "surface-container-high": "#e7e8e9",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#f8f9fa",
+                      "outline": "#906f6e",
+                      "tertiary-container": "#007f86",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#d92b3a",
+                      "primary-fixed": "#ffdad8",
+                      "on-secondary-fixed": "#1b1b1e",
+                      "surface-container-low": "#f3f4f5",
+                      "tertiary-fixed": "#94f1f9",
+                      "warning-amber": "#f59e0b",
+                      "on-primary-fixed": "#410006",
+                      "background": "#f8f9fa",
+                      "surface-variant": "#e1e3e4",
+                      "secondary-fixed": "#e4e1e6",
+                      "sidebar-bg": "#18181b",
+                      "border-subtle": "#e5e7eb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-page": "32px",
+                      "sidebar-width": "260px",
+                      "stack-md": "16px",
+                      "stack-lg": "24px",
+                      "stack-sm": "8px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-bold": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-bold": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    }catch(_e){}</script><meta charset="utf-8"></head><body class="bg-background text-on-surface font-body-lg antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg border-r border-border-subtle flex flex-col h-full py-margin-page overflow-y-auto hidden md:flex z-50">
+<!-- Header / Logo -->
+<div class="px-gutter mb-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">sO Agent Cockpit</h1>
+<p class="font-label-sm text-label-sm text-secondary-fixed-dim mt-1">Governance &amp; Marketplace</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-1"><a class="flex items-center gap-3 px-4 py-3 hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200 text-sidebar-text border-l-4 border-primary bg-on-secondary-fixed-variant scale-98 transition-transform" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">storefront</span><span class="font-label-bold text-label-bold">Marktplatz</span></a><a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span><span class="font-label-bold text-label-bold">FinOps</span></a><a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">smart_toy</span><span class="font-label-bold text-label-bold">AgentOps</span></a><a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200" href="#"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span><span class="font-label-bold text-label-bold">Einstellungen</span></a></div>
+<!-- Bottom CTA -->
+<div class="px-gutter mt-auto pt-4 border-t border-secondary-fixed-dim/20">
+<button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent text-secondary-fixed-dim hover:text-sidebar-text border border-secondary-fixed-dim rounded transition-colors duration-200 font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                 Zurück zu s.O GPT
+             </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col w-full md:ml-sidebar-width h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-border-subtle shadow-sm flex items-center justify-between h-16 px-gutter shrink-0 z-40">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search (Left aligned as per JSON) -->
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-sm">search</span>
+<input type="text" placeholder="Suchen..." class="w-full pl-9 pr-4 py-1.5 bg-surface-container-low border border-border-subtle rounded text-body-md font-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-secondary hover:text-primary hover:bg-surface-container-low transition-all p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary hover:bg-surface-container-low transition-all p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<img alt="Benutzerprofil" class="w-8 h-8 rounded-full border border-border-subtle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpliJrEiu9bj1ccy4c4DdRGp1h3zus_8erNxp7JZRzL9niEgsqT0qOLtNcbC_tcvfZNeZT2QDac09EeeY6xTWAfhKKJq1OVYr43YAxg4rPYgqbrF9Fta-TGpchYW5pnricsnxY9-pLapUSCWqDGHYgxMZ5Fbhtav_VhjqFjdk5ueVCcym_Qx_KGSvXZ4_5WclreOrHbM8AguvmrdSmoiMziFlW3Hf3KC3ygryFeXo_zlq5AUnO8773iYjCRPpdq_pbjKXMPqTCi99z">
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 overflow-y-auto bg-background p-4 md:p-margin-page">
+<div class="max-w-7xl mx-auto flex flex-col gap-stack-lg">
+<!-- Page Header & Agent Info -->
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div class="flex gap-4 items-start">
+<div class="w-16 h-16 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-3xl">flight_takeoff</span>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">HR Vacation Assistant</h2>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-green/10 text-success-green border border-success-green/20">
+                                        Aktiv
+                                    </span>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-3">Automatisiert Urlaubsanträge, Resturlaubsabfragen und HR-Policies.</p>
+<div class="flex flex-wrap items-center gap-4 text-sm text-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">person</span>
+<span class="">Ersteller: Sarah Müller (HR Dept)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="">Zuletzt aktualisiert: Heute, 09:41</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-transparent text-secondary border border-border-subtle rounded hover:bg-surface-container-low transition-colors font-label-bold text-label-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">stop_circle</span>
+                                Deaktivieren
+                            </button>
+<button class="px-4 py-2 bg-primary text-on-primary border border-primary rounded hover:bg-surface-tint transition-colors shadow-sm font-label-bold text-label-bold flex items-center gap-2">
+                                Speichern
+                            </button>
+</div>
+</div>
+</div>
+<!-- Tabs Navigation -->
+<div class="border-b border-border-subtle">
+<nav aria-label="Tabs" class="flex gap-8" id="agent-tabs">
+<button class="tab-btn active text-primary font-bold border-b-2 border-primary pb-3 px-1 font-label-sm text-label-sm uppercase tracking-wider transition-colors hover:text-primary" data-target="config" onclick="switchTab('config')">
+                            Konfiguration
+                        </button>
+<button class="tab-btn text-secondary hover:text-primary border-b-2 border-transparent pb-3 px-1 font-label-sm text-label-sm uppercase tracking-wider transition-colors" data-target="permissions" onclick="switchTab('permissions')">
+                            Berechtigungen
+                        </button>
+<button class="tab-btn text-secondary hover:text-primary border-b-2 border-transparent pb-3 px-1 font-label-sm text-label-sm uppercase tracking-wider transition-colors" data-target="knowledge" onclick="switchTab('knowledge')">
+                            Wissensdatenbank
+                        </button>
+<button class="tab-btn text-secondary hover:text-primary border-b-2 border-transparent pb-3 px-1 font-label-sm text-label-sm uppercase tracking-wider transition-colors" data-target="analytics" onclick="switchTab('analytics')">
+                            Analytics
+                        </button>
+</nav>
+</div>
+<!-- Tab Contents Container -->
+<div class="relative min-h-[400px]">
+<!-- Tab: Konfiguration -->
+<div class="tab-content active space-y-stack-md" id="tab-config">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Left Col: Basic Info -->
+<div class="lg:col-span-2 flex flex-col gap-stack-md">
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6">
+<h3 class="font-headline-sm text-headline-sm mb-4">Allgemeine Informationen</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">Agenten Name</label>
+<input class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors" type="text" value="HR Vacation Assistant">
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">Kurzbeschreibung (Deutsch)</label>
+<textarea class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors resize-none" rows="3">Automatisiert Urlaubsanträge, Resturlaubsabfragen und HR-Policies.</textarea>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">System Prompt / Instructions</label>
+<textarea class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors font-mono text-sm text-secondary" rows="6">Du bist ein hilfsbereiter HR-Assistent für Mitarbeiter der s.Oliver Group. Antworte immer auf Deutsch, professionell und freundlich. Nutze nur die bereitgestellten Dokumente (Betriebsvereinbarungen) zur Beantwortung von Fragen. Wenn du etwas nicht weißt, verweise an hr-support@soliver.com.</textarea>
+</div>
+<div><label class="block font-label-sm text-label-sm text-on-surface mb-1">Business Owner</label><input class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors" type="text" value="Sarah Müller"></div><div><label class="block font-label-sm text-label-sm text-on-surface mb-1">Application Container</label><input class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors" type="text" value="HR-Services-Prod"></div><div><label class="block font-label-sm text-label-sm text-on-surface mb-1">Configuration Item</label><input class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors" type="text" value="CI-992834"></div><div><label class="block font-label-sm text-label-sm text-on-surface mb-1">ServiceNow Link</label><div class="flex gap-2"><input class="flex-1 px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors" type="text" value="https://service-now.com/nav_to.do?uri=cmdb_ci.do?sys_id=..."><button class="px-3 py-2 bg-surface-container-high text-secondary rounded hover:bg-surface-container-highest transition-colors"><span class="material-symbols-outlined text-sm">open_in_new</span></button></div></div></div>
+</div>
+</div>
+<!-- Right Col: Model Settings -->
+<div class="flex flex-col gap-stack-md">
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6">
+<h3 class="font-headline-sm text-headline-sm mb-4">Modell &amp; Laufzeit</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">Basis KI-Modell</label>
+<select class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-colors appearance-none">
+<option>GPT-4o (Empfohlen)</option>
+<option>GPT-4 Turbo</option>
+<option>Claude 3.5 Sonnet</option>
+<option>Mistral Large</option>
+</select>
+</div>
+<div>
+<div class="flex justify-between mb-1">
+<label class="block font-label-sm text-label-sm text-on-surface">Creativity (Temperature)</label>
+<span class="text-xs text-secondary">0.2</span>
+</div>
+<input class="w-full accent-primary" max="1" min="0" step="0.1" type="range" value="0.2">
+<p class="text-xs text-secondary mt-1">Niedriger Wert für faktenbasierte HR-Antworten.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab: Berechtigungen -->
+<div class="tab-content space-y-stack-md" id="tab-permissions">
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm overflow-hidden">
+<div class="p-6 border-b border-border-subtle bg-surface-container-lowest flex justify-between items-center">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Zugriffskontrolle</h3>
+<p class="text-secondary font-body-md text-body-md">Verwalten Sie, wer diesen Agenten im Marktplatz sehen und nutzen darf.</p>
+</div>
+<button class="px-3 py-1.5 bg-surface text-primary border border-primary rounded hover:bg-surface-container-low transition-colors font-label-bold text-label-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                                    Gruppe/Nutzer hinzufügen
+                                </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="px-6 py-3 font-label-bold text-label-bold text-secondary uppercase">Entität</th>
+<th class="px-6 py-3 font-label-bold text-label-bold text-secondary uppercase">Typ</th>
+<th class="px-6 py-3 font-label-bold text-label-bold text-secondary uppercase">Rolle</th>
+<th class="px-6 py-3 font-label-bold text-label-bold text-secondary uppercase text-right">Aktionen</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-border-subtle">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">group</span>
+                                                 All_Employees
+                                             </td>
+<td class="px-6 py-4 text-secondary">Active Directory Group</td>
+<td class="px-6 py-4">
+<select class="px-2 py-1 bg-transparent border border-border-subtle rounded text-sm focus:outline-none focus:border-primary">
+<option>Nutzer (Read/Execute)</option>
+</select>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-error transition-colors p-1"><span class="material-symbols-outlined text-sm">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">person</span>
+                                                 Sarah Müller (Ersteller)
+                                             </td>
+<td class="px-6 py-4 text-secondary">Einzelnutzer</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-surface-container-high rounded text-sm text-secondary">Admin (Owner)</span>
+</td>
+<td class="px-6 py-4 text-right">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Tab: Wissensdatenbank -->
+<div class="tab-content space-y-stack-md" id="tab-knowledge">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<div class="md:col-span-2">
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm">
+<div class="p-6 border-b border-border-subtle flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Verknüpfte Dokumente</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 bg-surface text-secondary border border-border-subtle rounded hover:bg-surface-container-low transition-colors font-label-bold text-label-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">link</span>
+                                                URL
+                                            </button>
+<button class="px-3 py-1.5 bg-primary text-on-primary rounded hover:bg-surface-tint transition-colors font-label-bold text-label-bold flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-sm">upload</span>
+                                                Upload
+                                            </button>
+</div>
+</div>
+<ul class="divide-y divide-border-subtle p-2">
+<li class="flex items-center justify-between p-4 hover:bg-surface-container-lowest rounded transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error">picture_as_pdf</span>
+<div>
+<p class="font-body-md text-on-surface font-medium">Betriebsvereinbarung_Urlaub_2024.pdf</p>
+<p class="text-xs text-secondary">Hochgeladen am 12.05.2024 • 1.2 MB • Indexed</p>
+</div>
+</div>
+<button class="text-secondary hover:text-error transition-colors p-2"><span class="material-symbols-outlined">delete</span></button>
+</li>
+<li class="flex items-center justify-between p-4 hover:bg-surface-container-lowest rounded transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">article</span>
+<div>
+<p class="font-body-md text-on-surface font-medium">FAQ_Sonderurlaub.docx</p>
+<p class="text-xs text-secondary">Hochgeladen am 15.05.2024 • 45 KB • Indexed</p>
+</div>
+</div>
+<button class="text-secondary hover:text-error transition-colors p-2"><span class="material-symbols-outlined">delete</span></button>
+</li>
+</ul>
+</div>
+</div>
+<!-- RAG Settings -->
+<div>
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6">
+<h3 class="font-headline-sm text-headline-sm mb-4">Retrieval Settings</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">Chunk Size</label>
+<input class="w-full px-3 py-2 bg-surface-container-low border border-border-subtle rounded text-body-md text-secondary" disabled="" type="number" value="1024">
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-1">Top-K Results</label>
+<input class="w-full px-3 py-2 bg-surface border border-border-subtle rounded focus:outline-none focus:border-primary" type="number" value="5">
+</div>
+<label class="flex items-center gap-2 mt-4 cursor-pointer">
+<input checked="" class="rounded border-border-subtle text-primary focus:ring-primary w-4 h-4" type="checkbox">
+<span class="font-body-md text-sm text-on-surface">Strict Mode (Nur Antworten aus Doks)</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Tab: Analytics -->
+<div class="tab-content space-y-stack-md" id="tab-analytics">
+<!-- KPI Cards Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6 flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Token Usage (Letzte 30 Tage)</span>
+<div class="flex items-end gap-3 mt-auto">
+<span class="font-display-lg text-display-lg text-on-surface">142K</span>
+<span class="flex items-center text-error text-sm font-medium pb-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> 12%
+                                    </span>
+</div>
+</div>
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6 flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Ø Antwortzeit</span>
+<div class="flex items-end gap-3 mt-auto">
+<span class="font-display-lg text-display-lg text-on-surface">1.2s</span>
+<span class="flex items-center text-success-green text-sm font-medium pb-1">
+<span class="material-symbols-outlined text-sm">trending_down</span> 0.1s
+                                    </span>
+</div>
+</div>
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6 flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">Nutzerzufriedenheit</span>
+<div class="flex items-end gap-3 mt-auto">
+<span class="font-display-lg text-display-lg text-on-surface">4.8/5</span>
+<span class="flex items-center text-secondary text-sm font-medium pb-1">
+                                        (342 Ratings)
+                                    </span>
+</div>
+</div>
+</div>
+<!-- Chart Placeholder -->
+<div class="bg-surface border border-border-subtle rounded-lg shadow-sm p-6 h-64 flex items-center justify-center bg-surface-container-lowest">
+<div class="text-center text-secondary">
+<span class="material-symbols-outlined text-4xl mb-2">bar_chart</span>
+<p class="font-body-md">Detaillierte Nutzungsdiagramme laden...</p>
+</div>
+</div>
+</div>
+</div> <!-- End Tab Contents -->
+</div> <!-- End max-w container -->
+</div> <!-- End Page Canvas -->
+</main>
+<script>
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // Show target content
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // Update tab button styles
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                if(el.dataset.target === tabId) {
+                    el.classList.add('text-primary', 'border-primary', 'font-bold');
+                    el.classList.remove('text-secondary', 'border-transparent');
+                } else {
+                    el.classList.remove('text-primary', 'border-primary', 'font-bold');
+                    el.classList.add('text-secondary', 'border-transparent');
+                }
+            });
+        }
+    </script>
+
+
+
+
+</body></html>

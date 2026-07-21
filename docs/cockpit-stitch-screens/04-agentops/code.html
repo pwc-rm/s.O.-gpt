@@ -1,0 +1,345 @@
+<!DOCTYPE html><html lang="de" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AgentOps Dashboard - sO Agent Cockpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "warning-amber": "#f59e0b",
+                        "surface-bright": "#f8f9fa",
+                        "secondary": "#5f5e61",
+                        "text-main": "#1f2937",
+                        "text-muted": "#6b7280",
+                        "primary-container": "#d92b3a",
+                        "outline-variant": "#e4bdbb",
+                        "sidebar-text": "#ffffff",
+                        "on-tertiary-container": "#e6fdff",
+                        "inverse-surface": "#2e3132",
+                        "tertiary": "#00646a",
+                        "border-subtle": "#e5e7eb",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#002022",
+                        "error": "#ba1a1a",
+                        "surface": "#f8f9fa",
+                        "on-surface-variant": "#5b403f",
+                        "surface-container-low": "#f3f4f5",
+                        "sidebar-bg": "#18181b",
+                        "surface-container": "#edeeef",
+                        "on-primary-fixed": "#410006",
+                        "on-secondary-container": "#656467",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#bc1029",
+                        "on-primary-container": "#fff6f5",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-background": "#191c1d",
+                        "inverse-on-surface": "#f0f1f2",
+                        "tertiary-fixed": "#94f1f9",
+                        "tertiary-container": "#007f86",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "primary": "#b50625",
+                        "secondary-fixed": "#e4e1e6",
+                        "background": "#f8f9fa",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#77d5dc",
+                        "inverse-primary": "#ffb3b0",
+                        "primary-fixed-dim": "#ffb3b0",
+                        "on-surface": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "outline": "#906f6e",
+                        "on-primary-fixed-variant": "#93001b",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdad8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c8c5ca",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "on-primary": "#ffffff",
+                        "success-green": "#10b981",
+                        "secondary-container": "#e4e1e6",
+                        "on-secondary-fixed-variant": "#47464a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-page": "32px",
+                        "gutter": "24px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "260px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar Navigation" class="hidden md:flex bg-sidebar-bg border-r border-border-subtle fixed left-0 top-0 h-screen w-sidebar-width flex-col py-margin-page overflow-y-auto z-20">
+<div class="px-gutter mb-stack-lg">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">sO Agent Cockpit</h1>
+<p class="font-label-sm text-label-sm text-secondary-fixed-dim mt-1">Governance &amp; Marketplace</p>
+</div>
+<ul class="flex flex-col gap-1 flex-grow"><li class="">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-bold text-label-bold">Marktplatz</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-bold text-label-bold">FinOps</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 text-sidebar-text border-l-4 border-primary bg-on-secondary-fixed-variant hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200 active:scale-98 transition-transform" href="{{DATA:SCREEN:SCREEN_11}}">
+<span class="material-symbols-outlined" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-bold text-label-bold">AgentOps</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">Einstellungen</span>
+</a>
+</li></ul>
+<div class="px-gutter mt-auto">
+<button class="w-full flex items-center justify-center gap-2 py-2 px-4 rounded border border-secondary-fixed-dim text-sidebar-text font-label-bold text-label-bold hover:bg-on-secondary-fixed-variant transition-colors" onclick="window.location.href='{{DATA:SCREEN:SCREEN_2}}'">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                Zurück zu s.O GPT
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-border-subtle shadow-sm flex items-center justify-between h-16 px-gutter z-10 w-full shrink-0">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface md:hidden">sO Agent Cockpit</h2>
+<div class="hidden md:flex items-center border border-border-subtle rounded px-3 py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-secondary mr-2 text-sm">search</span>
+<input class="bg-transparent border-none outline-none font-body-md text-body-md text-on-surface w-64 placeholder:text-text-muted" placeholder="Suchen..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-secondary hover:text-primary hover:bg-surface-container-low transition-all p-2 rounded-full active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary hover:bg-surface-container-low transition-all p-2 rounded-full active:opacity-80">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-border-subtle">
+<img alt="Benutzerprofil" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate employee on a minimalist light gray background. Soft studio lighting. Neutral, modern aesthetic consistent with a high-end enterprise application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiFj0Jz5Mapx-C_qKIgDCwyDX9V8gPLK7S1JFaImmqSmCUbbIFgAB6-bXCU5zLLuFUZLBS4eEnlShIUEBBzf1AAtB9cSNxI2UEqgDBMZUCIetUmnwe8BOsGqDTa34ng3mSxONRZ01i6SkEE8nBzVkmxcMdF8okYWs6u9VHKFXTg5RIAdy2qLAvf-INUIRoBbiDWCizgGL5G3I_uZds9OEBt8fx86c2td56b-VXHwVYIuynHlLpbJlGEvnR4qTHQ8tONMY7wxFanTb-">
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-page bg-surface-bright">
+<div class="max-w-7xl mx-auto space-y-stack-lg">
+<!-- Page Header -->
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Agent Performance &amp; Metriken</h2>
+<p class="font-body-md text-body-md text-text-muted mt-1">Überwachung der Agenten-Gesundheit und Systemmetriken.</p>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-stack-md">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-lg shadow-sm border border-border-subtle flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Durchschn. Latenz (ms)</span>
+<span class="material-symbols-outlined text-text-muted text-sm">speed</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">840</span>
+<div class="flex items-center text-success-green font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">arrow_downward</span>
+                                12%
+                            </div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-lg shadow-sm border border-border-subtle flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Adoption Rate</span>
+<span class="material-symbols-outlined text-text-muted text-sm">trending_up</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">68%</span>
+<div class="flex items-center text-success-green font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                5.2%
+                            </div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-lg shadow-sm border border-border-subtle flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">QA Score (Automated)</span>
+<span class="material-symbols-outlined text-text-muted text-sm">fact_check</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">94.2</span>
+<div class="flex items-center text-error font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">arrow_downward</span>
+                                0.8
+                            </div>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-lg shadow-sm border border-border-subtle flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">User Feedback (Ø Sterne)</span>
+<span class="material-symbols-outlined text-text-muted text-sm">star_rate</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">4.8</span>
+<div class="flex items-center text-success-green font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                                0.1
+                            </div>
+</div>
+</div>
+</div>
+<!-- Middle Section: Alerts -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-border-subtle overflow-hidden">
+<div class="p-stack-md border-b border-border-subtle bg-surface-container-low flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Alerts &amp; Exceptions</h3>
+<button class="font-label-sm text-label-sm text-primary hover:underline">Alle ansehen</button>
+</div>
+<div class="p-0">
+<ul class="divide-y divide-border-subtle">
+<li class="p-stack-md flex items-start gap-4 hover:bg-surface-bright transition-colors">
+<div class="bg-error-container text-on-error-container p-2 rounded-full shrink-0">
+<span class="material-symbols-outlined text-sm">error</span>
+</div>
+<div class="flex-1">
+<p class="font-label-bold text-label-bold text-on-surface">API Timeout: Product Data Agent</p>
+<p class="font-body-md text-body-md text-text-muted mt-1">Verbindung zum ERP-System unterbrochen. 3 retries failed.</p>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Vor 5 Min</span>
+</li>
+<li class="p-stack-md flex items-start gap-4 hover:bg-surface-bright transition-colors">
+<div class="bg-warning-amber/20 text-warning-amber p-2 rounded-full shrink-0">
+<span class="material-symbols-outlined text-sm">warning</span>
+</div>
+<div class="flex-1">
+<p class="font-label-bold text-label-bold text-on-surface">Hohe Latenz: Customer Service Bot</p>
+<p class="font-body-md text-body-md text-text-muted mt-1">Antwortzeiten über 2000ms bei 15% der Anfragen in der letzten Stunde.</p>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">Vor 42 Min</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bottom Section: Performance Table -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm border border-border-subtle overflow-hidden">
+<div class="p-stack-md border-b border-border-subtle bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Agenten Performance</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-border-subtle font-label-bold text-label-bold text-secondary">
+<th class="p-stack-md font-medium">Agent Name</th>
+<th class="p-stack-md font-medium">Status</th>
+<th class="p-stack-md font-medium">Calls (24h)</th>
+<th class="p-stack-md font-medium">Avg. Latenz</th>
+<th class="p-stack-md font-medium text-right">Aktionen</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle font-body-md text-body-md text-on-surface">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Product Data Expert</td>
+<td class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Active
+                                        </span>
+</td>
+<td class="p-stack-md">12,450</td>
+<td class="p-stack-md">450ms</td>
+<td class="p-stack-md text-right">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Customer Service Bot (DE)</td>
+<td class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-warning-amber/10 text-warning-amber text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber"></span> Degraded
+                                        </span>
+</td>
+<td class="p-stack-md">45,200</td>
+<td class="p-stack-md text-warning-amber">1,200ms</td>
+<td class="p-stack-md text-right">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-stack-md font-medium">Inventory Forecaster</td>
+<td class="p-stack-md">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success-green/10 text-success-green text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Active
+                                        </span>
+</td>
+<td class="p-stack-md">1,890</td>
+<td class="p-stack-md">890ms</td>
+<td class="p-stack-md text-right">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+
+
+
+
+
+</body></html>

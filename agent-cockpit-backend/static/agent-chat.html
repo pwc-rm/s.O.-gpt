@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de" class="h-full">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agent Chat — s.Oliver</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { "soliver-red": "#d92b3a", "sidebar-dark": "#212121", "sidebar-hover": "#2f2f2f" },
+    fontFamily: { sans: ["Inter","sans-serif"] } } } }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background:#555; border-radius:20px; }
+  .bubble p { margin: 0 0 .5rem; }
+</style>
+</head>
+<body class="bg-white text-gray-800 font-sans h-screen flex overflow-hidden antialiased">
+
+<!-- Sidebar (s.O GPT design) -->
+<aside class="w-[260px] bg-sidebar-dark text-gray-300 flex flex-col flex-shrink-0 h-full">
+  <div class="p-4 flex items-center gap-2">
+    <span class="text-white font-bold text-lg">s.O</span><span class="text-soliver-red font-bold text-lg tracking-wider">GPT</span>
+  </div>
+  <div class="px-3 pb-3">
+    <button onclick="newChat()" class="w-full bg-soliver-red hover:bg-red-700 text-white font-semibold py-2.5 px-4 rounded-md flex items-center justify-center gap-2 transition-colors">
+      <i class="ph ph-plus text-lg"></i> NEUER CHAT
+    </button>
+  </div>
+  <div class="flex-1 overflow-y-auto custom-scrollbar px-3">
+    <div class="px-1 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Verlauf — <span id="agent-name-side"></span></div>
+    <div id="chat-list" class="space-y-1"></div>
+  </div>
+  <div class="mt-auto border-t border-gray-700/50 p-3">
+    <a id="to-cockpit" href="/" class="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:bg-sidebar-hover rounded-md transition-colors">
+      <i class="ph ph-squares-four text-lg"></i> Zum Agent Cockpit
+    </a>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 flex flex-col h-full bg-gray-50 min-w-0">
+  <header class="h-14 border-b border-gray-200 bg-white flex items-center justify-between px-6 flex-shrink-0">
+    <h1 class="font-semibold text-gray-800 text-lg" id="agent-name-top">Agent</h1>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500 hidden sm:inline">War der Agent hilfreich?</span>
+      <button onclick="rate('up')" title="Daumen hoch" class="p-1.5 rounded-full text-gray-400 hover:bg-green-50 hover:text-green-600 transition-colors"><i class="ph ph-thumbs-up text-lg"></i></button>
+      <button onclick="rate('down')" title="Daumen runter" class="p-1.5 rounded-full text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors"><i class="ph ph-thumbs-down text-lg"></i></button>
+      <span id="rate-pct" class="text-xs font-semibold text-gray-600 w-12"></span>
+    </div>
+    <div class="flex items-center gap-1.5 px-3 py-1 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-full text-xs font-medium">
+      <i class="ph-fill ph-warning-circle text-yellow-500"></i> PoC — echter Chat, reservierte Historie
+    </div>
+  </header>
+
+  <div id="chat-container" class="flex-1 overflow-y-auto flex flex-col items-center p-6">
+    <!-- Welcome state -->
+    <div id="welcome" class="max-w-3xl w-full flex flex-col items-center text-center mt-16">
+      <div class="w-20 h-20 rounded-2xl bg-soliver-red/10 text-soliver-red flex items-center justify-center mb-6">
+        <i class="ph ph-robot text-4xl"></i>
+      </div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-2" id="welcome-name">Agent</h2>
+      <p class="text-gray-500 mb-8 max-w-md" id="welcome-desc"></p>
+      <div id="suggestions" class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full"></div>
+    </div>
+    <!-- Messages render here -->
+    <div id="messages" class="max-w-3xl w-full space-y-6 hidden"></div>
+  </div>
+
+  <div class="border-t border-gray-200 bg-white p-4 flex-shrink-0">
+    <div class="max-w-3xl mx-auto">
+      <div class="relative flex items-end bg-gray-50 border border-gray-300 rounded-xl overflow-hidden focus-within:ring-1 focus-within:ring-gray-400">
+        <textarea id="input" rows="1" class="flex-1 bg-transparent border-none py-3.5 px-4 text-gray-700 placeholder-gray-400 focus:ring-0 text-sm resize-none max-h-40" placeholder="Nachricht senden..."></textarea>
+        <button onclick="send()" id="send-btn" class="m-2 bg-sidebar-dark hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors">
+          SENDEN <i class="ph ph-paper-plane-tilt"></i>
+        </button>
+      </div>
+      <p class="text-center text-[11px] text-gray-400 mt-2" id="disclaimer">Der Agent kann Fehler machen. Wichtige Infos prüfen.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const AGENT_ID = location.pathname.split("/")[2];
+let AGENT = null, CHAT_ID = null, streaming = false;
+
+function esc(s){ return (s??"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function chatRatingPct(r){ r=r||{}; const t=(r.up||0)+(r.down||0); return t?Math.round((r.up||0)/t*100):null; }
+async function rate(value){
+  const r = await (await fetch(`/api/agents/${AGENT_ID}/rate`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({value})})).json();
+  const pct=chatRatingPct(r);
+  document.getElementById("rate-pct").innerText = pct!==null ? pct+"% 👍" : "";
+  if(AGENT) AGENT.rating = r;
+}
+
+async function boot(){
+  AGENT = await (await fetch(`/api/agents/${AGENT_ID}`)).json();
+  document.getElementById("agent-name-top").innerText = AGENT.name;
+  document.getElementById("agent-name-side").innerText = AGENT.name;
+  document.getElementById("welcome-name").innerText = AGENT.name;
+  document.getElementById("welcome-desc").innerText = AGENT.description;
+  document.getElementById("input").placeholder = `Nachricht an ${AGENT.name} senden...`;
+  document.getElementById("disclaimer").innerText = `${AGENT.name} kann Fehler machen. Wichtige Infos prüfen.`;
+  const rp0=chatRatingPct(AGENT.rating); document.getElementById("rate-pct").innerText = rp0!==null ? rp0+"% 👍" : "";
+  document.getElementById("suggestions").innerHTML = (AGENT.grundfragen||[]).map(q=>
+    `<button onclick="ask('${esc(q).replace(/'/g,"\\'")}')" class="p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-soliver-red hover:shadow-md transition-all text-sm text-gray-600">${esc(q)}</button>`).join("");
+  const cfg = await (await fetch("/api/config")).json();
+  await loadChats();
+}
+
+async function loadChats(){
+  const chats = await (await fetch(`/api/agents/${AGENT_ID}/chats`)).json();
+  document.getElementById("chat-list").innerHTML = chats.map(c=>
+    `<button onclick="openChat('${c.chat_id}')" class="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-sidebar-hover truncate ${c.chat_id===CHAT_ID?'bg-sidebar-hover text-white':''}">${esc(c.title)}</button>`).join("");
+}
+
+function newChat(){ CHAT_ID = null; showWelcome(true); loadChats(); }
+function showWelcome(v){
+  document.getElementById("welcome").classList.toggle("hidden", !v);
+  document.getElementById("messages").classList.toggle("hidden", v);
+  if(v) document.getElementById("messages").innerHTML = "";
+}
+
+async function openChat(id){
+  CHAT_ID = id;
+  const d = await (await fetch(`/api/agents/${AGENT_ID}/chats/${id}`)).json();
+  showWelcome(false);
+  const box = document.getElementById("messages");
+  box.innerHTML = "";
+  d.messages.forEach(m=> addBubble(m.role, m.content));
+  await loadChats();
+}
+
+function addBubble(role, text){
+  const box = document.getElementById("messages");
+  const wrap = document.createElement("div");
+  wrap.className = "flex " + (role==="user" ? "justify-end" : "justify-start");
+  wrap.innerHTML = role==="user"
+    ? `<div class="bubble bg-soliver-red text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%] text-sm">${esc(text)}</div>`
+    : `<div class="bubble bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] text-sm text-gray-800 whitespace-pre-wrap">${esc(text)}</div>`;
+  box.appendChild(wrap);
+  document.getElementById("chat-container").scrollTop = 1e9;
+  return wrap.querySelector(".bubble");
+}
+
+function ask(q){ document.getElementById("input").value = q; send(); }
+
+async function send(){
+  const inp = document.getElementById("input");
+  const msg = inp.value.trim();
+  if(!msg || streaming) return;
+  inp.value = "";
+  showWelcome(false);
+  addBubble("user", msg);
+  const bubble = addBubble("assistant", "");
+  bubble.innerHTML = '<span class="text-gray-400">…</span>';
+  streaming = true;
+  document.getElementById("send-btn").disabled = true;
+
+  try {
+    const res = await fetch(`/api/agents/${AGENT_ID}/chat`, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ message: msg, chat_id: CHAT_ID })
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "", answer = "";
+    while(true){
+      const {done, value} = await reader.read();
+      if(done) break;
+      buf += dec.decode(value, {stream:true});
+      const parts = buf.split("\n\n");
+      buf = parts.pop();
+      for(const p of parts){
+        const line = p.replace(/^data: /, "");
+        if(line === "[DONE]") continue;
+        let ev; try { ev = JSON.parse(line); } catch { continue; }
+        if(ev.type==="meta" && ev.chat_id){ CHAT_ID = ev.chat_id; }
+        if(ev.type==="token"){ answer += ev.content; bubble.textContent = answer; document.getElementById("chat-container").scrollTop = 1e9; }
+        if(ev.type==="error"){ bubble.innerHTML = `<span class="text-red-600">Fehler: ${esc(ev.message)}</span>`; }
+      }
+    }
+  } catch(e){
+    bubble.innerHTML = `<span class="text-red-600">Verbindungsfehler: ${esc(e.message)}</span>`;
+  }
+  streaming = false;
+  document.getElementById("send-btn").disabled = false;
+  await loadChats();
+}
+
+document.getElementById("input").addEventListener("keydown", e=>{
+  if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); send(); }
+});
+boot();
+</script>
+</body>
+</html>

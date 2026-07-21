@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="de"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Einstellungen - sO Agent Cockpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "warning-amber": "#f59e0b",
+                    "surface-bright": "#f8f9fa",
+                    "secondary": "#5f5e61",
+                    "text-main": "#1f2937",
+                    "text-muted": "#6b7280",
+                    "primary-container": "#d92b3a",
+                    "outline-variant": "#e4bdbb",
+                    "sidebar-text": "#ffffff",
+                    "on-tertiary-container": "#e6fdff",
+                    "inverse-surface": "#2e3132",
+                    "tertiary": "#00646a",
+                    "border-subtle": "#e5e7eb",
+                    "surface-variant": "#e1e3e4",
+                    "on-tertiary-fixed": "#002022",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9fa",
+                    "on-surface-variant": "#5b403f",
+                    "surface-container-low": "#f3f4f5",
+                    "sidebar-bg": "#18181b",
+                    "surface-container": "#edeeef",
+                    "on-primary-fixed": "#410006",
+                    "on-secondary-container": "#656467",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#bc1029",
+                    "on-primary-container": "#fff6f5",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-background": "#191c1d",
+                    "inverse-on-surface": "#f0f1f2",
+                    "tertiary-fixed": "#94f1f9",
+                    "tertiary-container": "#007f86",
+                    "on-secondary-fixed": "#1b1b1e",
+                    "primary": "#b50625",
+                    "secondary-fixed": "#e4e1e6",
+                    "background": "#f8f9fa",
+                    "surface-container-high": "#e7e8e9",
+                    "tertiary-fixed-dim": "#77d5dc",
+                    "inverse-primary": "#ffb3b0",
+                    "primary-fixed-dim": "#ffb3b0",
+                    "on-surface": "#191c1d",
+                    "on-secondary": "#ffffff",
+                    "outline": "#906f6e",
+                    "on-primary-fixed-variant": "#93001b",
+                    "surface-dim": "#d9dadb",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#ffdad8",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#c8c5ca",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-primary": "#ffffff",
+                    "success-green": "#10b981",
+                    "secondary-container": "#e4e1e6",
+                    "on-secondary-fixed-variant": "#47464a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-page": "32px",
+                    "gutter": "24px",
+                    "stack-lg": "24px",
+                    "stack-md": "16px",
+                    "sidebar-width": "260px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-bold": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "display-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        /* Subtle custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: theme('colors.surface-variant'); border-radius: theme('borderRadius.full'); }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.secondary-fixed-dim'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-margin-page overflow-y-auto bg-sidebar-bg border-r border-border-subtle fixed left-0 top-0 h-screen w-sidebar-width z-40">
+<!-- Brand Header -->
+<div class="px-6 mb-8 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">sO</div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary">s.O</h1>
+</div>
+<div class="text-sidebar-text">
+<div class="font-headline-sm text-headline-sm font-semibold">sO Agent Cockpit</div>
+<div class="font-label-sm text-label-sm text-secondary-fixed-dim mt-1">Governance &amp; Marketplace</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 mt-4 flex-grow"><!-- Marktplatz (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200 group" href="{{DATA:SCREEN:SCREEN_13}}">
+<span class="material-symbols-outlined text-secondary-fixed-dim group-hover:text-sidebar-text transition-colors">storefront</span>
+<span class="font-label-bold text-label-bold">Marktplatz</span>
+</a>
+<!-- FinOps (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200 group" href="{{DATA:SCREEN:SCREEN_12}}">
+<span class="material-symbols-outlined text-secondary-fixed-dim group-hover:text-sidebar-text transition-colors">account_balance_wallet</span>
+<span class="font-label-bold text-label-bold">FinOps</span>
+</a>
+<!-- AgentOps (Inactive) -->
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors duration-200 group" href="{{DATA:SCREEN:SCREEN_11}}">
+<span class="material-symbols-outlined text-secondary-fixed-dim group-hover:text-sidebar-text transition-colors">smart_toy</span>
+<span class="font-label-bold text-label-bold">AgentOps</span>
+</a>
+<!-- Einstellungen (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 text-sidebar-text border-l-4 border-primary bg-on-secondary-fixed-variant scale-98 transition-transform" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined text-sidebar-text" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-bold text-label-bold">Einstellungen</span>
+</a></div>
+<!-- CTA Footer -->
+<div class="px-4 mt-auto">
+<button class="w-full py-2 px-4 rounded border border-secondary-fixed-dim text-secondary-fixed-dim hover:text-sidebar-text hover:border-sidebar-text hover:bg-on-secondary-fixed-variant transition-colors flex items-center justify-center gap-2 font-label-bold text-label-bold" onclick="window.location.href='{{DATA:SCREEN:SCREEN_2}}'">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                 Zurück zu s.O GPT
+             </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-[260px] min-h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between h-16 px-gutter bg-surface border-b border-border-subtle shadow-sm docked full-width top-0 z-30 shrink-0">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button -->
+<button class="md:hidden p-2 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface tracking-tight hidden md:block">
+                    sO Agent Cockpit
+                </div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Search (on left of actions) -->
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[20px]">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border border-border-subtle rounded-full text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors w-64" placeholder="Suchen..." type="text">
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2">
+<button class="p-2 text-secondary hover:text-primary hover:bg-surface-container-low rounded-full transition-all hover:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-secondary hover:text-primary hover:bg-surface-container-low rounded-full transition-all hover:opacity-80">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<!-- Profile -->
+<div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-border-subtle cursor-pointer ml-2">
+<img alt="Benutzerprofil" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate user, minimalist lighting, white background, conveying trust and competence in an enterprise setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD54VszySrEwMeAgyRPuXLdA6HALrutCNTclv8lcfBaRd8cGFfyhVJJM1Jo34nzThNIdVznnbPPONi7Z5VPrn-LzTp9Pr35e5yfeQxcw4Deu1adL0u23jYHygUM3h1F7eInW57R_MTvpfvW3Apbgprz2-KobSmoPxxrJK5wQARzN8iexy2dILcj6mwaIl2uUapS3HdaWkqGiKQzO5bhWL3vb72OZAvvLC1E5f7wZzg9hi6s97DlAUfilMj1xjV0w16cyn826-vsCHx2">
+</div>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-page bg-surface-bright">
+<div class="max-w-5xl mx-auto space-y-stack-lg pb-12">
+<!-- Header -->
+<div class="mb-8">
+<h2 class="font-display-lg text-display-lg text-text-main mb-2">Einstellungen</h2>
+<p class="font-body-lg text-body-lg text-text-muted">Verwalten Sie Ihr Profil, Governance-Richtlinien und Systemkonfigurationen.</p>
+</div>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Left Column: Navigation / Quick Links (Sticky) -->
+<div class="lg:col-span-1 space-y-2 relative">
+<div class="sticky top-stack-lg space-y-1">
+<a class="flex items-center gap-3 p-3 rounded-lg bg-surface shadow-sm border-l-4 border-primary text-primary font-label-bold text-label-bold transition-all" href="#profile">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">person</span>
+                                Benutzerprofil
+                            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface text-secondary hover:text-text-main font-label-sm text-label-sm transition-all border-l-4 border-transparent hover:border-border-subtle" href="#api">
+<span class="material-symbols-outlined text-[20px]">api</span>
+                                API &amp; Governance
+                            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface text-secondary hover:text-text-main font-label-sm text-label-sm transition-all border-l-4 border-transparent hover:border-border-subtle" href="#org">
+<span class="material-symbols-outlined text-[20px]">domain</span>
+                                Organisation
+                            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-surface text-secondary hover:text-text-main font-label-sm text-label-sm transition-all border-l-4 border-transparent hover:border-border-subtle" href="#notifications">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+                                Benachrichtigungen
+                            </a>
+</div>
+</div>
+<!-- Right Column: Settings Forms -->
+<div class="lg:col-span-2 space-y-stack-lg">
+<!-- Section: Profile -->
+<section class="bg-surface rounded-xl shadow-sm border border-border-subtle overflow-hidden" id="profile">
+<div class="p-6 border-b border-border-subtle bg-surface-bright flex justify-between items-center">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-main">Benutzerprofil</h3>
+<p class="font-body-md text-body-md text-text-muted mt-1">Ihre persönlichen Kontodaten.</p>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="flex items-center gap-6">
+<div class="relative group cursor-pointer">
+<div class="w-20 h-20 rounded-full overflow-hidden border-2 border-border-subtle group-hover:border-primary transition-colors">
+<img class="w-full h-full object-cover" data-alt="A close up of a minimalist blank avatar placeholder icon on a light gray background, clean flat design, enterprise UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlkgOwxdAfAv6fQrlcBEt3hKAx1ClDbyOJJnSlVoUiSzHykT0QC2lt6vMA1Ljw2unI-EmR5azWoaTT8kUtpfb1I4rkukFhlwwg3Na2h3cLarei9BPvDxn-6GO-4TsuczLbE2Anvtu4vFbfcFqqcu1hP2Vc_2hixzHNxgOrIHsOzgkRe6_Fy789iNHLhIHneIYD9e58wObV2y6ptjFcFuKBzLGKXx92-pO32SEKqWD72cKnTqxTqkyC5FK1YrMN98XOTSco2whnvjpz">
+</div>
+<div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">edit</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<button class="px-4 py-2 bg-primary text-white rounded font-label-bold text-label-bold hover:bg-surface-tint transition-colors shadow-sm">Bild ändern</button>
+<button class="px-4 py-2 bg-transparent text-secondary border border-border-subtle rounded font-label-bold text-label-bold hover:bg-surface-container-low transition-colors">Entfernen</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-text-muted">Vorname</label>
+<input class="w-full px-3 py-2 bg-surface-bright border border-border-subtle rounded text-text-main font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" type="text" value="Max">
+</div>
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-text-muted">Nachname</label>
+<input class="w-full px-3 py-2 bg-surface-bright border border-border-subtle rounded text-text-main font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow" type="text" value="Mustermann">
+</div>
+<div class="space-y-1 sm:col-span-2">
+<label class="font-label-sm text-label-sm text-text-muted">E-Mail-Adresse</label>
+<input class="w-full px-3 py-2 bg-surface-container border border-border-subtle rounded text-text-muted font-body-md cursor-not-allowed" disabled="" type="email" value="max.mustermann@s-oliver.de">
+</div>
+</div>
+</div>
+<div class="p-4 bg-surface-bright border-t border-border-subtle flex justify-end">
+<button class="px-6 py-2 bg-primary text-white rounded font-label-bold text-label-bold hover:bg-surface-tint transition-colors shadow-sm">Speichern</button>
+</div>
+</section>
+<!-- Section: API & Governance -->
+<section class="bg-surface rounded-xl shadow-sm border border-border-subtle overflow-hidden" id="api">
+<div class="p-6 border-b border-border-subtle bg-surface-bright flex justify-between items-center">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-main flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">shield_locked</span>
+                                        API &amp; Governance
+                                    </h3>
+<p class="font-body-md text-body-md text-text-muted mt-1">Verwalten Sie API-Schlüssel und Zugriffsrichtlinien für externe Agenten.</p>
+</div>
+</div>
+<div class="p-0">
+<!-- Table Layout for API Keys -->
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-border-subtle">
+<th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider">Schlüsselname</th>
+<th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider">Erstellt am</th>
+<th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider">Status</th>
+<th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider text-right">Aktion</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-text-main divide-y divide-border-subtle">
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">key</span>
+                                                Marketing Agent Prod
+                                            </td>
+<td class="p-4 text-text-muted">12. Okt 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-success-green/10 text-success-green border border-success-green/20">
+<span class="w-1.5 h-1.5 rounded-full bg-success-green"></span> Aktiv
+                                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors group">
+<td class="p-4 font-medium flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">key</span>
+                                                Dev Analytics Test
+                                            </td>
+<td class="p-4 text-text-muted">05. Sep 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-surface-container-highest text-secondary border border-border-subtle">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Inaktiv
+                                                </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors opacity-0 group-hover:opacity-100"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-bright border-t border-border-subtle">
+<button class="flex items-center gap-2 px-4 py-2 bg-transparent text-primary border border-primary rounded font-label-bold text-label-bold hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                    Neuer Schlüssel Anfragen</button>
+</div>
+</section>
+<section class="bg-surface rounded-xl shadow-sm border border-border-subtle overflow-hidden" id="org"><div class="p-6 border-b border-border-subtle bg-surface-bright"><div><h3 class="font-headline-sm text-headline-sm text-text-main">Organisation</h3><p class="font-body-md text-body-md text-text-muted mt-1">Verwalten Sie Ihre Teams, Abteilungen und Zugriffsrechte.</p></div></div><div class="p-0"><table class="w-full text-left border-collapse"><thead><tr class="bg-surface-container-low border-b border-border-subtle"><th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider">Abteilung</th><th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider">Mitglieder</th><th class="p-4 font-label-bold text-label-bold text-text-muted uppercase tracking-wider text-right">Aktion</th></tr></thead><tbody class="font-body-md text-body-md text-text-main divide-y divide-border-subtle"><tr class="hover:bg-surface-bright transition-colors group"><td class="p-4 font-medium">Marketing</td><td class="p-4 text-text-muted">12 Mitglieder</td><td class="p-4 text-right"><button class="text-primary font-label-bold text-label-bold hover:underline">Bearbeiten</button></td></tr><tr class="hover:bg-surface-bright transition-colors group"><td class="p-4 font-medium">Sales</td><td class="p-4 text-text-muted">8 Mitglieder</td><td class="p-4 text-right"><button class="text-primary font-label-bold text-label-bold hover:underline">Bearbeiten</button></td></tr><tr class="hover:bg-surface-bright transition-colors group"><td class="p-4 font-medium">Engineering</td><td class="p-4 text-text-muted">24 Mitglieder</td><td class="p-4 text-right"><button class="text-primary font-label-bold text-label-bold hover:underline">Bearbeiten</button></td></tr></tbody></table></div></section><section class="bg-surface rounded-xl shadow-sm border border-border-subtle overflow-hidden" id="notifications"><div class="p-6 border-b border-border-subtle bg-surface-bright"><div><h3 class="font-headline-sm text-headline-sm text-text-main">Benachrichtigungen</h3><p class="font-body-md text-body-md text-text-muted mt-1">Konfigurieren Sie, wie und wann Sie über Systemereignisse informiert werden möchten.</p></div></div><div class="p-6 space-y-6"><div class="flex items-center justify-between"><div class="space-y-0.5"><div class="font-medium text-text-main">E-Mail Benachrichtigungen</div><div class="text-text-muted text-label-sm">Erhalten Sie Updates direkt in Ihr Postfach.</div></div><button class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-primary"><span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span></button></div><div class="flex items-center justify-between"><div class="space-y-0.5"><div class="font-medium text-text-main">Browser-Push</div><div class="text-text-muted text-label-sm">Echtzeit-Benachrichtigungen in Ihrem Browser.</div></div><button class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-surface-container-highest"><span class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span></button></div><div class="flex items-center justify-between"><div class="space-y-0.5"><div class="font-medium text-text-main">Kritische System-Alerts</div><div class="text-text-muted text-label-sm">Wichtige Sicherheits- und Systemwarnungen.</div></div><button class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-primary"><span class="translate-x-5 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span></button></div></div><div class="p-4 bg-surface-bright border-t border-border-subtle flex justify-end"><button class="px-6 py-2 bg-primary text-white rounded font-label-bold text-label-bold hover:bg-surface-tint transition-colors shadow-sm">Einstellungen speichern</button></div></section></div>
+</div>
+</div>
+</main>
+</div>
+
+
+
+
+
+
+
+
+
+
+</body></html>

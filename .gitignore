@@ -65,3 +65,14 @@ infra/terraform.tfstate
 infra/terraform.tfstate.backup
 infra/*.tfplan
 deploy.zip
+
+# Terraform — cockpit module (state contains resource IDs / subscription)
+infra/cockpit/.terraform/
+infra/cockpit/.terraform.lock.hcl
+infra/cockpit/*.tfstate
+infra/cockpit/*.tfstate.backup
+infra/cockpit/*.tfplan
+
+# Playwright test artifacts
+test-results/
+playwright-report/

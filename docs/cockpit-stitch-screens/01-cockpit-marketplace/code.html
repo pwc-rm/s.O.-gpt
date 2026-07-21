@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html lang="de"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>sO Agent Cockpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#77d5dc",
+                      "inverse-primary": "#ffb3b0",
+                      "on-surface": "#191c1d",
+                      "primary-fixed-dim": "#ffb3b0",
+                      "on-secondary": "#ffffff",
+                      "primary": "#b50625",
+                      "on-secondary-fixed": "#1b1b1e",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-fixed": "#e4e1e6",
+                      "background": "#f8f9fa",
+                      "on-background": "#191c1d",
+                      "surface-container-highest": "#e1e3e4",
+                      "inverse-on-surface": "#f0f1f2",
+                      "tertiary-fixed": "#94f1f9",
+                      "tertiary-container": "#007f86",
+                      "surface-tint": "#bc1029",
+                      "on-primary-container": "#fff6f5",
+                      "on-primary": "#ffffff",
+                      "success-green": "#10b981",
+                      "secondary-fixed-dim": "#c8c5ca",
+                      "on-tertiary-fixed-variant": "#004f54",
+                      "on-secondary-fixed-variant": "#47464a",
+                      "secondary-container": "#e4e1e6",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#ffdad8",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "on-primary-fixed-variant": "#93001b",
+                      "on-error-container": "#93000a",
+                      "outline": "#906f6e",
+                      "on-tertiary-container": "#e6fdff",
+                      "inverse-surface": "#2e3132",
+                      "sidebar-text": "#ffffff",
+                      "text-muted": "#6b7280",
+                      "text-main": "#1f2937",
+                      "outline-variant": "#e4bdbb",
+                      "primary-container": "#d92b3a",
+                      "warning-amber": "#f59e0b",
+                      "secondary": "#5f5e61",
+                      "surface-bright": "#f8f9fa",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f4f5",
+                      "sidebar-bg": "#18181b",
+                      "surface-container": "#edeeef",
+                      "on-primary-fixed": "#410006",
+                      "on-secondary-container": "#656467",
+                      "surface": "#f8f9fa",
+                      "on-surface-variant": "#5b403f",
+                      "tertiary": "#00646a",
+                      "surface-variant": "#e1e3e4",
+                      "on-tertiary-fixed": "#002022",
+                      "error": "#ba1a1a",
+                      "border-subtle": "#e5e7eb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "stack-lg": "24px",
+                      "margin-page": "32px",
+                      "sidebar-width": "260px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Inter"],
+                      "label-bold": ["Inter"],
+                      "display-lg-mobile": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                      "label-bold": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                      "display-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                      "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                      "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                      "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "body-lg": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        body { background-color: theme('colors.background'); color: theme('colors.on-surface'); font-family: 'Inter', sans-serif; margin: 0; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+<!-- React App Root Container (Simulated via pure HTML/JS for this environment) -->
+<div class="flex w-full h-full" id="app">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-sidebar-width bg-sidebar-bg border-r border-border-subtle z-50 flex flex-col py-margin-page overflow-y-auto">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary-container rounded-sm flex items-center justify-center text-white font-bold">sO</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-sidebar-text">s.Oliver Cockpit</h1>
+<p class="font-label-sm text-label-sm text-secondary-fixed-dim">Governance &amp; Marketplace</p>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 px-2" id="nav-container">
+<!-- Navigation Items -->
+<button class="nav-btn w-full text-left flex items-center gap-3 px-4 py-3 text-sidebar-text border-l-4 border-primary-container bg-on-secondary-fixed-variant transition-colors duration-200" id="nav-Marktplatz" onclick="window.location.href='{{DATA:SCREEN:SCREEN_11}}'">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-bold text-label-bold">Marktplatz</span>
+</button>
+<button class="nav-btn w-full text-left flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200 border-l-4 border-transparent" id="nav-FinOps" onclick="window.location.href='{{DATA:SCREEN:SCREEN_5}}'">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-bold text-label-bold">FinOps</span>
+</button>
+<button class="nav-btn w-full text-left flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200 border-l-4 border-transparent" id="nav-AgentOps" onclick="window.location.href='{{DATA:SCREEN:SCREEN_9}}'">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-bold text-label-bold">AgentOps</span>
+</button>
+<button class="nav-btn w-full text-left flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:bg-on-secondary-fixed-variant hover:text-sidebar-text transition-colors duration-200 border-l-4 border-transparent" id="nav-Einstellungen" onclick="window.location.href='{{DATA:SCREEN:SCREEN_8}}'">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">Einstellungen</span>
+</button>
+</div>
+<div class="px-6 mt-auto">
+<button class="w-full py-2 border border-secondary-fixed-dim text-secondary-fixed-dim rounded-DEFAULT font-label-bold text-label-bold hover:text-sidebar-text hover:border-sidebar-text transition-colors" onclick="window.location.href='{{DATA:SCREEN:SCREEN_10}}'">
+                    Zurück zu s.O GPT
+                </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-sidebar-width flex-1 flex flex-col w-[calc(100%-theme(spacing.sidebar-width))] h-full overflow-hidden bg-background relative">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-border-subtle shadow-sm flex items-center justify-between h-16 px-gutter shrink-0 z-40">
+<div class="flex items-center gap-4 flex-1">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface" id="header-title">Agent Marketplace</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 mr-2">
+<div class="w-2 h-2 rounded-full bg-success-green animate-pulse"></div>
+<span class="text-xs font-label-bold text-success-green uppercase tracking-wider">Auto-Discovery: Active</span>
+</div>
+<div class="relative hidden md:flex items-center gap-2 bg-surface-container-low border border-border-subtle rounded-lg px-3 py-1.5 w-96 focus-within:ring-1 focus-within:ring-primary-container focus-within:border-primary-container transition-all">
+<span class="material-symbols-outlined text-secondary text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full text-on-surface placeholder:text-text-muted" placeholder="Search for Agents..." type="text"/>
+<div class="flex items-center gap-1 border-l border-border-subtle pl-2 ml-1">
+<span class="text-[10px] font-label-bold text-secondary uppercase tracking-tighter">Cmd+K</span>
+</div>
+</div>
+<button class="p-2 text-secondary hover:text-primary transition-colors" onclick="window.location.href='{{DATA:SCREEN:SCREEN_8}}#notifications'"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="p-2 text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="help_outline">help_outline</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-border-subtle ml-2">
+<img class="w-full h-full object-cover" data-alt="Corporate headshot profile picture of a professional user in a minimalist bright office environment, sharp focus, clean lighting, high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHiyXHkh79XCEkK5zN3_CfcIryzds-QamYkWXMrgRH8ljXl5RF120R2E1e1_5b6TmbkuR8XLVylgftn8Jpk8OLWp-L5sWyLylErjwBkflgE0LjvawP1DFyP8fy5lPMKYKj0Ua-PAe6ZtHiqlXZjhTVYHu_yyYL1zw1zxBpi3HqjGARlL0UKv5rw85gr9oSW-Z8Y8HFE__r-gaVYteQx74hd76m9CFiC57ivVh6wczTLFgOmq17fZYfswrx3lFxf7bez0dHeDbbkVuW"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Views Container -->
+<div class="flex-1 overflow-y-auto p-gutter relative" id="views-container">
+<!-- Background subtle abstract decoration -->
+<div class="absolute inset-0 pointer-events-none opacity-20 z-0">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary-fixed-dim rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+</div>
+<!-- View: Marktplatz -->
+<div class="view-panel relative z-10 block space-y-stack-lg" id="view-Marktplatz">
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="font-body-md text-body-md text-secondary">Entdecken und aktivieren Sie KI-Agenten für Ihre Geschäftsprozesse.</p>
+</div>
+<div class="flex gap-2">
+<select class="border border-border-subtle rounded-DEFAULT text-sm py-1.5 pl-3 pr-8 bg-surface">
+<option>Alle Kategorien</option>
+<option>HR</option>
+<option>IT</option>
+<option>Finance</option>
+</select>
+<button class="flex items-center gap-1 border border-border-subtle rounded-DEFAULT text-sm py-1.5 px-3 bg-surface hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+                            </button>
+</div>
+</div>
+<!-- Bento Grid for Agents -->
+<div class="space-y-12">
+<!-- Group 1: HR & People -->
+<section>
+<div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">HR &amp; People</h3>
+<span class="bg-primary/10 text-primary text-[10px] font-label-bold px-2 py-0.5 rounded-full">Deine Gruppe</span>
+</div>
+<span class="text-label-sm text-secondary">2 Agenten</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- HR Urlaubsassistent -->
+<div class="glass-card rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">event_available</span>
+</div>
+<span class="bg-success-green/10 text-success-green font-label-bold text-[10px] px-2 py-1 rounded-sm">Aktiv</span>
+</div>
+<div class="mb-1 flex justify-between items-center"><span class="text-[10px] font-label-bold text-primary uppercase tracking-wider">HR &amp; People</span></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 group-hover:text-primary transition-colors">HR Urlaubsassistent</h3>
+<div class="mb-4 space-y-1">
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Business Owner: Sarah Müller</div>
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">corporate_fare</span> Org. Zuordnung: HR Dept</div>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-1">Automatisiert die Beantragung und Genehmigung von Urlaubsanträgen gemäß s.Oliver Richtlinien.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container text-secondary font-label-sm px-2 py-0.5 rounded-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">memory</span> GPT-4</span>
+</div>
+<div class="flex gap-2 mt-auto"><button class="flex-1 bg-primary-container text-white font-label-bold py-2 rounded-DEFAULT hover:bg-surface-tint transition-colors">Agent starten</button><button class="flex-1 border border-primary-container text-primary-container font-label-bold py-2 rounded-DEFAULT hover:bg-primary/10 transition-colors">Verwalten</button></div>
+</div>
+<!-- Placeholder: Recruiting Assistant -->
+<div class="glass-card rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-highest text-secondary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">person_search</span>
+</div>
+<span class="bg-surface-container text-secondary font-label-bold text-[10px] px-2 py-1 rounded-sm">Inaktiv</span>
+</div>
+<div class="mb-1"><span class="text-[10px] font-label-bold text-primary uppercase tracking-wider">HR &amp; People</span></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 group-hover:text-primary transition-colors">Recruiting Screener</h3>
+<div class="mb-4 space-y-1">
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Business Owner: Thomas Becker</div>
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">corporate_fare</span> Org. Zuordnung: Recruiting</div>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-1">Analysiert CVs und gleicht sie mit Anforderungsprofilen ab.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container text-secondary font-label-sm px-2 py-0.5 rounded-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">memory</span> Claude 3</span>
+</div>
+<button class="w-full bg-primary-container text-white font-label-bold py-2 rounded-DEFAULT hover:bg-surface-tint transition-colors">Agent starten</button>
+</div>
+</div>
+</section>
+<!-- Group 2: IT & Infrastructure -->
+<section>
+<div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">IT &amp; Infrastructure</h3>
+<span class="text-label-sm text-secondary">1 Agent</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- IT Support Bot -->
+<div class="glass-card rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-highest text-secondary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<span class="bg-surface-container text-secondary font-label-bold text-[10px] px-2 py-1 rounded-sm">Inaktiv</span>
+</div>
+<div class="mb-1"><span class="text-[10px] font-label-bold text-secondary uppercase tracking-wider">IT Support</span></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 group-hover:text-primary transition-colors">IT Support Bot Level 1</h3>
+<div class="mb-4 space-y-1">
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Business Owner: IT Helpdesk</div>
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">corporate_fare</span> Org. Zuordnung: IT Services</div>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-1">Löst grundlegende Passwort-Resets und Hardware-Anfragen via Teams-Integration.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container text-secondary font-label-sm px-2 py-0.5 rounded-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">memory</span> Claude 3</span>
+</div>
+<button class="w-full bg-primary-container text-white font-label-bold py-2 rounded-DEFAULT hover:bg-surface-tint transition-colors">Agent starten</button>
+</div>
+</div>
+</section>
+<!-- Group 3: Sales & Marketing -->
+<section>
+<div class="flex items-center justify-between mb-4 border-b border-border-subtle pb-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Sales &amp; Marketing</h3>
+<span class="text-label-sm text-secondary">2 Agenten</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Sales Forecasting -->
+<div class="glass-card rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow group border-l-4 border-l-primary-container">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-primary-container text-on-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<span class="bg-success-green/10 text-success-green font-label-bold text-[10px] px-2 py-1 rounded-sm">Aktiv</span>
+</div>
+<div class="mb-1"><span class="text-[10px] font-label-bold text-primary uppercase tracking-wider">Sales</span></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 group-hover:text-primary transition-colors">Sales Forecasting</h3>
+<div class="mb-4 space-y-1">
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Business Owner: Lisa Schmidt</div>
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">corporate_fare</span> Org. Zuordnung: Sales B2B</div>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-1">Analysiert wöchentliche Verkaufsdaten und generiert Prognosen für B2B Key Accounts.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container text-secondary font-label-sm px-2 py-0.5 rounded-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">memory</span> Custom LLM</span>
+</div>
+<div class="flex gap-2 mt-auto"><button class="flex-1 bg-primary-container text-white font-label-bold py-2 rounded-DEFAULT hover:bg-surface-tint transition-colors">Agent starten</button><button class="flex-1 border border-primary-container text-primary-container font-label-bold py-2 rounded-DEFAULT hover:bg-primary/10 transition-colors">Verwalten</button></div>
+</div>
+<!-- Placeholder: Content Generator -->
+<div class="glass-card rounded-lg shadow-sm border border-border-subtle p-5 flex flex-col hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container-highest text-secondary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<span class="bg-surface-container text-secondary font-label-bold text-[10px] px-2 py-1 rounded-sm">Inaktiv</span>
+</div>
+<div class="mb-1"><span class="text-[10px] font-label-bold text-secondary uppercase tracking-wider">Marketing</span></div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 group-hover:text-primary transition-colors">Social Media Copywriter</h3>
+<div class="mb-4 space-y-1">
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span> Business Owner: Marketing Team</div>
+<div class="text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">corporate_fare</span> Org. Zuordnung: Marketing</div>
+</div>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-1">Erstellt Entwürfe für LinkedIn und Instagram basierend auf Kampagnen-Briefings.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-surface-container text-secondary font-label-sm px-2 py-0.5 rounded-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">memory</span> GPT-4</span>
+</div>
+<button class="w-full bg-primary-container text-white font-label-bold py-2 rounded-DEFAULT hover:bg-surface-tint transition-colors">Agent starten</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- View: FinOps -->
+<div class="view-panel relative z-10 hidden space-y-stack-lg" id="view-FinOps">
+<p class="font-body-md text-body-md text-secondary mb-6">Überwachung der API-Kosten und Token-Verbrauch über alle Agenten hinweg.</p>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="bg-surface rounded-lg shadow-sm border border-border-subtle p-5">
+<h4 class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Gesamtbudget (Monat)</h4>
+<div class="flex items-end gap-3">
+<span class="font-display-lg text-display-lg text-on-surface">€4,250</span>
+<span class="text-success-green font-label-bold flex items-center text-sm mb-1">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span> 12%
+                                </span>
+</div>
+<div class="w-full bg-surface-container h-1.5 mt-4 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[45%]"></div>
+</div>
+</div>
+<div class="bg-surface rounded-lg shadow-sm border border-border-subtle p-5">
+<h4 class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Verbrauchte Token</h4>
+<div class="flex items-end gap-3">
+<span class="font-display-lg text-display-lg text-on-surface">12.4M</span>
+<span class="text-error flex items-center text-sm mb-1 font-label-bold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> 5%
+                                </span>
+</div>
+</div>
+<div class="bg-surface rounded-lg shadow-sm border border-border-subtle p-5">
+<h4 class="font-label-sm text-label-sm text-secondary mb-2 uppercase tracking-wider">Kosten pro Anfrage (Ø)</h4>
+<div class="flex items-end gap-3">
+<span class="font-display-lg text-display-lg text-on-surface">€0.003</span>
+</div>
+</div>
+</div>
+<!-- Chart Placeholder & Table -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-surface rounded-lg shadow-sm border border-border-subtle p-5 h-80 flex flex-col">
+<h3 class="font-headline-sm text-headline-sm mb-4">Kostenverlauf der letzten 30 Tage</h3>
+<div class="flex-1 relative w-full h-full bg-surface-container-low rounded-DEFAULT border border-dashed border-border-subtle flex items-center justify-center">
+<span class="text-secondary font-label-sm">Chart Placeholder (WebGL/SVG)</span>
+</div>
+</div>
+<div class="bg-surface rounded-lg shadow-sm border border-border-subtle p-5">
+<h3 class="font-headline-sm text-headline-sm mb-4">Kosten pro Agent</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="border-b border-border-subtle text-secondary font-label-sm uppercase">
+<th class="pb-2 font-medium">Name</th>
+<th class="pb-2 font-medium text-right">Kosten</th>
+</tr>
+</thead>
+<tbody class="font-body-md">
+<tr class="border-b border-border-subtle hover:bg-surface-container-low transition-colors">
+<td class="py-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span>HR Agent</td>
+<td class="py-3 text-right">€1,240</td>
+</tr>
+<tr class="border-b border-border-subtle hover:bg-surface-container-low transition-colors">
+<td class="py-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-tertiary-container"></span>Sales Forecast</td>
+<td class="py-3 text-right">€850</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary"></span>IT Support</td>
+<td class="py-3 text-right">€320</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- View: AgentOps -->
+<div class="view-panel relative z-10 hidden space-y-stack-lg" id="view-AgentOps">
+<p class="font-body-md text-body-md text-secondary mb-6">Systemgesundheit, Latenzen und Qualitätsmetriken.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface border-l-2 border-primary p-4 shadow-sm">
+<div class="text-secondary font-label-sm mb-1">Durchschn. Latenz</div>
+<div class="font-headline-md text-on-surface">1.2s</div>
+</div>
+<div class="bg-surface border-l-2 border-border-subtle p-4 shadow-sm">
+<div class="text-secondary font-label-sm mb-1">Adoption Rate</div>
+<div class="font-headline-md text-on-surface">68%</div>
+</div>
+<div class="bg-surface border-l-2 border-success-green p-4 shadow-sm">
+<div class="text-secondary font-label-sm mb-1">QA Score</div>
+<div class="font-headline-md text-on-surface">94/100</div>
+</div>
+<div class="bg-surface border-l-2 border-border-subtle p-4 shadow-sm">
+<div class="text-secondary font-label-sm mb-1">User Feedback</div>
+<div class="font-headline-md text-on-surface">4.8 <span class="text-warning-amber text-sm">★</span></div>
+</div>
+</div>
+<div class="bg-surface rounded-lg shadow-sm border border-border-subtle p-5">
+<h3 class="font-headline-sm text-headline-sm mb-4 border-b border-border-subtle pb-2">Alerts &amp; Exceptions</h3>
+<div class="space-y-4 pt-2">
+<div class="flex gap-4 items-start">
+<div class="bg-error-container text-on-error-container p-2 rounded-full mt-1">
+<span class="material-symbols-outlined text-[16px]">error</span>
+</div>
+<div>
+<div class="font-label-bold text-on-surface">API Timeout: Sales Forecasting</div>
+<div class="text-secondary font-body-md text-sm">Verbindung zum internen Data Warehouse fehlgeschlagen. 3 Retries erfolglos.</div>
+<div class="text-text-muted text-xs mt-1">Vor 12 Minuten</div>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="bg-warning-amber/20 text-warning-amber p-2 rounded-full mt-1">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+</div>
+<div>
+<div class="font-label-bold text-on-surface">Token Limit Nähert sich: HR Agent</div>
+<div class="text-secondary font-body-md text-sm">Monatliches Kontingent zu 85% ausgeschöpft.</div>
+<div class="text-text-muted text-xs mt-1">Vor 2 Stunden</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- View: Einstellungen (Empty State for completeness) -->
+<div class="view-panel relative z-10 hidden h-64 flex items-center justify-center" id="view-Einstellungen">
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-secondary-fixed-dim mb-2">settings_suggest</span>
+<h3 class="font-headline-sm text-on-surface">Systemeinstellungen</h3>
+<p class="text-secondary font-body-md mt-2">Globale Konfigurationen für das sO Cockpit.</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Simple vanilla JS state management to mimic React useState for views
+        function switchView(viewName) {
+            // Update Header Title
+            const titles = {
+                'Marktplatz': 'Agent Marketplace',
+                'FinOps': 'FinOps & Kostenkontrolle',
+                'AgentOps': 'AgentOps & Performance',
+                'Einstellungen': 'Einstellungen'
+            };
+            document.getElementById('header-title').innerText = titles[viewName];
+
+            // Toggle Views
+            document.querySelectorAll('.view-panel').forEach(panel => {
+                panel.classList.add('hidden');
+                panel.classList.remove('block');
+            });
+            const activePanel = document.getElementById('view-' + viewName);
+            if(activePanel) {
+                activePanel.classList.remove('hidden');
+                activePanel.classList.add('block');
+            }
+
+            // Update Nav Active State based on JSON style guidance
+            const activeClasses = ['border-l-4', 'border-primary-container', 'bg-on-secondary-fixed-variant', 'text-sidebar-text'];
+            const inactiveClasses = ['text-secondary-fixed-dim', 'hover:bg-on-secondary-fixed-variant', 'hover:text-sidebar-text', 'border-transparent'];
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                // Reset all to inactive
+                btn.classList.remove(...activeClasses);
+                btn.classList.add('border-l-4'); // Keep structure
+                btn.classList.add(...inactiveClasses);
+                btn.classList.remove('border-primary-container', 'bg-on-secondary-fixed-variant', 'text-sidebar-text');
+            });
+
+            // Set active
+            const activeBtn = document.getElementById('nav-' + viewName);
+            if(activeBtn) {
+                activeBtn.classList.remove(...inactiveClasses);
+                activeBtn.classList.add(...activeClasses);
+            }
+        }
+    </script>
+</body></html>
