@@ -847,6 +847,312 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
+    /* ── AGENTS: sidebar section, marketplace, agent-chat, connectors ── */
+    .sidebar-section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 16px 6px; cursor: pointer;
+      font-size: 10px; font-weight: 600; color: #6b7280;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      transition: color 0.1s;
+    }
+    .sidebar-section-header:hover { color: var(--text-sidebar); }
+    .sidebar-section-header svg { flex-shrink: 0; }
+
+    .agent-quickstart { padding: 0 8px 4px; max-height: 34vh; overflow-y: auto; }
+    .agent-quickstart:empty { display: none; }
+    .agent-quickstart-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-radius: 6px; cursor: pointer;
+      color: var(--text-sidebar); font-size: 12.5px;
+      transition: background 0.1s;
+    }
+    .agent-quickstart-item:hover { background: var(--sidebar-hover); }
+    .agent-quickstart-item.active { background: var(--sidebar-active); color: #fff; }
+    .agent-quickstart-item .agent-avatar { width: 20px; height: 20px; font-size: 10px; }
+    .agent-quickstart-item > span:first-of-type {
+      flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+    }
+
+    /* Letter avatar (Gemini-style colored circle) */
+    .agent-avatar {
+      flex-shrink: 0; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #1c1917; font-weight: 700; width: 40px; height: 40px; font-size: 16px;
+      text-transform: uppercase; user-select: none;
+    }
+    .agent-avatar.lg { width: 72px; height: 72px; font-size: 30px; }
+
+    /* Marketplace view — fills the main area (light, s.Oliver look) */
+    .main { position: relative; }
+    .marketplace-view {
+      display: none; position: absolute; inset: 0; z-index: 20;
+      background: var(--main-bg); flex-direction: column; overflow: hidden;
+    }
+    body.marketplace-open .marketplace-view { display: flex; }
+    .mp-header {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 20px 28px 14px; border-bottom: 1px solid var(--border);
+    }
+    .mp-header-text { flex: 1; min-width: 0; }
+    .mp-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+    .mp-subtitle {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.45;
+      margin-top: 4px; max-width: 680px;
+    }
+    .mp-close {
+      background: none; border: none; cursor: pointer; color: var(--text-secondary);
+      display: flex; padding: 6px; border-radius: 6px;
+    }
+    .mp-close:hover { background: #e5e7eb; color: var(--text-primary); }
+    .mp-search { padding: 16px 28px 6px; }
+    .mp-search input {
+      width: 100%; max-width: 420px; padding: 9px 14px; font-size: 13px;
+      border: 1px solid var(--border); border-radius: 8px; background: #fff;
+      color: var(--text-primary); outline: none;
+    }
+    .mp-search input:focus { border-color: #d92b3a; }
+    .mp-body { flex: 1; overflow-y: auto; padding: 10px 28px 40px; }
+    .mp-group-label {
+      font-size: 13px; font-weight: 700; color: var(--text-secondary);
+      margin: 22px 0 12px;
+    }
+    .mp-grid {
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+    .agent-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; cursor: pointer; display: flex; flex-direction: column; gap: 10px;
+      transition: box-shadow 0.15s, border-color 0.15s, transform 0.05s;
+    }
+    .agent-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-color: #d1d5db; }
+    .agent-card:active { transform: translateY(1px); }
+    .ac-top { display: flex; align-items: center; justify-content: space-between; }
+    .ac-top-right { display: flex; align-items: center; gap: 6px; }
+    .ac-source { font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+    .ac-source::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .ac-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+
+    /* Model badge + org/owner meta */
+    .ac-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+    .model-badge {
+      font-size: 11px; font-weight: 600; color: #312e81;
+      background: #eef2ff; border: 1px solid #e0e7ff; border-radius: 6px;
+      padding: 2px 8px; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .model-badge::before { content: ""; width: 6px; height: 6px; border-radius: 2px; background: #6366f1; }
+    .ac-meta { display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--text-secondary); }
+    .ac-meta b { color: var(--text-primary); font-weight: 600; }
+
+    /* Pin button (cards) */
+    .pin-btn {
+      background: none; border: none; cursor: pointer; padding: 3px; border-radius: 6px;
+      color: #cbd5e1; display: inline-flex; line-height: 0; flex-shrink: 0;
+    }
+    .pin-btn:hover { background: #f3f4f6; color: #d92b3a; }
+    .pin-btn.on { color: #d92b3a; }
+
+    /* Sidebar: pin indicator that turns into a kebab (⋮) on hover */
+    .agent-quickstart-item .aq-pin { margin-left: auto; color: #9ca3af; display: inline-flex; line-height: 0; flex-shrink: 0; }
+    .agent-quickstart-item .aq-kebab {
+      display: none; margin-left: auto; background: none; border: none; cursor: pointer;
+      color: var(--text-sidebar); padding: 2px; border-radius: 5px; line-height: 0; flex-shrink: 0;
+    }
+    .agent-quickstart-item:hover .aq-pin { display: none; }
+    .agent-quickstart-item:hover .aq-kebab { display: inline-flex; }
+    .agent-quickstart-item .aq-kebab:hover { background: rgba(255,255,255,0.12); }
+
+    /* Context menu (Loslösen / Info) */
+    .agent-menu {
+      display: none; position: fixed; z-index: 60; min-width: 172px;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.16); padding: 6px;
+    }
+    .agent-menu.open { display: block; }
+    .am-item {
+      display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px;
+      font-size: 13.5px; color: var(--text-primary); cursor: pointer;
+    }
+    .am-item:hover { background: var(--sources-bg); }
+    .am-item svg { color: var(--text-secondary); flex-shrink: 0; }
+
+    /* Info modal */
+    .agent-info-overlay {
+      display: none; position: fixed; inset: 0; z-index: 70;
+      background: rgba(17,24,39,0.45); align-items: center; justify-content: center;
+    }
+    .agent-info-overlay.open { display: flex; }
+    .agent-info-modal {
+      background: #fff; border-radius: 16px; padding: 28px 32px; max-width: 560px; width: calc(100% - 48px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .ai-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
+    .ai-grid { display: grid; grid-template-columns: max-content 1fr; gap: 12px 20px; font-size: 14px; }
+    .ai-label { font-weight: 700; color: var(--text-primary); }
+    .ai-grid > span:not(.ai-label) { color: var(--text-secondary); }
+    .ac-desc {
+      font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ac-foot {
+      display: flex; align-items: center; gap: 14px; padding-top: 4px;
+      font-size: 11.5px; color: var(--text-secondary);
+    }
+    .ac-foot .ac-metric { display: inline-flex; align-items: center; gap: 4px; }
+    .ac-metric.ac-thumbs { color: #16a34a; font-weight: 600; }
+    .ac-metric.ac-thumbs svg { flex-shrink: 0; }
+    .ac-owner { margin-left: auto; font-style: italic; opacity: 0.8; }
+
+    /* ── Marketplace "Library": Cover-Flow doors (sections) + section view ── */
+    .mp-empty { padding: 40px 0; color: var(--text-secondary); }
+
+    /* Türen-Bühne füllt die verbleibende Höhe und zentriert den Cover-Flow. */
+    .mp-doors-stage {
+      min-height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 12px 0 4px;
+    }
+    .mp-doors-intro { text-align: center; margin-bottom: 8px; }
+    .mp-doors-intro-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .mp-doors-intro-sub { font-size: 13px; color: var(--text-secondary); margin-top: 3px; }
+    .mp-flow {
+      position: relative; width: 100%; flex: 1 1 auto; min-height: 440px; max-height: 620px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      perspective: 2000px;
+    }
+    .mp-flow-track {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+    }
+    .mp-door {
+      position: absolute; top: 50%; left: 50%;
+      width: 300px; height: 410px; margin: -205px 0 0 -150px;
+      background: #fff; border: 1px solid var(--border); border-radius: 22px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.10);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px;
+      padding: 28px; cursor: pointer; text-align: center;
+      transition: transform 0.5s cubic-bezier(.22,.7,.24,1), opacity 0.5s ease, box-shadow 0.3s;
+      will-change: transform; backface-visibility: hidden;
+    }
+    .mp-door.is-center { border-color: #f0b3b8; box-shadow: 0 22px 60px rgba(217,43,58,0.20); }
+    .mp-door-icon { font-size: 62px; line-height: 1; }
+    .mp-door-name { font-size: 23px; font-weight: 700; color: var(--text-primary); }
+    .mp-door-desc {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.4; max-width: 244px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .mp-door-count {
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      background: var(--sources-bg); border-radius: 999px; padding: 4px 14px;
+    }
+    .mp-door-avs { display: flex; margin-top: 4px; }
+    .mp-door-avs .agent-avatar { width: 36px; height: 36px; font-size: 15px; margin-left: -10px; border: 2px solid #fff; }
+    .mp-door-avs .agent-avatar:first-child { margin-left: 0; }
+    .mp-door-enter { visibility: hidden; font-size: 14px; font-weight: 700; color: #d92b3a; margin-top: 2px; }
+    .mp-door.is-center .mp-door-enter { visibility: visible; }
+
+    .mp-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 50;
+      width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border);
+      background: #fff; color: var(--text-primary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    .mp-nav:hover { border-color: #d92b3a; color: #d92b3a; }
+    .mp-nav-prev { left: 18px; }
+    .mp-nav-next { right: 18px; }
+
+    .mp-dots { display: flex; justify-content: center; gap: 8px; margin-top: 26px; }
+    .mp-dot { width: 8px; height: 8px; border-radius: 999px; border: none; background: #d1d5db; cursor: pointer; padding: 0; transition: width 0.25s, background 0.25s; }
+    .mp-dot.on { background: #d92b3a; width: 22px; }
+
+    .mp-section-head { margin: 6px 0 26px; }
+    .mp-back {
+      display: inline-flex; align-items: center; gap: 4px; background: none;
+      border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px 7px 8px;
+      font-size: 13px; font-weight: 600; color: var(--text-primary); cursor: pointer;
+    }
+    .mp-back:hover { border-color: #d92b3a; color: #d92b3a; }
+    .mp-section-hero {
+      display: flex; align-items: center; gap: 16px; margin-top: 16px;
+      padding-bottom: 20px; border-bottom: 1px solid var(--border);
+    }
+    .mp-section-hero-icon {
+      font-size: 38px; line-height: 1; width: 66px; height: 66px; border-radius: 16px;
+      background: var(--sources-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .mp-section-hero-text { flex: 1; min-width: 0; }
+    .mp-section-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+    .mp-section-desc { font-size: 14px; color: var(--text-secondary); margin-top: 4px; line-height: 1.45; }
+    .mp-section-count {
+      font-size: 12px; font-weight: 600; color: var(--text-secondary); white-space: nowrap;
+      background: var(--sources-bg); border-radius: 999px; padding: 4px 13px; align-self: center;
+    }
+    /* Sektions-eigene Agenten-Suche */
+    .mp-section-search {
+      display: flex; align-items: center; gap: 8px; margin-top: 18px;
+      max-width: 460px; padding: 9px 14px; background: #fff;
+      border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary);
+    }
+    .mp-section-search:focus-within { border-color: #d92b3a; color: #d92b3a; }
+    .mp-section-search input {
+      flex: 1; border: none; outline: none; background: none; font-size: 13px; color: var(--text-primary);
+    }
+
+    /* Obere Suche: Türen mit Treffern (Grid statt Cover-Flow) */
+    .mp-result-grid {
+      display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    .mp-result-door {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px; cursor: pointer; display: flex; flex-direction: column; gap: 12px;
+      transition: box-shadow 0.15s, border-color 0.15s, transform 0.05s;
+    }
+    .mp-result-door:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.09); border-color: #f0b3b8; }
+    .mp-result-door:active { transform: translateY(1px); }
+    .mp-result-top { display: flex; align-items: center; gap: 14px; }
+    .mp-result-icon {
+      font-size: 26px; line-height: 1; width: 50px; height: 50px; border-radius: 12px; flex-shrink: 0;
+      background: var(--sources-bg); display: flex; align-items: center; justify-content: center;
+    }
+    .mp-result-headtext { flex: 1; min-width: 0; }
+    .mp-result-name { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .mp-result-hitlabel { font-size: 12.5px; font-weight: 600; color: #d92b3a; margin-top: 2px; }
+    .mp-result-arrow { color: var(--text-secondary); display: flex; flex-shrink: 0; }
+    .mp-result-door:hover .mp-result-arrow { color: #d92b3a; }
+    .mp-hit-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mp-hit-chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 4px;
+      background: var(--sources-bg); border-radius: 999px; font-size: 12px; font-weight: 600;
+      color: var(--text-primary); max-width: 100%;
+    }
+    .mp-hit-chip .agent-avatar { width: 20px; height: 20px; font-size: 10px; }
+
+    /* Agent-chat empty state */
+    .agent-empty .empty-title { margin-top: 14px; }
+
+    /* Connectors popover */
+    .connectors-btn { display: none; }
+    body.agent-mode .connectors-btn { display: flex; }
+    .connectors-pop {
+      display: none; position: absolute; bottom: 60px; left: 20px; z-index: 30;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14); padding: 10px; min-width: 280px; max-width: 360px;
+    }
+    .connectors-pop.open { display: block; }
+    .connectors-pop .cp-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-secondary); padding: 4px 8px 8px;
+    }
+    .cp-item {
+      display: flex; align-items: center; gap: 9px; padding: 8px; border-radius: 6px;
+      font-size: 12.5px; color: var(--text-primary);
+    }
+    .cp-item:hover { background: var(--sources-bg); }
+    .cp-item .cp-doc { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cp-item .cp-size { font-size: 11px; color: var(--text-secondary); }
+    .cp-empty { padding: 10px 8px; font-size: 12.5px; color: var(--text-secondary); }
   </style>
 </head>
 <body>
@@ -863,7 +1169,13 @@
     NEUER CHAT
   </button>
 
-  <div class="sidebar-section-label">Recent Chats</div>
+  <div class="sidebar-section-header" onclick="openMarketplace()" title="Agenten entdecken">
+    <span>Agenten</span>
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div class="agent-quickstart" id="agent-quickstart"></div>
+
+  <div class="sidebar-section-label">Chats</div>
 
   <div class="chat-history" id="chat-history"></div>
 
@@ -871,17 +1183,35 @@
   <div class="sidebar-footer">
     <div class="sidebar-nav-item">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M20 12h-2M6 12H4M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 20v-2M12 6V4"/></svg>
-      Settings
+      Einstellungen
     </div>
     <div class="sidebar-nav-item">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Account
+      Konto
     </div>
   </div>
 </aside>
 
 <!-- ── MAIN CHAT ── -->
 <main class="main">
+
+  <!-- ── MARKETPLACE (User-Sicht, Agenten entdecken) ── -->
+  <div class="marketplace-view" id="marketplace-view">
+    <div class="mp-header">
+      <div class="mp-header-text">
+        <div class="mp-title">Agenten</div>
+        <div class="mp-subtitle">Zentral bereitgestellte und geprüfte KI-Agenten für deinen Arbeitsalltag – nach Fachbereich gebündelt. Wähle einen Bereich, öffne ihn und starte direkt einen Chat mit dem passenden Agenten.</div>
+      </div>
+      <button class="mp-close" onclick="closeMarketplace()" title="Schließen">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="mp-search">
+      <input id="mp-search-input" type="text" placeholder="Bereiche und Agenten durchsuchen…" oninput="renderMarketplace()" />
+    </div>
+    <div class="mp-body" id="mp-body"></div>
+  </div>
+
   <header class="chat-header">
     <span class="chat-title" id="chat-title">Neuer Chat</span>
     <div style="display:flex;align-items:center;gap:8px;flex:1;justify-content:center;">
@@ -891,8 +1221,9 @@
       </span>
       <span class="cost-badge" id="cost-badge"></span>
     </div>
+    <!-- Cockpit ist reine Admin-Sicht (FinOps/AgentOps) — Button im User-s.O-GPT ausgeblendet (Decision #3). -->
     <a href="https://app-agent-cockpit.azurewebsites.net" id="cockpit-btn" title="Zum Agent Cockpit"
-       style="display:inline-flex;align-items:center;gap:6px;background:#d92b3a;color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;margin-left:auto;margin-right:8px;white-space:nowrap;">
+       style="display:none;align-items:center;gap:6px;background:#d92b3a;color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;margin-left:auto;margin-right:8px;white-space:nowrap;">
       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
       Zum Agent Cockpit
     </a>
@@ -920,6 +1251,9 @@
         <button class="icon-btn" title="Datei anhängen">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
         </button>
+        <button class="icon-btn connectors-btn" id="connectors-btn" title="Wissensquellen des Agenten" onclick="toggleConnectors(event)">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+        </button>
       </div>
       <textarea
         id="message-input"
@@ -935,6 +1269,12 @@
         </span>
       </button>
     </div>
+  </div>
+
+  <!-- Connectors popover (display-only: the active agent's knowledge sources) -->
+  <div class="connectors-pop" id="connectors-pop">
+    <div class="cp-title">Wissensquellen</div>
+    <div id="connectors-list"></div>
   </div>
 </main>
 
@@ -960,7 +1300,7 @@
 <!-- ── RIGHT PANEL (Chat Assets + Quellen) ── -->
 <aside class="right-panel" id="right-panel">
   <div class="panel-tab-bar">
-    <button class="panel-tab active" id="tab-btn-assets" onclick="switchPanelTab('assets')">Chat Assets</button>
+    <button class="panel-tab active" id="tab-btn-assets" onclick="switchPanelTab('assets')">Anhänge</button>
     <button class="panel-tab" id="tab-btn-quellen" onclick="switchPanelTab('quellen')">Quellen <span class="sources-count" id="sources-count">0</span></button>
     <div class="panel-tab-spacer"></div>
     <button class="sources-collapse-btn" onclick="toggleSources()" title="Panel ein-/ausblenden" style="margin-bottom:4px">
@@ -1025,6 +1365,426 @@
   _setPanelCollapsed(true);  // hide the Assets/Quellen panel until the user starts chatting
   fetchSessions();
 
+  // ── AGENTS: marketplace, per-agent chat, connectors ────────────────────────
+  let activeAgent = null;          // public agent object, or null = classic s.O-GPT
+  let _agents = [];                // cached /api/agents
+  let _agentsById = {};
+  // Angepinnte Agenten (persistiert in localStorage) — Default: die beiden unternehmensweiten Agenten.
+  let _pinned = (() => { try { const s = localStorage.getItem('so-gpt-pinned'); if (s) return JSON.parse(s); } catch(_){} return ['deep-research', 'idea-innovation']; })();
+  let _menuAgentId = null;
+  function isPinned(id){ return _pinned.includes(id); }
+  function savePinned(){ try { localStorage.setItem('so-gpt-pinned', JSON.stringify(_pinned)); } catch(_){} }
+  function setPinned(id, on){
+    const i = _pinned.indexOf(id);
+    if(on && i < 0) _pinned.push(id);
+    else if(!on && i >= 0) _pinned.splice(i, 1);
+    savePinned();
+    renderSidebarAgents();
+    if(document.body.classList.contains('marketplace-open')) renderMarketplace();
+  }
+  function togglePin(id, ev){ if(ev) ev.stopPropagation(); setPinned(id, !isPinned(id)); }
+  function unpinAgent(id){ setPinned(id, false); closeAgentMenu(); }
+
+  const _pinSvg = (f) => `<svg width="15" height="15" viewBox="0 0 24 24" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="1.7"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg>`;
+  const _unpinSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H8.5"/><path d="M8 9c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-4.5"/><line x1="3" y1="3" x2="21" y2="21"/></svg>`;
+  const _infoSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="7.5" x2="12.01" y2="7.5"/></svg>`;
+  const _kebabSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>`;
+
+  function pinBtnHtml(id, on){
+    return `<button class="pin-btn ${on ? 'on' : ''}" title="${on ? 'Loslösen' : 'Anpinnen'}" onclick="togglePin('${id}', event)">${_pinSvg(on)}</button>`;
+  }
+
+  function openAgentMenu(id, ev){
+    if(ev) ev.stopPropagation();
+    _menuAgentId = id;
+    const menu = document.getElementById('agent-menu');
+    const pinned = isPinned(id);
+    menu.innerHTML =
+      `<div class="am-item" onclick="${pinned ? `unpinAgent('${id}')` : `setPinned('${id}',true);closeAgentMenu()`}">${pinned ? _unpinSvg : _pinSvg(false)}<span>${pinned ? 'Loslösen' : 'Anpinnen'}</span></div>`
+      + `<div class="am-item" onclick="showAgentInfo('${id}')">${_infoSvg}<span>Info</span></div>`;
+    const r = ev.currentTarget.getBoundingClientRect();
+    menu.style.top = (r.bottom + 4) + 'px';
+    menu.style.left = Math.min(r.left, window.innerWidth - 200) + 'px';
+    menu.classList.add('open');
+  }
+  function closeAgentMenu(){ const m = document.getElementById('agent-menu'); if(m) m.classList.remove('open'); _menuAgentId = null; }
+
+  function showAgentInfo(id){
+    const a = _agentsById[id]; if(!a) return;
+    closeAgentMenu();
+    const upd = a.updated_at ? new Date(a.updated_at).toLocaleString('de-DE') : '—';
+    document.getElementById('agent-info-modal').innerHTML =
+      `<h2 class="ai-title">Informationen zum KI-Agenten</h2>
+       <div class="ai-grid">
+         <span class="ai-label">Name:</span><span>${escHtml(a.name)}</span>
+         <span class="ai-label">ID:</span><span>${escHtml(a.id)}</span>
+         <span class="ai-label">Beschreibung:</span><span>${escHtml(a.description)}</span>
+         <span class="ai-label">Modell:</span><span>${escHtml(a.model)}</span>
+         <span class="ai-label">Zuletzt aktualisiert:</span><span>${escHtml(upd)}</span>
+       </div>`;
+    document.getElementById('agent-info-overlay').classList.add('open');
+  }
+  function closeAgentInfo(ev){
+    if(ev && ev.target.id !== 'agent-info-overlay') return;  // clicks inside modal don't close
+    document.getElementById('agent-info-overlay').classList.remove('open');
+  }
+  document.addEventListener('click', () => closeAgentMenu());
+
+  const AGENT_COLORS = ['#f6c945','#a5d8ff','#b2f2bb','#ffc9c9','#d0bfff','#ffd8a8','#99e9f2','#eebefa'];
+  function agentColor(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))>>>0; return AGENT_COLORS[h % AGENT_COLORS.length]; }
+  function avatarHtml(a, cls){ return `<div class="agent-avatar ${cls||''}" style="background:${agentColor(a.id)}">${escHtml((a.name||'?').trim().charAt(0))}</div>`; }
+
+  async function loadAgents(){
+    try {
+      const res = await fetch('/api/agents');
+      if(res.ok){ _agents = await res.json(); _agentsById = {}; _agents.forEach(a => _agentsById[a.id] = a); }
+    } catch(_){}
+    renderSidebarAgents();
+    if (chatSessions && chatSessions.length) renderHistory();  // now agent-tagged chats can show their glyph
+  }
+
+  // Marktplatz als "Bibliothek": Level 1 = Sektions-Türen (Cover-Flow),
+  // Level 2 = Agenten der gewählten Sektion.
+  // Zwei Suchen: oben durchsucht Bereiche+Agenten und zeigt die TÜREN mit Treffern;
+  // innerhalb einer Sektion filtert eine eigene Suche nur deren Agenten.
+  let _mpSection = null;        // aktive Sektion (null = Türen-Ansicht)
+  let _mpIndex = 0;             // zentrierte Tür im Cover-Flow
+  let _mpSectionQuery = '';     // Agenten-Filter innerhalb der Sektion
+
+  function openMarketplace(){
+    document.body.classList.add('marketplace-open');
+    const s = document.getElementById('mp-search-input'); if(s) s.value='';
+    _mpSection = null; _mpIndex = 0; _mpSectionQuery = '';
+    renderMarketplace();
+  }
+  function closeMarketplace(){ document.body.classList.remove('marketplace-open'); }
+
+  const _mpChevL = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
+  const _mpChevR = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+
+  function _mpIcon(cat){
+    const c = (cat || '').toLowerCase();
+    if(c.includes('organis') || c.includes('unternehmen')) return '🏢';
+    if(c.includes('hr') || c.includes('people') || c.includes('personal')) return '👥';
+    if(c.includes('it') || c.includes('infra') || c.includes('tech')) return '🖥️';
+    if(c.includes('sales') || c.includes('marketing') || c.includes('vertrieb')) return '📈';
+    if(c.includes('finan') || c.includes('control')) return '💶';
+    if(c.includes('legal') || c.includes('recht') || c.includes('compliance')) return '⚖️';
+    if(c.includes('service') || c.includes('support') || c.includes('kunden')) return '🎧';
+    if(c.includes('produkt') || c.includes('product') || c.includes('design')) return '🛍️';
+    if(c.includes('logistik') || c.includes('supply')) return '📦';
+    return '📁';
+  }
+
+  function _mpDesc(cat){
+    const c = (cat || '').toLowerCase();
+    if(c.includes('organis') || c.includes('unternehmen')) return 'Unternehmensweit freigegebene Agenten für alle Mitarbeitenden.';
+    if(c.includes('hr') || c.includes('people') || c.includes('personal')) return 'Recruiting, Onboarding, Urlaub und Fragen rund um Mitarbeitende.';
+    if(c.includes('it') || c.includes('infra') || c.includes('tech')) return 'IT-Support, Systeme und technische Anfragen im Arbeitsalltag.';
+    if(c.includes('sales') || c.includes('marketing') || c.includes('vertrieb')) return 'Kampagnen, Kundenansprache und Unterstützung im Vertrieb.';
+    if(c.includes('finan') || c.includes('control')) return 'Budgets, Reporting und finanzielle Auswertungen.';
+    if(c.includes('legal') || c.includes('recht') || c.includes('compliance')) return 'Verträge, Richtlinien und rechtliche Fragestellungen.';
+    if(c.includes('service') || c.includes('support') || c.includes('kunden')) return 'Kundenanliegen und Serviceprozesse effizient bearbeiten.';
+    if(c.includes('produkt') || c.includes('product') || c.includes('design')) return 'Produktentwicklung, Sortiment und Designthemen.';
+    if(c.includes('logistik') || c.includes('supply')) return 'Beschaffung, Lager und Lieferkette im Blick.';
+    return 'Spezialisierte Agenten für diesen Bereich.';
+  }
+
+  function _mpGroups(){
+    const groups = {};
+    _agents.forEach(a => { (groups[a.category] = groups[a.category] || []).push(a); });
+    // Unternehmensweite Agenten ("Von Ihrer Organisation") zuerst, dann Abteilungen A–Z.
+    const rank = (cat) => cat === 'Von Ihrer Organisation' ? 0 : 1;
+    const cats = Object.keys(groups).sort((a, b) => rank(a) - rank(b) || a.localeCompare(b, 'de'));
+    return { groups, cats };
+  }
+
+  function renderMarketplace(){
+    const body = document.getElementById('mp-body');
+    const topSearch = document.querySelector('.mp-search');
+    // In der Sektions-Ansicht blenden wir die obere Suche aus – dort gilt die
+    // sektionseigene Agenten-Suche.
+    if(_mpSection){
+      if(topSearch) topSearch.style.display = 'none';
+      renderMpSection(body, _mpSection);
+      return;
+    }
+    if(topSearch) topSearch.style.display = '';
+    const q = (document.getElementById('mp-search-input').value || '').trim().toLowerCase();
+    if(q){ renderMpDoorSearch(body, q); return; }
+    renderMpDoors(body);
+  }
+
+  // Obere Suche: findet Bereiche (Name) UND Agenten und zeigt die passenden
+  // TÜREN. Klick öffnet den Bereich – der Suchbegriff wird in die Sektions-Suche
+  // übernommen, sodass der gesuchte Agent direkt sichtbar ist.
+  function renderMpDoorSearch(body, q){
+    const { groups, cats } = _mpGroups();
+    const results = cats.map((cat, idx) => {
+      const nameHit = cat.toLowerCase().includes(q);
+      const hits = groups[cat].filter(a => a.name.toLowerCase().includes(q) || a.description.toLowerCase().includes(q));
+      return (nameHit || hits.length) ? { cat, idx, hits, nameHit } : null;
+    }).filter(Boolean);
+    if(!results.length){ body.innerHTML = '<div class="mp-empty">Keine Bereiche oder Agenten gefunden.</div>'; return; }
+    const doors = results.map(r => {
+      const label = r.hits.length
+        ? `${r.hits.length} ${r.hits.length === 1 ? 'passender Agent' : 'passende Agenten'}`
+        : 'Passender Bereichsname';
+      const chips = r.hits.slice(0, 3).map(a => `<span class="mp-hit-chip">${avatarHtml(a)}${escHtml(a.name)}</span>`).join('');
+      return `<div class="mp-result-door" onclick="mpEnterFrom(${r.idx})" title="${escHtml(r.cat)} öffnen">
+        <div class="mp-result-top">
+          <div class="mp-result-icon">${_mpIcon(r.cat)}</div>
+          <div class="mp-result-headtext">
+            <div class="mp-result-name">${escHtml(r.cat)}</div>
+            <div class="mp-result-hitlabel">${label}</div>
+          </div>
+          <span class="mp-result-arrow">${_mpChevR}</span>
+        </div>
+        ${chips ? `<div class="mp-hit-chips">${chips}</div>` : ''}
+      </div>`;
+    }).join('');
+    body.innerHTML = `
+      <div class="mp-doors-intro" style="text-align:left;margin:8px 0 18px;">
+        <div class="mp-doors-intro-title">Treffer in ${results.length} ${results.length === 1 ? 'Bereich' : 'Bereichen'}</div>
+        <div class="mp-doors-intro-sub">Bereich öffnen, um den Agenten auszuwählen</div>
+      </div>
+      <div class="mp-result-grid">${doors}</div>`;
+  }
+
+  function _mpSectionGridHtml(list){
+    return list.length
+      ? `<div class="mp-grid">${list.map(cardHtml).join('')}</div>`
+      : '<div class="mp-empty">Keine Agenten in diesem Bereich gefunden.</div>';
+  }
+
+  function renderMpSection(body, cat){
+    const all = _mpGroups().groups[cat] || [];
+    const q = (_mpSectionQuery || '').trim().toLowerCase();
+    const list = q ? all.filter(a => a.name.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)) : all;
+    body.innerHTML = `
+      <div class="mp-section-head">
+        <button class="mp-back" onclick="mpBack()">${_mpChevL} Alle Bereiche</button>
+        <div class="mp-section-hero">
+          <div class="mp-section-hero-icon">${_mpIcon(cat)}</div>
+          <div class="mp-section-hero-text">
+            <div class="mp-section-title">${escHtml(cat)}</div>
+            <div class="mp-section-desc">${escHtml(_mpDesc(cat))}</div>
+          </div>
+          <span class="mp-section-count">${all.length} ${all.length === 1 ? 'Agent' : 'Agenten'}</span>
+        </div>
+        <div class="mp-section-search">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="mp-section-search-input" type="text" placeholder="Agenten in „${escHtml(cat)}“ durchsuchen…" oninput="mpSectionSearch(this.value)" value="${escHtml(_mpSectionQuery || '')}" />
+        </div>
+      </div>
+      <div id="mp-section-grid">${_mpSectionGridHtml(list)}</div>`;
+    if(_mpSectionQuery){
+      const inp = document.getElementById('mp-section-search-input');
+      if(inp){ inp.focus(); const v = inp.value; inp.value = ''; inp.value = v; }  // Cursor ans Ende
+    }
+  }
+
+  // Live-Filter innerhalb der Sektion: nur das Grid neu rendern, damit der Fokus
+  // im Suchfeld erhalten bleibt.
+  function mpSectionSearch(val){
+    _mpSectionQuery = val;
+    const cat = _mpSection; if(!cat) return;
+    const all = _mpGroups().groups[cat] || [];
+    const q = (val || '').trim().toLowerCase();
+    const list = q ? all.filter(a => a.name.toLowerCase().includes(q) || a.description.toLowerCase().includes(q)) : all;
+    const grid = document.getElementById('mp-section-grid');
+    if(grid) grid.innerHTML = _mpSectionGridHtml(list);
+  }
+
+  function renderMpDoors(body){
+    const { groups, cats } = _mpGroups();
+    if(!cats.length){ body.innerHTML = '<div class="mp-empty">Keine Agenten gefunden.</div>'; return; }
+    if(_mpIndex > cats.length - 1) _mpIndex = 0;
+    const doors = cats.map((cat, i) => {
+      const list = groups[cat];
+      const avs = list.slice(0, 4).map(a => avatarHtml(a)).join('');
+      return `<div class="mp-door" onclick="mpDoorClick(${i})" title="${escHtml(cat)}">
+        <div class="mp-door-icon">${_mpIcon(cat)}</div>
+        <div class="mp-door-name">${escHtml(cat)}</div>
+        <div class="mp-door-desc">${escHtml(_mpDesc(cat))}</div>
+        <div class="mp-door-count">${list.length} ${list.length === 1 ? 'Agent' : 'Agenten'}</div>
+        <div class="mp-door-avs">${avs}</div>
+        <div class="mp-door-enter">Öffnen →</div>
+      </div>`;
+    }).join('');
+    const total = _agents.length;
+    body.innerHTML = `
+      <div class="mp-doors-stage">
+        <div class="mp-doors-intro">
+          <div class="mp-doors-intro-title">Wähle einen Bereich</div>
+          <div class="mp-doors-intro-sub">${cats.length} Bereiche · ${total} Agenten insgesamt</div>
+        </div>
+        <div class="mp-flow">
+          <button class="mp-nav mp-nav-prev" onclick="mpMove(-1)" aria-label="Zurück">${_mpChevL}</button>
+          <div class="mp-flow-track" id="mp-flow-track">${doors}</div>
+          <button class="mp-nav mp-nav-next" onclick="mpMove(1)" aria-label="Weiter">${_mpChevR}</button>
+        </div>
+        <div class="mp-dots" id="mp-dots">${cats.map((_, i) => `<button class="mp-dot" onclick="mpGoto(${i})" aria-label="Sektion ${i + 1}"></button>`).join('')}</div>
+      </div>`;
+    positionDoors();
+  }
+
+  function positionDoors(){
+    const track = document.getElementById('mp-flow-track');
+    if(!track) return;
+    const doors = [...track.children];
+    doors.forEach((d, i) => {
+      const off = i - _mpIndex, abs = Math.abs(off), sign = Math.sign(off);
+      const x = off === 0 ? 0 : sign * (205 + (abs - 1) * 142);
+      const rot = off === 0 ? 0 : -sign * 50;
+      const scale = off === 0 ? 1 : Math.max(0.70, 0.82 - (abs - 1) * 0.08);
+      d.style.transform = `translateX(${x}px) rotateY(${rot}deg) scale(${scale})`;
+      d.style.zIndex = String(off === 0 ? 30 : 20 - abs);
+      d.style.opacity = abs > 2 ? '0' : (off === 0 ? '1' : '0.55');
+      d.style.pointerEvents = abs > 2 ? 'none' : 'auto';
+      d.classList.toggle('is-center', off === 0);
+    });
+    const dots = document.querySelectorAll('#mp-dots .mp-dot');
+    dots.forEach((dot, i) => dot.classList.toggle('on', i === _mpIndex));
+  }
+
+  function mpGoto(i){
+    const n = _mpGroups().cats.length;
+    _mpIndex = Math.max(0, Math.min(i, n - 1));
+    positionDoors();
+  }
+  function mpMove(delta){ mpGoto(_mpIndex + delta); }
+  function mpDoorClick(i){ if(i === _mpIndex) mpEnter(); else mpGoto(i); }
+  function mpEnter(){ _mpSectionQuery = ''; _mpSection = _mpGroups().cats[_mpIndex] || null; renderMarketplace(); }
+
+  // Öffnet einen Bereich aus einem oberen Such-Treffer und übernimmt den
+  // Suchbegriff in die Sektions-Suche, damit der Agent sofort sichtbar ist.
+  function mpEnterFrom(idx){
+    const cats = _mpGroups().cats;
+    _mpSectionQuery = (document.getElementById('mp-search-input').value || '').trim();
+    const top = document.getElementById('mp-search-input'); if(top) top.value = '';
+    _mpIndex = idx;
+    _mpSection = cats[idx] || null;
+    renderMarketplace();
+  }
+
+  function mpBack(){
+    _mpSection = null; _mpSectionQuery = '';
+    const s = document.getElementById('mp-search-input'); if(s) s.value = '';
+    renderMarketplace();
+  }
+
+  // Pfeiltasten/Enter steuern den Cover-Flow (nur in der Türen-Ansicht).
+  document.addEventListener('keydown', (e) => {
+    if(!document.body.classList.contains('marketplace-open')) return;
+    if(_mpSection) return;
+    if((document.getElementById('mp-search-input').value || '')) return;
+    if(e.target && e.target.tagName === 'INPUT') return;
+    if(e.key === 'ArrowLeft'){ mpMove(-1); e.preventDefault(); }
+    else if(e.key === 'ArrowRight'){ mpMove(1); e.preventDefault(); }
+    else if(e.key === 'Enter'){ mpEnter(); e.preventDefault(); }
+  });
+
+  function cardHtml(a){
+    const rating = (a.rating && a.rating.pct != null) ? `<span class="ac-metric ac-thumbs" title="Zustimmung der Nutzer"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>${a.rating.pct}%</span>` : '';
+    return `
+      <div class="agent-card" onclick="startAgentChat('${a.id}')">
+        <div class="ac-top">
+          ${avatarHtml(a)}
+          <div class="ac-top-right">
+            <span class="ac-source" style="color:${a.source.color || '#5f5e61'}">${escHtml(a.source.label)}</span>
+            ${pinBtnHtml(a.id, isPinned(a.id))}
+            <button class="pin-btn" title="Info" onclick="showAgentInfo('${a.id}');event.stopPropagation()">${_infoSvg}</button>
+          </div>
+        </div>
+        <div class="ac-name">${escHtml(a.name)}</div>
+        <div class="ac-desc">${escHtml(a.description)}</div>
+        <div class="ac-badges">
+          <span class="model-badge" title="Zugrunde liegendes Modell">${escHtml(a.model)}</span>
+        </div>
+        <div class="ac-meta">
+          <span>Organisation: <b>${escHtml(a.org_unit || '—')}</b></span>
+          <span>Besitzer: <b>${escHtml(a.business_owner || '—')}</b></span>
+        </div>
+        <div class="ac-foot">
+          <span class="ac-metric" title="Aktive Benutzer">${a.mau} Aktive Benutzer</span>
+          ${rating}
+        </div>
+      </div>`;
+  }
+
+  function renderSidebarAgents(){
+    const c = document.getElementById('agent-quickstart'); if(!c) return;
+    // Angepinnte Agenten (in Reihenfolge) + aktiver Agent, falls (noch) nicht angepinnt.
+    const ids = [..._pinned];
+    if(activeAgent && !ids.includes(activeAgent.id)) ids.push(activeAgent.id);
+    const items = ids.map(id => _agentsById[id]).filter(Boolean);
+    c.innerHTML = items.map(a => {
+      const active = activeAgent && activeAgent.id === a.id && !sessionId;
+      return `<div class="agent-quickstart-item ${active ? 'active' : ''}" onclick="startAgentChat('${a.id}')" title="${escHtml(a.name)}">`
+        + `${avatarHtml(a)}<span>${escHtml(a.name)}</span>`
+        + `<span class="aq-pin">${isPinned(a.id) ? _pinSvg(true) : ''}</span>`
+        + `<button class="aq-kebab" title="Optionen" onclick="openAgentMenu('${a.id}', event)">${_kebabSvg}</button>`
+        + `</div>`;
+    }).join('');
+  }
+
+  function startAgentChat(id){
+    const a = _agentsById[id]; if(!a) return;
+    closeMarketplace();
+    activeAgent = a;
+    // Fresh chat dedicated to this agent (clicking the agent always starts a new one).
+    sessionId = null; currentSessionId = null;
+    resetCostBadge();
+    _canvases = []; _urlaubAntrag = null; _activeCanvasId = null; _pendingDiff = null; _streamingCanvasId = null;
+    document.body.classList.remove('canvas-open');
+    renderAssets(); switchPanelTab('assets'); _setPanelCollapsed(true);
+    document.getElementById('chat-title').textContent = a.name;
+    renderAgentEmptyState(a);
+    applyAgentContext(a);
+    renderSidebarAgents();
+  }
+
+  function renderAgentEmptyState(a){
+    const chips = (a.grundfragen || []).map(q => `<div class="chip" onclick="sendSuggestion(this)">${escHtml(q)}</div>`).join('');
+    document.getElementById('messages').innerHTML = `
+      <div class="empty-state agent-empty" id="empty-state">
+        ${avatarHtml(a, 'lg')}
+        <div class="empty-title">${escHtml(a.name)}</div>
+        <div class="empty-sub">${escHtml(a.description)}</div>
+        <div class="suggestion-chips">${chips}</div>
+      </div>`;
+  }
+
+  function applyAgentContext(a){
+    activeAgent = a || null;
+    const input = document.getElementById('message-input');
+    if(input) input.placeholder = a ? `${a.name} fragen…` : 'Nachricht an Knowledgeassistent senden...';
+    document.body.classList.toggle('agent-mode', !!a);
+    const mb = document.getElementById('mock-badge'); if(mb) mb.style.display = a ? 'none' : '';  // agent chat = real LLM
+    renderConnectors(a);
+    closeConnectors();
+  }
+
+  function renderConnectors(a){
+    const list = document.getElementById('connectors-list'); if(!list) return;
+    const docs = (a && a.knowledge && a.knowledge.documents) || [];
+    list.innerHTML = docs.length ? docs.map(d => `
+      <div class="cp-item">
+        <svg width="15" height="15" fill="none" stroke="#d92b3a" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="cp-doc">${escHtml(d.name)}</span><span class="cp-size">${escHtml(d.size || '')}</span>
+      </div>`).join('') : '<div class="cp-empty">Keine Wissensquellen hinterlegt.</div>';
+  }
+
+  function toggleConnectors(e){ if(e) e.stopPropagation(); document.getElementById('connectors-pop').classList.toggle('open'); }
+  function closeConnectors(){ const p = document.getElementById('connectors-pop'); if(p) p.classList.remove('open'); }
+  document.addEventListener('click', (e) => {
+    const pop = document.getElementById('connectors-pop'), btn = document.getElementById('connectors-btn');
+    if(pop && pop.classList.contains('open') && !pop.contains(e.target) && btn && !btn.contains(e.target)) closeConnectors();
+  });
+
+  loadAgents();
+
   async function fetchSessions() {
     try {
       const res = await fetch(SESSIONS_URL);
@@ -1039,6 +1799,8 @@
     sessionId = s.id;
     currentSessionId = s.id;
     document.getElementById('chat-title').textContent = s.title;
+    // Variante A: an agent-tagged session reopens in agent mode; otherwise classic.
+    applyAgentContext(s.agent_id ? (_agentsById[s.agent_id] || null) : null);
     clearSources();
     _setPanelCollapsed(false);  // existing session has content — show the panel
     renderHistory();
@@ -1115,6 +1877,8 @@
 
   function newChat() {
     sessionId = null;
+    applyAgentContext(null);   // classic s.O-GPT mode
+    renderSidebarAgents();
     document.getElementById('messages').innerHTML = `
       <div class="empty-state" id="empty-state">
         <img src="/static/soliver-logo.png" class="empty-logo" alt="s.Oliver" />
@@ -1243,7 +2007,7 @@
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ frage: text, session_id: sessionId }),
+        body: JSON.stringify({ frage: text, session_id: sessionId, agent_id: activeAgent ? activeAgent.id : null }),
         signal: _abortController.signal,
       });
 
@@ -2295,5 +3059,13 @@
     }
   }
 </script>
+
+<!-- Agent-Kontextmenü (Sidebar-Kebab: Loslösen / Info) -->
+<div class="agent-menu" id="agent-menu"></div>
+
+<!-- Info-Modal „Informationen zum KI-Agenten" -->
+<div class="agent-info-overlay" id="agent-info-overlay" onclick="closeAgentInfo(event)">
+  <div class="agent-info-modal" id="agent-info-modal"></div>
+</div>
 </body>
 </html>
